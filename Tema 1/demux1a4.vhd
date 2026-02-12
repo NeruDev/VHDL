@@ -22,10 +22,13 @@ ARCHITECTURE UNA OF demux1a4 IS
 
 BEGIN   
 
-	a <= x AND NOT s(1) AND NOT s(0);
-	b <= x AND NOT s(1) AND s(0);
-	c <= x AND s(1) AND NOT s(0);
-	d <= x AND s(1) AND s(0);
+PROCESS (a, b, c, d, s) IS
+	BEGIN
+		a <= x AND NOT s(1) AND NOT s(0);
+		b <= x AND NOT s(1) AND s(0);
+		c <= x AND s(1) AND NOT s(0);
+		d <= x AND s(1) AND s(0);
+	END PROCESS;
 
 END ARCHITECTURE UNA;
 
