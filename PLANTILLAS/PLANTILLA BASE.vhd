@@ -10,10 +10,10 @@ USE ieee.std_logic_1164.all;
 ---------------------------------------------------------------------
 ENTITY BASE IS
 
-  PORT (
-    A : IN  STD_LOGIC_VECTOR(1 DOWNTO 0);
-    X : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
-  );
+   PORT (
+      A : IN  STD_LOGIC_VECTOR(1 DOWNTO 0);
+      X : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
+   );
 END ENTITY BASE;
 
 ---------------------------------------------------------------------

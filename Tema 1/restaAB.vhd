@@ -10,11 +10,11 @@ USE ieee.numeric_std.all;
 ---------------------------------------------------------------------
 ENTITY restaAB IS
 
-  PORT (
-    A, B : IN  STD_LOGIC_VECTOR(3 DOWNTO 0);
-    S: OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-    C: OUT STD_LOGIC
-  );
+   PORT (
+      A, B : IN  STD_LOGIC_VECTOR(3 DOWNTO 0);
+      S: OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+      C: OUT STD_LOGIC
+   );
 END ENTITY restaAB;
 
 ---------------------------------------------------------------------
@@ -22,13 +22,13 @@ END ENTITY restaAB;
 ---------------------------------------------------------------------
 ARCHITECTURE UNO OF restaAB IS
 
-    SIGNAL SS : STD_LOGIC_VECTOR(4 DOWNTO 0);
+      SIGNAL SS : STD_LOGIC_VECTOR(4 DOWNTO 0);
 
 BEGIN
 
-    SS <= STD_LOGIC_VECTOR(UNSIGNED('0' & A) - UNSIGNED('0' & B));
+      SS <= STD_LOGIC_VECTOR(UNSIGNED('0' & A) - UNSIGNED('0' & B));
 
-    S <= SS(3 DOWNTO 0);
-    C <= SS(4);
+      S <= SS(3 DOWNTO 0);
+      C <= SS(4);
 
 END ARCHITECTURE UNO;
