@@ -1,4 +1,6 @@
 {
+    "workbench.colorTheme": "Default Dark+",
+    "remote.autoForwardPortsSource": "hybrid",
     "files.associations": {
         "*.vhd": "vhdl"
     },
@@ -7,7 +9,8 @@
     "git.autofetch": true,
 
     "[vhdl]": {
-        "editor.defaultFormatter": "teros-technology.teroshdl"
+        "editor.defaultFormatter": "teros-technology.teroshdl",
+        "editor.semanticHighlighting.enabled": false
     },
 
     "markdown-preview-enhanced.previewColorScheme": "editorColorScheme",
@@ -50,5 +53,5 @@
                 }
             }
         ]
-    },
+    }
 }
