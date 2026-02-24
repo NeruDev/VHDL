@@ -1,3 +1,54 @@
 {
-    "markdown-preview-enhanced.previewColorScheme": "editorColorScheme"
+    "files.associations": {
+        "*.vhd": "vhdl"
+    },
+    
+    "workbench.iconTheme": "vscode-icons",
+    "git.autofetch": true,
+
+    "[vhdl]": {
+        "editor.defaultFormatter": "teros-technology.teroshdl"
+    },
+
+    "markdown-preview-enhanced.previewColorScheme": "editorColorScheme",
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "comment.line.vhdl",
+                "settings": {
+                    "foreground": "#DDACFE"
+                }
+            },
+            {
+                "scope": "string.quoted.single.vhdl",
+                "settings": {
+                    "foreground": "#A4FC80"
+                }
+            },
+            {
+                "scope": "string.quoted.double.vhdl",
+                "settings": {
+                    "foreground": "#F80407"
+                }
+            },
+            {
+                "scope": "constant.numeric.decimal_literal.vhdl",
+                "settings": {
+                    "foreground": "#FE9900"
+                }
+            },
+            {
+                "scope": "support.function.vhdl",
+                "settings": {
+                    "foreground": "#5DE2E7"
+                }
+            },
+            {
+                "scope": "support.function.ieee_std_logic_1164.vhdl",
+                "settings": {
+                    "foreground": "#FE9AE7"
+                }
+            }
+        ]
+    },
 }
