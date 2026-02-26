@@ -1,9 +1,14 @@
 ---------------------------------------------------------------------
 -- DISEÑO: Mapeo de Periféricos Placa Cyclone II
 -- AUTOR: Gemini Code Assist
--- PROPOSITO: Realizar una conexión directa enya funcionontre los switches (SW)
---            y los LEDs rojos (LEDR) para verificar el
---            funcionamiento y la correcta asignación de pines.
+-- DESCRIPCIÓN: Este código VHDL define la entidad y arquitectura 
+-- para mapear los periféricos de la placa Cyclone II EP2C20F484C7. 
+-- Se asignan los pines de los interruptores, botones, LEDs y displays 
+-- de 7 segmentos según el archivo README.md proporcionado. 
+-- La lógica implementada en la arquitectura es simple: los LEDs rojos 
+-- se encienden según el estado de los interruptores, los LEDs verdes 
+-- se encienden en nivel bajo, y los displays de 7 segmentos muestran 
+-- un valor hexadecimal basado en la combinación de los botones.
 -- PLACA: Cyclone II EP2C20F484C7
 ---------------------------------------------------------------------
 
