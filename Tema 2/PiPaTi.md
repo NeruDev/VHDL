@@ -47,6 +47,7 @@ El diseño utiliza un bloque `PROCESS` combinacional que realiza las siguientes 
 | `100` | `100` | 0 | 0 | 1 | 0 | Piedra vs Piedra -> Empate |
 | `001` | `100` | 0 | 1 | 0 | 0 | Tijera vs Piedra -> Gana B |
 | `110` | `001` | 0 | 0 | 0 | 1 | A pulsa dos botones -> Error |
+| `111` | `010` | 0 | 0 | 0 | 1 | A pulsa tres botones -> Error |
 | `000` | `010` | 0 | 0 | 0 | 1 | A no pulsa nada -> Error |
 
 ### Observaciones
