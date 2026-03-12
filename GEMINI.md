@@ -48,15 +48,16 @@ Para diagramas de Máquinas de Estado Finito (FSM) en documentación teórica:
 
 ### Esquema de Colores
 - Cada ejemplo debe tener su propia paleta de colores claros para diferenciarse visualmente.
-- Usar `%%{init: {'theme':'base', 'themeVariables': {...}}}%%` al inicio del bloque Mermaid.
+- Usar la directiva extendida definiendo colores base, bordes, texto y líneas para mantener consistencia:
+  `%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'...','primaryTextColor':'...','primaryBorderColor':'...','lineColor':'...','noteBkgColor':'#fffde7','noteTextColor':'#333'}}}%%`
 - Paletas recomendadas (tonos pasteles):
-  - Azul claro: `primaryColor:'#e8eaf6'` (índigo suave)
-  - Verde claro: `primaryColor:'#e8f5e9'` (verde agua)
-  - Naranja claro: `primaryColor:'#fff3e0'` (naranja pastel)
-  - Rosa claro: `primaryColor:'#fce4ec'` (rosa suave)
-  - Turquesa claro: `primaryColor:'#e0f2f1'` (turquesa pastel)
-  - Púrpura claro: `primaryColor:'#f3e5f5'` (púrpura suave)
-- Fondo de notas: `noteBkgColor:'#fffde7'` (amarillo muy claro)
+  - **Azul claro (Índigo):** `primaryColor:'#e8eaf6'`, `primaryTextColor:'#3f51b5'`, `primaryBorderColor:'#7986cb'`, `lineColor:'#5c6bc0'`
+  - **Verde claro:** `primaryColor:'#e8f5e9'`, `primaryTextColor:'#2e7d32'`, `primaryBorderColor:'#81c784'`, `lineColor:'#4caf50'`
+  - **Naranja claro:** `primaryColor:'#fff3e0'`, `primaryTextColor:'#e65100'`, `primaryBorderColor:'#ffb74d'`, `lineColor:'#ff9800'`
+  - **Rosa claro:** `primaryColor:'#fce4ec'`, `primaryTextColor:'#880e4f'`, `primaryBorderColor:'#f06292'`, `lineColor:'#e91e63'`
+  - **Turquesa claro:** `primaryColor:'#e0f2f1'`, `primaryTextColor:'#00695c'`, `primaryBorderColor:'#4db6ac'`, `lineColor:'#009688'`
+  - **Púrpura claro:** `primaryColor:'#f3e5f5'`, `primaryTextColor:'#4a148c'`, `primaryBorderColor:'#ba68c8'`, `lineColor:'#9c27b0'`
+- **Notas:** `noteBkgColor:'#fffde7'` (amarillo muy claro), `noteTextColor:'#333'` (gris oscuro)
 
 ### Diagramas de Bloques Arquitecturales
 - Usar `graph LR` (left-right).
