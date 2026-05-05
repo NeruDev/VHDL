@@ -1,0 +1,63 @@
+# ==============================================================================
+# .gitignore para Proyecto VHDL
+# Conserva: .vhd, .circ (Logisim), .md (Documentación)
+# Ignora: Archivos temporales de compilación, simulación y proyectos de Quartus
+# ==============================================================================
+
+# --- Quartus II / Altera ---
+# Ignorar carpetas de bases de datos y archivos de salida de síntesis
+db/
+incremental_db/
+output_files/
+greybox_tmp/
+hc_output/
+*.qws
+*.bak
+*.orig
+*.rpt
+*.summary
+*.jdi
+*.pin
+*.pof
+*.sof
+*.sta
+*.done
+*.qmsg
+*.dfp
+*.rcfdb
+*.dpi
+*.hbdb
+*.sig
+*.kpt
+*.logdb
+*.bpm
+*.cdb
+*.hdb
+*.ddb
+*.ammdb
+
+# --- ModelSim / Simulación ---
+# Ignorar la librería de trabajo de ModelSim y archivos de log
+work/
+transcript
+vsim.wlf
+*.vstf
+*.vsim
+
+# --- VS Code / IDE ---
+.vscode/
+.gemini/
+*.tmp
+
+# --- SO / Generales ---
+Thumbs.db
+.DS_Store
+
+# --- Reglas de Exclusión (Asegurar que se mantengan) ---
+!*.vhd
+!*.circ
+!*.md
+!*.qpf
+!*.qsf
+!README.md
+!GEMINI.md
