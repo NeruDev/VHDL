@@ -32,8 +32,14 @@ architecture Comportamiento of memoria_64kx8 is
     -- Definición del tipo de arreglo para 64K posiciones de 8 bits
     type ram_type is array (0 to (2**ADDR_WIDTH) - 1) of std_logic_vector(DATA_WIDTH - 1 downto 0);
     
-    -- Señal que representa la memoria física
-    signal RAM : ram_type := (others => (others => '0')); 
+    -- Señal que representa la memoria física con un pequeño programa de prueba
+    signal RAM : ram_type := (
+        0 => x"01", -- Opcode ADD
+        1 => x"01", -- Opcode ADD
+        2 => x"02", -- Opcode LOAD (ficticio)
+        3 => x"FF", -- Opcode Desconocido (Reset/Loop)
+        others => (others => '0')
+    ); 
 begin
 
     -- Proceso de Escritura (Síncrono o asíncrono dependiendo de la tecnología, 

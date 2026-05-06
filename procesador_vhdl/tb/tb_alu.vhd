@@ -1,7 +1,7 @@
 -- ==============================================================================
 -- Archivo: tb_alu.vhd
 -- Ubicación: tb/
--- Descripción: Banco de pruebas aislado para validar la ALU.
+-- Descripción: Testbench exhaustivo para la ALU con autoverificación y casos borde.
 -- ==============================================================================
 
 library IEEE;
@@ -12,12 +12,11 @@ library work;
 use work.procesador_pkg.all;
 
 entity tb_alu is
--- Un testbench no tiene puertos de entrada/salida
 end tb_alu;
 
-architecture behavior of tb_alu is
+architecture robust of tb_alu is
 
-    -- Componente a probar (Design Under Test - DUT)
+    -- DUT
     component alu
     Port ( 
         SalA        : in  std_logic_vector(DATA_WIDTH - 1 downto 0);
@@ -28,59 +27,79 @@ architecture behavior of tb_alu is
     );
     end component;
 
-    -- Señales para conectar con el DUT
-    signal SalA_tb        : std_logic_vector(DATA_WIDTH - 1 downto 0) := (others => '0');
-    signal SalB_tb        : std_logic_vector(DATA_WIDTH - 1 downto 0) := (others => '0');
-    signal ope_tb         : std_logic_vector(ALU_OP_WIDTH - 1 downto 0) := (others => '0');
-    signal SalidaALU_tb   : std_logic_vector(DATA_WIDTH - 1 downto 0);
-    signal SalidaFlags_tb : std_logic_vector(7 downto 0);
+    signal SalA_tb, SalB_tb : std_logic_vector(DATA_WIDTH - 1 downto 0) := (others => '0');
+    signal ope_tb           : std_logic_vector(ALU_OP_WIDTH - 1 downto 0) := (others => '0');
+    signal SalidaALU_tb     : std_logic_vector(DATA_WIDTH - 1 downto 0);
+    signal SalidaFlags_tb   : std_logic_vector(7 downto 0);
 
 begin
 
-    -- Instanciación
-    DUT: alu port map (
-        SalA => SalA_tb,
-        SalB => SalB_tb,
-        ope => ope_tb,
-        SalidaALU => SalidaALU_tb,
-        SalidaFlags => SalidaFlags_tb
-    );
+    DUT: alu port map (SalA_tb, SalB_tb, ope_tb, SalidaALU_tb, SalidaFlags_tb);
 
-    -- Proceso de estímulos
     stim_proc: process
+        -- Procedimiento interno para tener visibilidad de las señales del proceso
+        procedure check_alu(
+            constant a, b : in integer;
+            constant op   : in std_logic_vector(2 downto 0);
+            constant exp_res : in integer;
+            constant exp_z, exp_s, exp_c : in std_logic;
+            constant msg  : in string
+        ) is
+        begin
+            SalA_tb <= std_logic_vector(to_unsigned(a, DATA_WIDTH));
+            SalB_tb <= std_logic_vector(to_unsigned(b, DATA_WIDTH));
+            ope_tb  <= op;
+            wait for 10 ns;
+            
+            assert (to_integer(unsigned(SalidaALU_tb)) = exp_res mod 256)
+                report "ERROR RESULTADO [" & msg & "]: Esperado " & integer'image(exp_res mod 256) & 
+                       ", Obtenido " & integer'image(to_integer(unsigned(SalidaALU_tb)))
+                severity error;
+                
+            assert (SalidaFlags_tb(0) = exp_z) 
+                report "ERROR FLAG Z [" & msg & "]" severity error;
+            assert (SalidaFlags_tb(1) = exp_s) 
+                report "ERROR FLAG S [" & msg & "]" severity error;
+            assert (SalidaFlags_tb(2) = exp_c) 
+                report "ERROR FLAG C [" & msg & "]" severity error;
+        end procedure;
     begin
-        -- Test 1: Suma básica (ADD) -> 5 + 3 = 8
-        SalA_tb <= x"05"; -- 5 en Hex
-        SalB_tb <= x"03"; -- 3 en Hex
-        ope_tb  <= "101"; -- Código de ADD
-        wait for 10 ns;
-        -- Verificación automática en consola
-        assert (SalidaALU_tb = x"08") report "Error en ADD: 5+3" severity error;
+        report "Iniciando Pruebas Robustas de ALU..." severity note;
 
-        -- Test 2: Suma con Acarreo (Carry Flag) -> 255 + 1 = 0 (con acarreo)
-        SalA_tb <= x"FF"; -- 255
-        SalB_tb <= x"01"; -- 1
-        ope_tb  <= "101"; 
-        wait for 10 ns;
-        assert (SalidaFlags_tb(2) = '1') report "Error en Flag de Acarreo" severity error;
-        assert (SalidaFlags_tb(0) = '1') report "Error en Flag Zero" severity error;
+        -- --- OPERACIONES ARITMÉTICAS ---
+        
+        -- ADD: Casos borde
+        check_alu(0, 0, OP_ADD, 0, '1', '0', '0', "ADD 0+0");
+        check_alu(127, 1, OP_ADD, 128, '0', '1', '0', "ADD 127+1 (Set Sign)");
+        check_alu(255, 1, OP_ADD, 256, '1', '0', '1', "ADD 255+1 (Carry + Zero)");
+        check_alu(255, 255, OP_ADD, 510, '0', '1', '1', "ADD 255+255 (Carry + Sign)");
 
-        -- Test 3: Resta con resultado negativo (Sign Flag) -> 5 - 10 = -5
-        SalA_tb <= x"05"; 
-        SalB_tb <= x"0A"; 
-        ope_tb  <= "110"; -- Código de SUB
-        wait for 10 ns;
-        assert (SalidaFlags_tb(1) = '1') report "Error en Flag de Signo" severity error;
+        -- SUB: Casos borde
+        check_alu(10, 5, OP_SUB, 5, '0', '0', '0', "SUB 10-5");
+        check_alu(5, 5, OP_SUB, 0, '1', '0', '0', "SUB 5-5 (Zero)");
+        check_alu(0, 1, OP_SUB, -1, '0', '1', '1', "SUB 0-1 (Borrow/Carry + Sign)");
+        check_alu(128, 1, OP_SUB, 127, '0', '0', '0', "SUB 128-1 (Clear Sign)");
 
-        -- Test 4: Transferencia de B
-        SalA_tb <= x"AA"; 
-        SalB_tb <= x"BB"; 
-        ope_tb  <= "001"; -- Código de Trans_B
-        wait for 10 ns;
-        assert (SalidaALU_tb = x"BB") report "Error en Transferencia B" severity error;
+        -- INC / DEC
+        check_alu(255, 0, OP_INC_A, 256, '1', '0', '1', "INC 255");
+        check_alu(0, 0, OP_DEC_A, -1, '0', '1', '1', "DEC 0");
 
-        report "--- TESTBENCH DE ALU FINALIZADO CON EXITO ---" severity note;
-        wait; -- Detiene la simulación
+        -- --- OPERACIONES LÓGICAS ---
+        
+        -- AND
+        check_alu(170, 85, OP_AND, 0, '1', '0', '0', "AND AA with 55");
+        check_alu(255, 128, OP_AND, 128, '0', '1', '0', "AND FF with 80");
+
+        -- NOT
+        check_alu(255, 0, OP_NOT_A, 0, '1', '0', '0', "NOT FF");
+        check_alu(0, 0, OP_NOT_A, 255, '0', '1', '0', "NOT 00");
+
+        -- --- TRANSFERENCIAS ---
+        check_alu(123, 45, OP_TRANS_A, 123, '0', '0', '0', "TRANS A");
+        check_alu(123, 45, OP_TRANS_B, 45, '0', '0', '0', "TRANS B");
+
+        report "--- TESTBENCH DE ALU ROBUSTO FINALIZADO ---" severity note;
+        wait;
     end process;
 
-end behavior;
+end architecture;
