@@ -1,8 +1,8 @@
 -- ==============================================================================
 -- Archivo: registro_hl.vhd
 -- Ubicación: src/ruta_datos/
--- Descripción: Registro combinado H|L de 16 bits (High y Low).
--- Permite cargar la parte alta y baja de manera independiente desde un bus de 8 bits.
+-- Descripción: Registro especial de 16 bits dividido en dos bytes (High y Low).
+--              Se utiliza como puntero de direcciones para acceso a RAM y saltos.
 -- ==============================================================================
 
 library IEEE;
@@ -13,21 +13,34 @@ use work.procesador_pkg.all;
 
 entity registro_hl is
     Port ( 
-        clk       : in  std_logic;
-        clear     : in  std_logic;
-        LH        : in  std_logic; -- Load High: Carga el byte alto
-        LL        : in  std_logic; -- Load Low: Carga el byte bajo
+        -- ======================================================================
+        -- MAPA DE ENTRADAS (Input Map)
+        -- ======================================================================
+        clk       : in  std_logic; -- Reloj del Sistema
+        clear     : in  std_logic; -- Reset Global
+        LH        : in  std_logic; -- Load High: Habilita la carga del byte alto (H)
+        LL        : in  std_logic; -- Load Low: Habilita la carga del byte bajo (L)
         
-        entDat    : in  std_logic_vector(DATA_WIDTH - 1 downto 0); -- Desde el BusDatos (8 bits)
-        salida_hl : out std_logic_vector(ADDR_WIDTH - 1 downto 0)  -- Hacia entradaPC y Mux (16 bits)
+        entDat    : in  std_logic_vector(DATA_WIDTH - 1 downto 0); -- Dato desde BusDatos (8 bits)
+        
+        -- ======================================================================
+        -- MAPA DE SALIDAS (Output Map)
+        -- ======================================================================
+        salida_hl : out std_logic_vector(ADDR_WIDTH - 1 downto 0)  -- Valor completo (16 bits)
     );
 end registro_hl;
 
 architecture RTL of registro_hl is
+    -- ----------------------------------------------------------------------
+    -- SEÑALES INTERNAS
+    -- ----------------------------------------------------------------------
     signal reg_H : std_logic_vector(DATA_WIDTH - 1 downto 0) := (others => '0');
     signal reg_L : std_logic_vector(DATA_WIDTH - 1 downto 0) := (others => '0');
 begin
 
+    -- ----------------------------------------------------------------------
+    -- PROCESO SÍNCRONO: CARGA INDEPENDIENTE DE BYTES
+    -- ----------------------------------------------------------------------
     process(clk, clear)
     begin
         if clear = '1' then
@@ -35,8 +48,7 @@ begin
             reg_L <= (others => '0');
             
         elsif rising_edge(clk) then
-            -- Se evalúan de manera independiente; la Unidad de Control 
-            -- podría teóricamente mandar cargar ambos al mismo tiempo.
+            -- Permite cargar H y L en ciclos diferentes o iguales
             if LH = '1' then
                 reg_H <= entDat;
             end if;
@@ -47,8 +59,7 @@ begin
         end if;
     end process;
 
-    -- Concatenación de ambos registros de 8 bits para formar el bus de 16 bits
-    -- El operador '&' une el registro High (bits 15 downto 8) y el Low (bits 7 downto 0)
+    -- Concatenación de ambos registros para formar la dirección de 16 bits
     salida_hl <= reg_H & reg_L;
 
 end RTL;

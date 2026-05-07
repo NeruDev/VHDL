@@ -1,20 +1,32 @@
 -- ==============================================================================
 -- Archivo: deco_7seg.vhd
 -- Ubicación: src/top/
--- Descripción: Decodificador de Binario a 7 Segmentos (Ánodo Común).
+-- Descripción: Decodificador combinacional de Binario a 7 Segmentos.
+--              Diseñado para displays de ÁNODO COMÚN (Lógica Negativa: '0' enciende).
 -- ==============================================================================
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity deco_7seg is
     Port ( 
-        binario : in  std_logic_vector(3 downto 0);
-        segmentos : out std_logic_vector(6 downto 0)
+        -- ======================================================================
+        -- MAPA DE ENTRADAS (Input Map)
+        -- ======================================================================
+        binario : in  std_logic_vector(3 downto 0); -- Valor nibble (0-15)
+        
+        -- ======================================================================
+        -- MAPA DE SALIDAS (Output Map)
+        -- ======================================================================
+        segmentos : out std_logic_vector(6 downto 0) -- Segmentos (g f e d c b a)
     );
 end deco_7seg;
 
 architecture RTL of deco_7seg is
 begin
+    -- ----------------------------------------------------------------------
+    -- PROCESO COMBINACIONAL: TRADUCCIÓN DE VALORES
+    -- ----------------------------------------------------------------------
+    -- Formato de salida: bit 6=g, 5=f, 4=e, 3=d, 2=c, 1=b, 0=a
     process(binario)
     begin
         case binario is
@@ -34,7 +46,7 @@ begin
             when "1101" => segmentos <= "0100001"; -- d
             when "1110" => segmentos <= "0000110"; -- E
             when "1111" => segmentos <= "0001110"; -- F
-            when others => segmentos <= "1111111";
+            when others => segmentos <= "1111111"; -- Apagado
         end case;
     end process;
 end RTL;

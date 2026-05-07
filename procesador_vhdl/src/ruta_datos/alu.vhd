@@ -1,7 +1,9 @@
 -- ==============================================================================
 -- Archivo: alu.vhd
 -- Ubicación: src/ruta_datos/
--- Descripción: Unidad Aritmético Lógica (ALU) - VERSIÓN CORREGIDA.
+-- Descripción: Unidad Aritmético Lógica (ALU) de 8 bits.
+--              Realiza operaciones matemáticas y lógicas, y genera banderas
+--              de estado (Zero, Sign, Carry).
 -- ==============================================================================
 
 library IEEE;
@@ -13,28 +15,41 @@ use work.procesador_pkg.all;
 
 entity alu is
     Port ( 
-        SalA        : in  std_logic_vector(DATA_WIDTH - 1 downto 0);
-        SalB        : in  std_logic_vector(DATA_WIDTH - 1 downto 0);
-        ope         : in  std_logic_vector(ALU_OP_WIDTH - 1 downto 0);
+        -- ======================================================================
+        -- MAPA DE ENTRADAS (Input Map)
+        -- ======================================================================
+        SalA        : in  std_logic_vector(DATA_WIDTH - 1 downto 0); -- Operando A (desde BR)
+        SalB        : in  std_logic_vector(DATA_WIDTH - 1 downto 0); -- Operando B (desde BR)
+        ope         : in  std_logic_vector(ALU_OP_WIDTH - 1 downto 0); -- Código de operación
         
-        SalidaALU   : out std_logic_vector(DATA_WIDTH - 1 downto 0);
-        SalidaFlags : out std_logic_vector(7 downto 0) 
+        -- ======================================================================
+        -- MAPA DE SALIDAS (Output Map)
+        -- ======================================================================
+        SalidaALU   : out std_logic_vector(DATA_WIDTH - 1 downto 0); -- Resultado (8 bits)
+        SalidaFlags : out std_logic_vector(7 downto 0) -- Registro de estado (Z, S, C)
     );
 end alu;
 
 architecture Comportamiento of alu is
+    -- ----------------------------------------------------------------------
+    -- SEÑALES INTERNAS
+    -- ----------------------------------------------------------------------
+    -- Usamos 9 bits (unsigned) para detectar el Carry/Borrow de forma natural
     signal res_temp : unsigned(DATA_WIDTH downto 0); 
     signal a_uns    : unsigned(DATA_WIDTH downto 0);
     signal b_uns    : unsigned(DATA_WIDTH downto 0);
     
-    signal flag_z   : std_logic;
-    signal flag_s   : std_logic;
-    signal flag_c   : std_logic;
+    signal flag_z   : std_logic; -- Bandera de Cero
+    signal flag_s   : std_logic; -- Bandera de Signo
+    signal flag_c   : std_logic; -- Bandera de Acarreo
 begin
-    -- Expansión a 9 bits para capturar Carry/Borrow
+    -- Preparación de operandos (extensión de signo/cero a 9 bits)
     a_uns <= unsigned('0' & SalA);
     b_uns <= unsigned('0' & SalB);
 
+    -- ----------------------------------------------------------------------
+    -- PROCESO COMBINACIONAL: CÁLCULO DE OPERACIONES
+    -- ----------------------------------------------------------------------
     process(a_uns, b_uns, ope)
         variable res_var : unsigned(DATA_WIDTH downto 0);
     begin
@@ -42,26 +57,26 @@ begin
         flag_c  <= '0'; 
 
         case ope is
-            when "000" => -- OP_TRANS_A
+            when OP_TRANS_A => -- Pasa operando A sin cambios
                 res_var := a_uns;
-            when "001" => -- OP_TRANS_B
+            when OP_TRANS_B => -- Pasa operando B sin cambios
                 res_var := b_uns;
-            when "010" => -- OP_AND
+            when OP_AND     => -- Operación lógica AND
                 res_var := a_uns and b_uns;
-            when "011" => -- OP_NOT_A
+            when OP_NOT_A   => -- Operación lógica NOT (Inversor)
                 res_var := not a_uns;
-            when "100" => -- OP_DEC_A
+            when OP_DEC_A   => -- Decremento (A - 1)
                 res_var := a_uns - 1;
-                flag_c  <= res_var(8);
-            when "101" => -- OP_ADD
+                flag_c  <= res_var(8); -- Detecta underflow
+            when OP_ADD     => -- Suma aritmética
                 res_var := a_uns + b_uns;
-                flag_c  <= res_var(8);
-            when "110" => -- OP_SUB
+                flag_c  <= res_var(8); -- Detecta desbordamiento
+            when OP_SUB     => -- Resta aritmética
                 res_var := a_uns - b_uns;
-                flag_c  <= res_var(8);
-            when "111" => -- OP_INC_A
+                flag_c  <= res_var(8); -- Detecta borrow
+            when OP_INC_A   => -- Incremento (A + 1)
                 res_var := a_uns + 1;
-                flag_c  <= res_var(8);
+                flag_c  <= res_var(8); -- Detecta desbordamiento
             when others =>
                 res_var := (others => '0');
         end case;
@@ -69,10 +84,14 @@ begin
         res_temp <= res_var;
     end process;
 
+    -- Asignación de salida principal (truncando el bit de acarreo)
     SalidaALU <= std_logic_vector(res_temp(7 downto 0));
 
-    flag_z <= '1' when res_temp(7 downto 0) = x"00" else '0';
-    flag_s <= res_temp(7);
+    -- Lógica de Banderas
+    flag_z <= '1' when res_temp(7 downto 0) = x"00" else '0'; -- Zero si los 8 bits son 0
+    flag_s <= res_temp(7); -- Signo es el bit más significativo (MSB)
+    
+    -- Empaquetado de flags: bit 0=Z, bit 1=S, bit 2=C
     SalidaFlags <= "00000" & flag_c & flag_s & flag_z;
 
 end Comportamiento;

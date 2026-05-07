@@ -1,9 +1,9 @@
 -- ==============================================================================
 -- Archivo: banco_registros.vhd
 -- Ubicación: src/ruta_datos/
--- Descripción: Banco de 8 registros de propósito general de 8 bits.
---              Cuenta con 1 puerto de escritura síncrona y 2 puertos de 
---              lectura asíncrona (combinacional).
+-- Descripción: Banco de 8 registros de propósito general de 8 bits cada uno.
+--              Implementa una memoria interna rápida con un puerto de escritura
+--              síncrono y dos puertos de lectura asíncronos.
 -- ==============================================================================
 
 library IEEE;
@@ -15,54 +15,62 @@ use work.procesador_pkg.all;
 
 entity banco_registros is
     Port ( 
-        -- Sincronización y Control General
-        clk      : in  std_logic;
+        -- ======================================================================
+        -- MAPA DE ENTRADAS (Input Map)
+        -- ======================================================================
+        clk      : in  std_logic; -- Reloj del Sistema
         
-        -- Puerto de Escritura (Write)
-        wr       : in  std_logic;
-        SelRegW  : in  std_logic_vector(REG_SEL_W - 1 downto 0);
-        entDat   : in  std_logic_vector(DATA_WIDTH - 1 downto 0);
+        -- Puerto de Escritura (Síncrono)
+        wr       : in  std_logic; -- Habilitador de Escritura (Write Enable)
+        SelRegW  : in  std_logic_vector(REG_SEL_W - 1 downto 0); -- Selección de registro (0-7)
+        entDat   : in  std_logic_vector(DATA_WIDTH - 1 downto 0); -- Dato a escribir
         
-        -- Puerto de Lectura A
-        RA       : in  std_logic; -- Habilitador de lectura A (Desde Unidad de Control)
-        SelRegRA : in  std_logic_vector(REG_SEL_W - 1 downto 0);
-        SalA     : out std_logic_vector(DATA_WIDTH - 1 downto 0);
+        -- Puerto de Lectura A (Asíncrono)
+        RA       : in  std_logic; -- Habilitador de Lectura Puerto A
+        SelRegRA : in  std_logic_vector(REG_SEL_W - 1 downto 0); -- Selección Reg A
         
-        -- Puerto de Lectura B
-        RB       : in  std_logic; -- Habilitador de lectura B (Desde Unidad de Control)
-        SelRegRB : in  std_logic_vector(REG_SEL_W - 1 downto 0);
-        SalB     : out std_logic_vector(DATA_WIDTH - 1 downto 0)
+        -- Puerto de Lectura B (Asíncrono)
+        RB       : in  std_logic; -- Habilitador de Lectura Puerto B
+        SelRegRB : in  std_logic_vector(REG_SEL_W - 1 downto 0); -- Selección Reg B
+        
+        -- ======================================================================
+        -- MAPA DE SALIDAS (Output Map)
+        -- ======================================================================
+        SalA     : out std_logic_vector(DATA_WIDTH - 1 downto 0); -- Valor leído en A
+        SalB     : out std_logic_vector(DATA_WIDTH - 1 downto 0)  -- Valor leído en B
     );
 end banco_registros;
 
 architecture RTL of banco_registros is
-    -- Definimos el tipo de arreglo: 8 posiciones (2^3) de 8 bits cada una
+    -- ----------------------------------------------------------------------
+    -- TIPOS DE DATOS Y SEÑALES INTERNAS
+    -- ----------------------------------------------------------------------
+    -- Definimos la estructura de memoria: 8 filas de 8 bits
     type reg_array is array (0 to (2**REG_SEL_W) - 1) of std_logic_vector(DATA_WIDTH - 1 downto 0);
     
-    -- Inicializamos todos los registros en cero para simulación limpia
+    -- Inicializamos todos los registros en cero para asegurar un estado conocido
     signal registros : reg_array := (others => (others => '0'));
 begin
 
-    -- =========================================================
-    -- Proceso de Escritura (Síncrono)
-    -- =========================================================
+    -- ----------------------------------------------------------------------
+    -- PROCESO SÍNCRONO: ESCRITURA EN REGISTROS
+    -- ----------------------------------------------------------------------
     process(clk)
     begin
         if rising_edge(clk) then
-            -- Solo escribe si el habilitador 'wr' está en alto
+            -- Solo se modifica el contenido si el habilitador 'wr' está en alto
             if wr = '1' then
-                -- Convertimos el vector lógico a un entero (unsigned) para indexar la matriz
                 registros(to_integer(unsigned(SelRegW))) <= entDat;
             end if;
         end if;
     end process;
 
-    -- =========================================================
-    -- Lógica de Lectura (Asíncrona / Combinacional)
-    -- =========================================================
-    -- Si el habilitador de lectura correspondiente está activo, volcamos el 
-    -- valor del registro a la salida. De lo contrario, enviamos ceros para 
-    -- mantener el bus estable y reducir el consumo de energía (toggling).
+    -- ----------------------------------------------------------------------
+    -- LÓGICA COMBINACIONAL: LECTURA ASÍNCRONA
+    -- ----------------------------------------------------------------------
+    -- Las lecturas no dependen del reloj; el dato está disponible en cuanto
+    -- cambian los índices de selección y los habilitadores.
+    -- Si el habilitador está en '0', se fuerza la salida a cero.
     
     SalA <= registros(to_integer(unsigned(SelRegRA))) when RA = '1' else (others => '0');
     SalB <= registros(to_integer(unsigned(SelRegRB))) when RB = '1' else (others => '0');

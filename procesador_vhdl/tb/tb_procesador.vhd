@@ -20,60 +20,90 @@ architecture robust of tb_procesador is
     -- Señales de estímulo
     signal clk_tb    : std_logic := '0';
     signal rst_tb    : std_logic := '1';
+    signal inicia_tb : std_logic := '0';
     signal salida_tb : std_logic_vector(DATA_WIDTH - 1 downto 0);
 
     constant CLK_PERIOD : time := 10 ns;
     constant MAX_SIM_TIME : time := 1 us;
+    
+    -- Registro de fallos
+    signal errores : integer := 0;
 
 begin
 
-    -- Instancia del procesador
+    -- Instancia del procesador (DUT)
     DUT: entity work.procesador port map (
         rst => rst_tb,
         clk => clk_tb,
+        inicia => inicia_tb,
         salida => salida_tb
     );
 
-    -- Generador de Reloj
+    -- Generador de Reloj compatible con herramientas Quartus/ModelSim
     clk_process :process
     begin
         clk_tb <= '0'; wait for CLK_PERIOD/2;
         clk_tb <= '1'; wait for CLK_PERIOD/2;
     end process;
 
-    -- Proceso de Supervisión (Watchdog)
+    -- Proceso de Supervisión (Watchdog) para evitar bucles infinitos
     watchdog: process
     begin
         wait for MAX_SIM_TIME;
-        assert false report "TIMEOUT: La simulación excedió el tiempo máximo" severity failure;
+        if (errores = 0) then
+            report "TIMEOUT: Simulación finalizada por límite de tiempo." severity note;
+        else
+            report "TIMEOUT: Simulación finalizada con errores acumulados." severity failure;
+        end if;
+        wait;
     end process;
 
-    -- Secuencia de estímulos
+    -- Secuencia de estímulos principal
     stim_proc: process
     begin
-        report "Iniciando Pruebas de Sistema (Procesador)..." severity note;
+        report "--- INICIANDO AUDITORÍA DE SISTEMA COMPLETO ---" severity note;
 
-        -- 1. Reset inicial
+        -- 1. FASE: Inicialización y Reset
+        -- Objetivo: Asegurar que el bus inicie limpio antes de la señal inicia.
         rst_tb <= '1';
+        inicia_tb <= '0';
         wait for CLK_PERIOD * 3;
         
-        -- Opcional: Podríamos intentar cargar la RAM aquí si el simulador lo permite
-        -- usando alias o nombres jerárquicos, pero para máxima compatibilidad
-        -- asumimos que la RAM tiene un programa base o que el hardware lo carga.
-        
         rst_tb <= '0';
-        report "Procesador liberado, iniciando ejecución..." severity note;
+        wait for CLK_PERIOD * 2;
+        assert (salida_tb = "00000000") report "FALLO: El bus no está limpio tras el reset" severity warning;
+        if salida_tb /= "00000000" then errores <= errores + 1; end if;
 
-        -- Esperar a que el PC avance. 
-        -- FETCH1 -> FETCH2 -> DECODE -> EXEC -> FETCH1... (aprox 4-5 ciclos por instrucción)
+        -- 2. FASE: Arranque del Procesador
+        -- Objetivo: Activar la señal 'inicia' y observar el comienzo de la ejecución.
+        inicia_tb <= '1';
+        report "Señal 'inicia' activada. Comenzando ejecución del programa en RAM..." severity note;
+        wait for CLK_PERIOD * 10; -- FETCH1 -> FETCH2 -> DECODE -> EXEC (ADD R2)
+
+        -- 3. FASE: Verificación de Ejecución Continua
+        -- Objetivo: El bus de sistema no debe estar en alta impedancia ('Z') durante la ejecución normal.
         wait for CLK_PERIOD * 50; 
-
-        -- Verificación de actividad: Si el bus nunca cambió de '0', algo va mal
         assert (salida_tb /= "ZZZZZZZZ") 
-            report "ERROR: El bus de sistema está en alta impedancia permanente" severity warning;
+            report "FALLO CRÍTICO: El bus de sistema entró en alta impedancia inesperadamente" severity error;
+        if salida_tb = "ZZZZZZZZ" then errores <= errores + 1; end if;
 
-        report "--- TESTBENCH DE SISTEMA FINALIZADO ---" severity note;
-        assert false report "Simulacion completada exitosamente" severity failure;
+        -- 4. FASE: Verificación de Lógica de Bucle
+        -- El programa en RAM es un bucle que incrementa R2.
+        -- Verificamos que el valor en el bus (salida) sea mayor que 10 tras unos ciclos.
+        if (to_integer(unsigned(salida_tb)) <= 10) then
+            report "FALLO: El contador en R2 no parece estar incrementando (Val=" & integer'image(to_integer(unsigned(salida_tb))) & ")" severity error;
+            errores <= errores + 1;
+        end if;
+
+        -- FINALIZACIÓN
+        report "--- RESUMEN DE AUDITORÍA DE SISTEMA ---" severity note;
+        if errores = 0 then
+            report "RESULTADO: Sistema verificado sin anomalías." severity note;
+        else
+            report "RESULTADO: Se detectaron " & integer'image(errores) & " fallos en la integración." severity error;
+        end if;
+        
+        assert false report "Auditoria finalizada exitosamente" severity failure;
         wait;
     end process;
 

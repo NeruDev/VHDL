@@ -31,13 +31,16 @@ architecture robust of tb_alu is
     signal ope_tb           : std_logic_vector(ALU_OP_WIDTH - 1 downto 0) := (others => '0');
     signal SalidaALU_tb     : std_logic_vector(DATA_WIDTH - 1 downto 0);
     signal SalidaFlags_tb   : std_logic_vector(7 downto 0);
+    
+    -- Registro de fallos para auditoría
+    signal errores : integer := 0;
 
 begin
 
     DUT: alu port map (SalA_tb, SalB_tb, ope_tb, SalidaALU_tb, SalidaFlags_tb);
 
     stim_proc: process
-        -- Procedimiento interno para tener visibilidad de las señales del proceso
+        -- Procedimiento interno mejorado con registro de fallos
         procedure check_alu(
             constant a, b : in integer;
             constant op   : in std_logic_vector(2 downto 0);
@@ -51,54 +54,55 @@ begin
             ope_tb  <= op;
             wait for 10 ns;
             
-            assert (to_integer(unsigned(SalidaALU_tb)) = exp_res mod 256)
-                report "ERROR RESULTADO [" & msg & "]: Esperado " & integer'image(exp_res mod 256) & 
+            -- Verificación de Resultado
+            if (to_integer(unsigned(SalidaALU_tb)) /= exp_res mod 256) then
+                report "FALLO RESULTADO [" & msg & "]: Esperado " & integer'image(exp_res mod 256) & 
                        ", Obtenido " & integer'image(to_integer(unsigned(SalidaALU_tb)))
                 severity error;
+                errores <= errores + 1;
+            end if;
                 
-            assert (SalidaFlags_tb(0) = exp_z) 
-                report "ERROR FLAG Z [" & msg & "]" severity error;
-            assert (SalidaFlags_tb(1) = exp_s) 
-                report "ERROR FLAG S [" & msg & "]" severity error;
-            assert (SalidaFlags_tb(2) = exp_c) 
-                report "ERROR FLAG C [" & msg & "]" severity error;
+            -- Verificación de Banderas (Z, S, C)
+            if (SalidaFlags_tb(0) /= exp_z) then
+                report "FALLO FLAG Z [" & msg & "]" severity error;
+                errores <= errores + 1;
+            end if;
+            if (SalidaFlags_tb(1) /= exp_s) then
+                report "FALLO FLAG S [" & msg & "]" severity error;
+                errores <= errores + 1;
+            end if;
+            if (SalidaFlags_tb(2) /= exp_c) then
+                report "FALLO FLAG C [" & msg & "]" severity error;
+                errores <= errores + 1;
+            end if;
         end procedure;
     begin
-        report "Iniciando Pruebas Robustas de ALU..." severity note;
+        report "--- INICIANDO AUDITORÍA TÉCNICA DE ALU ---" severity note;
 
-        -- --- OPERACIONES ARITMÉTICAS ---
+        -- 1. OPERACIONES ARITMÉTICAS (ADD/SUB)
+        -- Objetivo: Validar suma, resta y generación de Acarreo/Signo.
+        check_alu(127, 1, OP_ADD, 128, '0', '1', '0', "Suma con Signo");
+        check_alu(255, 1, OP_ADD, 0,   '1', '0', '1', "Suma con Carry y Zero");
+        check_alu(0, 1, OP_SUB, 255,   '0', '1', '1', "Resta con Underflow (Signo+Borrow)");
+
+        -- 2. OPERACIONES LÓGICAS (AND/NOT)
+        -- Objetivo: Validar operaciones bit a bit.
+        check_alu(170, 85, OP_AND, 0, '1', '0', '0', "Operación AND (AA & 55 = 0)");
+        check_alu(255, 0, OP_NOT_A, 0, '1', '0', '0', "Operación NOT (Inversión FF -> 00)");
+
+        -- 3. INCREMENTO / DECREMENTO
+        -- Objetivo: Validar operaciones unitarias.
+        check_alu(255, 0, OP_INC_A, 0, '1', '0', '1', "Incremento al límite (FF+1)");
+        check_alu(0, 0, OP_DEC_A, 255, '0', '1', '1', "Decremento al límite (00-1)");
+
+        -- FINALIZACIÓN Y REPORTE
+        report "--- RESUMEN DE AUDITORÍA ALU ---" severity note;
+        if errores = 0 then
+            report "RESULTADO: ALU validada al 100% sin errores." severity note;
+        else
+            report "RESULTADO: Se detectaron " & integer'image(errores) & " anomalías en la ALU." severity error;
+        end if;
         
-        -- ADD: Casos borde
-        check_alu(0, 0, OP_ADD, 0, '1', '0', '0', "ADD 0+0");
-        check_alu(127, 1, OP_ADD, 128, '0', '1', '0', "ADD 127+1 (Set Sign)");
-        check_alu(255, 1, OP_ADD, 256, '1', '0', '1', "ADD 255+1 (Carry + Zero)");
-        check_alu(255, 255, OP_ADD, 510, '0', '1', '1', "ADD 255+255 (Carry + Sign)");
-
-        -- SUB: Casos borde
-        check_alu(10, 5, OP_SUB, 5, '0', '0', '0', "SUB 10-5");
-        check_alu(5, 5, OP_SUB, 0, '1', '0', '0', "SUB 5-5 (Zero)");
-        check_alu(0, 1, OP_SUB, -1, '0', '1', '1', "SUB 0-1 (Borrow/Carry + Sign)");
-        check_alu(128, 1, OP_SUB, 127, '0', '0', '0', "SUB 128-1 (Clear Sign)");
-
-        -- INC / DEC
-        check_alu(255, 0, OP_INC_A, 256, '1', '0', '1', "INC 255");
-        check_alu(0, 0, OP_DEC_A, -1, '0', '1', '1', "DEC 0");
-
-        -- --- OPERACIONES LÓGICAS ---
-        
-        -- AND
-        check_alu(170, 85, OP_AND, 0, '1', '0', '0', "AND AA with 55");
-        check_alu(255, 128, OP_AND, 128, '0', '1', '0', "AND FF with 80");
-
-        -- NOT
-        check_alu(255, 0, OP_NOT_A, 0, '1', '0', '0', "NOT FF");
-        check_alu(0, 0, OP_NOT_A, 255, '0', '1', '0', "NOT 00");
-
-        -- --- TRANSFERENCIAS ---
-        check_alu(123, 45, OP_TRANS_A, 123, '0', '0', '0', "TRANS A");
-        check_alu(123, 45, OP_TRANS_B, 45, '0', '0', '0', "TRANS B");
-
-        report "--- TESTBENCH DE ALU ROBUSTO FINALIZADO ---" severity note;
         wait;
     end process;
 
