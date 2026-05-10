@@ -1,0 +1,3 @@
+project_open procesador_top
+set_global_assignment -name TOP_LEVEL_ENTITY procesador_top
+project_close

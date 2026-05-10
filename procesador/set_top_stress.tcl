@@ -1,0 +1,4 @@
+project_open procesador_top
+set_global_assignment -name TOP_LEVEL_ENTITY tb_procesador_estres
+set_global_assignment -name VHDL_FILE tb/tb_procesador_estres.vhd
+project_close

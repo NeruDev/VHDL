@@ -22,3 +22,15 @@ El repositorio está organizado por unidades temáticas y recursos de apoyo:
 - Los archivos de diseño usan nombres descriptivos en minúsculas.
 - Los testbenches se identifican con el sufijo `_tb.vhd`.
 - Toda la documentación y comentarios de código se mantienen en español.
+
+## 💻 Entorno de Desarrollo (Local)
+Para garantizar la compatibilidad y facilitar la automatización de la compilación, se ha identificado el siguiente entorno en el equipo del autor:
+
+- **Sistema Operativo:** Windows 11 Home / Pro (64-bit).
+- **Software de Síntesis:** Altera Quartus II 64-Bit versión 13.0.1 Build 232 Service Pack 1 SJ Web Edition.
+- **Ruta del Compilador (Estándar):** `C:\altera\13.0sp1\quartus\bin64\`
+- **Ejecutables principales:**
+    - `quartus_map.exe` (Análisis y Síntesis)
+    - `quartus_fit.exe` (Fitter)
+    - `quartus_asm.exe` (Assembler)
+    - `quartus_sh.exe` (Shell de comandos)
