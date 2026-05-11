@@ -6,7 +6,6 @@
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
-use work.procesador_pkg.all;
 
 entity registro_flags is
     port (
