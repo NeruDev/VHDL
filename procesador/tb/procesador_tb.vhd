@@ -8,22 +8,12 @@
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
+use work.procesador_pkg.all;
 
 entity procesador_tb is
 end entity;
 
 architecture testbench of procesador_tb is
-
-    ----------------------------------------------------------------------------
-    -- Declaración del componente a probar (Unit Under Test - UUT)
-    ----------------------------------------------------------------------------
-    component procesador_top is
-        port (
-            clk : in  std_logic;
-            rst : in  std_logic;
-            fin : out std_logic
-        );
-    end component;
 
     ----------------------------------------------------------------------------
     -- Señales de interconexión
@@ -40,7 +30,7 @@ begin
     ----------------------------------------------------------------------------
     -- Instanciación del Procesador
     ----------------------------------------------------------------------------
-    uut: procesador_top port map (
+    uut: entity work.procesador_top port map (
         clk => clk,
         rst => rst,
         fin => fin

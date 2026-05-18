@@ -15,4 +15,5 @@ set_global_assignment -name VHDL_FILE src/datapath/ruta_datos.vhd
 set_global_assignment -name VHDL_FILE src/memoria/memoria_ram.vhd
 set_global_assignment -name VHDL_FILE src/procesador_top.vhd
 set_global_assignment -name VHDL_FILE tb/procesador_tb.vhd
+set_global_assignment -name VHDL_FILE tb/tb_alu_xor.vhd
 project_close

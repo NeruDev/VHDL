@@ -8,6 +8,7 @@
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
+use work.procesador_pkg.all;
 
 entity tb_procesador_estres is
 end entity;

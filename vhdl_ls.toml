@@ -1,0 +1,12 @@
+# Configuracion del analizador VHDL LS para el subproyecto procesador.
+# Se utiliza la ruta absoluta para asegurar que el LSP encuentre los archivos.
+
+[libraries]
+work.files = [
+  "G:/REPOSITORIOS GITHUB/VHDL/procesador/src/pkg/procesador_pkg.vhd",
+  "G:/REPOSITORIOS GITHUB/VHDL/procesador/src/control/**/*.vhd",
+  "G:/REPOSITORIOS GITHUB/VHDL/procesador/src/datapath/**/*.vhd",
+  "G:/REPOSITORIOS GITHUB/VHDL/procesador/src/memoria/**/*.vhd",
+  "G:/REPOSITORIOS GITHUB/VHDL/procesador/src/procesador_top.vhd",
+  "G:/REPOSITORIOS GITHUB/VHDL/procesador/tb/**/*.vhd"
+]

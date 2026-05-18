@@ -17,6 +17,12 @@ package procesador_pkg is
   constant REG_ADDR_WIDTH : integer := 3;-- Bits para direccionar 8 registros
 
   ------------------------------------------------------------------------------
+  -- OpCodes ISA (instrucciones de alto nivel)
+  ------------------------------------------------------------------------------
+  constant OP_XOR : std_logic_vector(7 downto 0) := x"30"; -- XOR R1 <- R0 xor R1
+  constant OP_NOT : std_logic_vector(7 downto 0) := x"40"; -- NOT R1 (ya existente)
+
+  ------------------------------------------------------------------------------
   -- Definición de componentes de la Ruta de Datos (Datapath)
   ------------------------------------------------------------------------------
 

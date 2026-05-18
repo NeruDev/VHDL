@@ -42,6 +42,11 @@ begin
         case ope is
             when "000" => -- PASA A (Bypass): Usado en MOV y STORE
                 res_9bit := a_9bit;
+
+            when "001" => -- XOR: Operación lógica XOR bit a bit
+                res_9bit := a_9bit xor b_9bit;
+                -- Se limpia el bit de acarreo forzadamente para operaciones lógicas
+                res_9bit(DATA_WIDTH) := '0';
             
             when "010" => -- AND: Operación lógica AND bit a bit
                 res_9bit := a_9bit and b_9bit;

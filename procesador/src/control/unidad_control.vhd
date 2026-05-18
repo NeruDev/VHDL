@@ -9,6 +9,7 @@
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
+use work.procesador_pkg.all;
 
 entity unidad_control is
     port (
@@ -42,7 +43,8 @@ architecture rtl of unidad_control is
 
     -- Definición de estados según FSM_PROCESADOR.md
     type state_type is (S00, S01, S02, S03, S04, S05, S06, S07, S08, 
-                        S09, S10, S11, S12, S13, S14, S15, S16, S17, S18, S19);
+                        S09, S10, S11, S12, S13, S14, S15, S16, S17, S18, S19,
+                        S20);
     signal current_state, next_state : state_type;
 
     -- Mapeo de banderas de estado para saltos condicionales
@@ -113,13 +115,14 @@ begin
                     -- Instrucciones que requieren operando de 16 bits (LOAD, STORE, JUMPS)
                     when x"70" | x"71" | x"80" | x"81" | x"82" | x"83" => next_state <= S03;
                     -- Instrucciones ALU rápidas (1 solo ciclo de ejecución)
-                    when x"40" => next_state <= S15; -- NOT R1
+                    when OP_NOT => next_state <= S15; -- NOT R1
                     when x"41" => next_state <= S16; -- AND R1
                     when x"42" => next_state <= S17; -- DEC R1
                     when x"43" => next_state <= S18; -- INC R1
                     when x"44" => next_state <= S19; -- SUB R1
                     when x"45" => next_state <= S09; -- ADD R1
                     when x"46" => next_state <= S10; -- MOV R0, R1
+                    when OP_XOR => next_state <= S20; -- XOR R1
                     when x"47" => next_state <= S12; -- MOVI K
                     when x"FF" => next_state <= S11; -- HALT
                     when others => next_state <= S01; -- NOP / Desconocida
@@ -257,6 +260,16 @@ begin
                 SelRegRA <= "000";
                 SelRegRB <= "001";
                 ope      <= "110"; -- RESTA
+                SalAlu   <= '1';
+                wr       <= '1';
+                LF       <= '1';
+                next_state <= S01;
+
+            when S20 => -- XOR: R1 <- R0 xor R1
+                SelRegW  <= "001";
+                SelRegRA <= "000";
+                SelRegRB <= "001";
+                ope      <= "001"; -- XOR
                 SalAlu   <= '1';
                 wr       <= '1';
                 LF       <= '1';
