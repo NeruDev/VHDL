@@ -47,7 +47,7 @@ Este proyecto implementa un procesador didactico de 8 bits con bus de datos de 8
 - Selecciona entre `salidaPC` y `SalidaHL` con `SelDir`.
 
 ### 3.9 Unidad de Control (UC)
-- FSM que implementa los estados S00 a S19.
+- FSM que implementa los estados S00 a S20.
 - Decodifica `CO` y evalua `Flags` para dirigir el flujo.
 - Genera senales de control para ruta de datos y memoria.
 
@@ -65,8 +65,8 @@ Este proyecto implementa un procesador didactico de 8 bits con bus de datos de 8
    - **Instrucciones con operando de 16 bits** (LOAD, STORE, JMP, JZ, JC, JS):
      - **S03-S06** ensamblan HL desde memoria.
      - **S07/S08/S14** ejecutan la operacion final.
-   - **ALU rapidas** (NOT, AND, DEC, INC, SUB, ADD, MOV):
-     - Ejecutan en un solo estado (S09, S10, S15-S19).
+   - **ALU rapidas** (XOR, NOT, AND, DEC, INC, SUB, ADD, MOV):
+     - Ejecutan en un solo estado (S09, S10, S15-S20).
    - **MOVI**: usa S12 para cargar y S13 para incrementar PC.
 5. **FIN (S11)**: estado de detencion permanente.
 
@@ -75,6 +75,7 @@ Este proyecto implementa un procesador didactico de 8 bits con bus de datos de 8
 | :--- | :--- | :--- | :--- |
 | 70h | LOAD dir | S03-S07 | `R1 <- M(HL)` |
 | 71h | STORE dir | S03-S08 | `M(HL) <- R1` |
+| 30h | XOR R1 | S20 | `R1 <- R0 xor R1` |
 | 40h | NOT R1 | S15 | `R1 <- not R1` |
 | 41h | AND R1 | S16 | `R1 <- R0 and R1` |
 | 42h | DEC R1 | S17 | `R1 <- R1 - 1` |
@@ -183,6 +184,7 @@ procesador:
 | procesador/src/memoria/memoria_ram.vhd | RAM 256x8 con programa base | Memoria |
 | procesador/tb/procesador_tb.vhd | Testbench basico del procesador | Testbench |
 | procesador/tb/tb_procesador_estres.vhd | Testbench de estres con watchdog | Testbench |
+| procesador/tb/tb_alu_xor.vhd | Testbench unitario de la ALU (XOR/NOT) | Testbench |
 
 ## 10. Referencias usadas
 - Proyecto/ARCHIVOS_BASE/MICRO_INSTRUCCIONES.md

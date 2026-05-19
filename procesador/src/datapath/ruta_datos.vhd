@@ -3,7 +3,6 @@
 -- Arquitectura: estructural
 -- Descripción: Encapsula todos los componentes de ejecución física (ALU, 
 --              Registros, PC, etc.) e interconecta sus señales internas.
--- Referencias: Proyecto/ARCHIVOS_BASE/MICRO_INSTRUCCIONES.md (Esquema lógico)
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;

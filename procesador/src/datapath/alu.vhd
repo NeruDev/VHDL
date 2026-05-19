@@ -3,7 +3,6 @@
 -- Arquitectura: rtl
 -- Descripción: Unidad Lógico Aritmética (ALU) de 8 bits. Realiza operaciones 
 --              aritméticas y lógicas básicas, y genera banderas de estado.
--- Referencias: Proyecto/ARCHIVOS_BASE/MICRO_INSTRUCCIONES.md (Códigos de op.)
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;

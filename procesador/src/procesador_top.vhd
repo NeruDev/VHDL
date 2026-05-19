@@ -3,7 +3,6 @@
 -- Arquitectura: estructural
 -- Descripción: Módulo de nivel superior que interconecta la Unidad de Control, 
 --              la Ruta de Datos y la Memoria RAM para formar el procesador completo.
--- Referencias: Proyecto/ARCHIVOS_BASE/MICRO_INSTRUCCIONES.md (Lógica de interconexión)
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;

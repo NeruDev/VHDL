@@ -4,7 +4,6 @@
 -- Descripción: Banco de pruebas avanzado con mecanismos de seguridad y métricas.
 --              Incluye un Watchdog para prevenir bucles infinitos y un contador
 --              de ciclos para evaluar el rendimiento del procesador.
--- Referencias: Proyecto/ARCHIVOS_BASE/TEST_PROCESADOR.md
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;

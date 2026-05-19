@@ -3,7 +3,6 @@
 -- Arquitectura: rtl
 -- Descripción: Memoria RAM de 256 bytes (8 bits de datos, 8 bits de direccionamiento
 --              efectivo). Contiene el programa de prueba pre-cargado.
--- Referencias: Proyecto/ARCHIVOS_BASE/TEST_PROCESADOR.md
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;

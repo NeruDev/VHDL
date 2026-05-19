@@ -2,7 +2,6 @@
 -- Paquete: procesador_pkg
 -- Descripción: Definición de constantes globales y componentes necesarios para 
 --              la construcción del procesador de 8 bits.
--- Referencias: Proyecto/ARCHIVOS_BASE/MICRO_INSTRUCCIONES.md
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
@@ -19,8 +18,11 @@ package procesador_pkg is
   ------------------------------------------------------------------------------
   -- OpCodes ISA (instrucciones de alto nivel)
   ------------------------------------------------------------------------------
-  constant OP_XOR : std_logic_vector(7 downto 0) := x"30"; -- XOR R1 <- R0 xor R1
-  constant OP_NOT : std_logic_vector(7 downto 0) := x"40"; -- NOT R1 (ya existente)
+  -- NOT: Operación nativa base (remarcada para consistencia arquitectónica)
+  constant OP_NOT : std_logic_vector(7 downto 0) := x"40"; 
+  
+  -- XOR: Única ampliación agregada para completar el set de operaciones de la ALU
+  constant OP_XOR : std_logic_vector(7 downto 0) := x"30"; 
 
   ------------------------------------------------------------------------------
   -- Definición de componentes de la Ruta de Datos (Datapath)

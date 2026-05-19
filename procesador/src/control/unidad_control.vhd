@@ -3,9 +3,6 @@
 -- Arquitectura: rtl
 -- Descripción: Unidad de Control que implementa la Máquina de Estados Finitos (FSM) 
 --              para orquestar el ciclo de Búsqueda, Decodificación y Ejecución.
--- Referencias: 
---   - Proyecto/ARCHIVOS_BASE/FSM_PROCESADOR.md (Tabla de estados)
---   - Proyecto/ARCHIVOS_BASE/MICRO_INSTRUCCIONES.md (Acciones por instrucción)
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;

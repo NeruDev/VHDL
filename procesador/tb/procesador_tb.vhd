@@ -4,7 +4,6 @@
 -- Descripción: Banco de pruebas estándar para la validación del procesador.
 --              Simula el ciclo de vida completo desde el reset hasta la instrucción
 --              de detención (HALT/FFh).
--- Referencias: Proyecto/ARCHIVOS_BASE/TEST_PROCESADOR.md (Programa de prueba)
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
