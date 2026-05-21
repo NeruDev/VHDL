@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project source="3.8.0" version="1.0">
+  This file is intended to be loaded by Logisim-evolution v3.8.0(https://github.com/logisim-evolution/).
+
+  <lib desc="#Wiring" name="0">
+    <tool name="Pin">
+      <a name="appearance" val="classic"/>
+    </tool>
+  </lib>
+  <lib desc="#Gates" name="1"/>
+  <lib desc="#Plexers" name="2"/>
+  <lib desc="#Arithmetic" name="3"/>
+  <lib desc="#Memory" name="4"/>
+  <lib desc="#I/O" name="5"/>
+  <lib desc="#TTL" name="6"/>
+  <lib desc="#TCL" name="7"/>
+  <lib desc="#Base" name="8"/>
+  <lib desc="#BFH-Praktika" name="9"/>
+  <lib desc="#Input/Output-Extra" name="10"/>
+  <lib desc="#Soc" name="11"/>
+  <main name="main"/>
+  <options>
+    <a name="gateUndefined" val="ignore"/>
+    <a name="simlimit" val="1000"/>
+    <a name="simrand" val="0"/>
+  </options>
+  <mappings>
+    <tool lib="8" map="Button2" name="Poke Tool"/>
+    <tool lib="8" map="Button3" name="Menu Tool"/>
+    <tool lib="8" map="Ctrl Button1" name="Menu Tool"/>
+  </mappings>
+  <toolbar>
+    <tool lib="8" name="Poke Tool"/>
+    <tool lib="8" name="Edit Tool"/>
+    <tool lib="8" name="Wiring Tool"/>
+    <tool lib="8" name="Text Tool"/>
+    <sep/>
+    <tool lib="0" name="Pin"/>
+    <tool lib="0" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </tool>
+    <sep/>
+    <tool lib="1" name="NOT Gate"/>
+    <tool lib="1" name="AND Gate"/>
+    <tool lib="1" name="OR Gate"/>
+    <tool lib="1" name="XOR Gate"/>
+    <tool lib="1" name="NAND Gate"/>
+    <tool lib="1" name="NOR Gate"/>
+    <sep/>
+    <tool lib="4" name="D Flip-Flop"/>
+    <tool lib="4" name="Register"/>
+  </toolbar>
+  <circuit name="main">
+    <a name="appearance" val="logisim_evolution"/>
+    <a name="circuit" val="main"/>
+    <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="1000.0"/>
+    <comp lib="0" loc="(290,100)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="radix" val="16"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(290,40)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+    </comp>
+    <comp lib="0" loc="(290,60)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+    </comp>
+    <comp lib="0" loc="(290,80)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(580,100)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(580,120)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(580,180)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(580,200)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(580,220)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(580,240)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(580,260)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(580,280)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(580,300)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(580,320)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(580,340)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(580,360)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(580,380)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(580,40)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(580,400)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(580,420)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="5"/>
+    </comp>
+    <comp lib="0" loc="(580,60)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(580,80)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(650,140)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(650,160)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </comp>
+    <comp lib="1" loc="(610,140)" name="NOT Gate"/>
+    <comp lib="1" loc="(610,160)" name="NOT Gate"/>
+    <comp loc="(540,40)" name="control">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <wire from="(290,100)" to="(320,100)"/>
+    <wire from="(290,40)" to="(320,40)"/>
+    <wire from="(290,60)" to="(320,60)"/>
+    <wire from="(290,80)" to="(320,80)"/>
+    <wire from="(540,100)" to="(580,100)"/>
+    <wire from="(540,120)" to="(580,120)"/>
+    <wire from="(540,140)" to="(580,140)"/>
+    <wire from="(540,160)" to="(580,160)"/>
+    <wire from="(540,180)" to="(580,180)"/>
+    <wire from="(540,200)" to="(580,200)"/>
+    <wire from="(540,220)" to="(580,220)"/>
+    <wire from="(540,240)" to="(580,240)"/>
+    <wire from="(540,260)" to="(580,260)"/>
+    <wire from="(540,280)" to="(580,280)"/>
+    <wire from="(540,300)" to="(580,300)"/>
+    <wire from="(540,320)" to="(580,320)"/>
+    <wire from="(540,340)" to="(580,340)"/>
+    <wire from="(540,360)" to="(580,360)"/>
+    <wire from="(540,380)" to="(580,380)"/>
+    <wire from="(540,40)" to="(580,40)"/>
+    <wire from="(540,400)" to="(580,400)"/>
+    <wire from="(540,420)" to="(580,420)"/>
+    <wire from="(540,60)" to="(580,60)"/>
+    <wire from="(540,80)" to="(580,80)"/>
+    <wire from="(610,140)" to="(650,140)"/>
+    <wire from="(610,160)" to="(650,160)"/>
+  </circuit>
+  <vhdl name="control">library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+-- ============================================================================
+-- Entidad: control
+-- Rol:
+--   Unidad de Control basada en una Máquina de Estados Finitos (FSM) que
+--   secuencia el ciclo FETCH–DECODE–EXECUTE de un procesador sencillo de 8 bits.
+--
+-- Entradas:
+--   - clk : reloj del sistema.
+--   - rst : reset externo (asíncrono) que fuerza el estado inicial.
+--   - Flags[7:0] : banderas de estado (se usan Z,S,C en bits 0,1,2).
+--   - CO[7:0] : código de operación (OpCode) proveniente del Registro de
+--              Instrucción (RI).
+--
+-- Salidas:
+--   Señales de control hacia datapath/memoria: clear, Lpc, Ipc, SelDir, inicia,
+--   cs, oe, we, LH, LL, Lri, selectores de registros, wr, operación ALU (ope),
+--   habilitación de bus (SalAlu), carga de flags (LF) y fin (HALT).
+--   - idEstado[4:0] : codificación binaria del estado actual (debug/monitoreo).
+--
+-- Notas:
+--   - cs y oe son ACTIVOS EN BAJO (0 =&gt; activo).
+--   - we es ACTIVO EN ALTO (1 =&gt; escritura).
+-- ============================================================================
+entity control is
+  port (
+    clk: in std_logic;
+    rst: in std_logic;
+    Flags: in std_logic_vector (7 downto 0);
+    CO: in std_logic_vector (7 downto 0);
+
+    clear: out std_logic;
+    Lpc, Ipc, SelDir: out std_logic;
+    inicia, cs, oe, we: out std_logic;
+    LH, LL, Lri: out std_logic;
+
+    SelRegW, SelRegRA, SelRegRB: out std_logic_vector (2 downto 0);
+    wr: out std_logic;
+
+    ope: out std_logic_vector (2 downto 0);
+    SalAlu, LF: out std_logic;
+    fin: out std_logic;
+
+    idEstado: out std_logic_vector (4 downto 0)
+  );
+end entity control;
+
+architecture una of control is
+
+  -- ==========================================================================
+  -- Definición de estados:
+  --   S00..S02  : fetch + decode inicial
+  --   S03..S06  : lectura de operando de 16 bits (carga de HL)
+  --   S07..S08  : acceso a memoria (LOAD/STORE)
+  --   S09..S10  : ALU/transferencias rápidas (ADD, MOV)
+  --   S12..S13  : inmediato (MOVI)
+  --   S14       : salto (JMP/Jcc)
+  --   S15..S20  : ALU lógicas/ariméticas (NOT, AND, DEC, INC, SUB, XOR)
+  --   S11       : HALT
+  -- ==========================================================================
+  type state_type is (
+    S00, S01, S02, S03, S04, S05, S06, S07, S08, S09,
+    S10, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20
+  );
+
+  -- Registro de estado actual y estado siguiente
+  signal current_state, next_state : state_type;
+
+  -- ==========================================================================
+  -- Aliases de banderas:
+  --   Se extraen bits específicos del vector Flags para saltos condicionales.
+  -- ==========================================================================
+  alias FZ : std_logic is Flags(0);  -- Zero flag
+  alias FS : std_logic is Flags(1);  -- Sign flag
+  alias FC : std_logic is Flags(2);  -- Carry flag
+
+  -- ==========================================================================
+  -- Función de mapeo: state_type -&gt; std_logic_vector(4 downto 0)
+  --   - Exporta el estado como número binario para depuración.
+  --   - Se usa numeric_std para convertir con to_unsigned.
+  -- ==========================================================================
+  function state_to_slv(s : state_type) return std_logic_vector is
+    variable v : unsigned(4 downto 0);
+  begin
+    case s is
+      when S00 =&gt; v := to_unsigned(0, 5);
+      when S01 =&gt; v := to_unsigned(1, 5);
+      when S02 =&gt; v := to_unsigned(2, 5);
+      when S03 =&gt; v := to_unsigned(3, 5);
+      when S04 =&gt; v := to_unsigned(4, 5);
+      when S05 =&gt; v := to_unsigned(5, 5);
+      when S06 =&gt; v := to_unsigned(6, 5);
+      when S07 =&gt; v := to_unsigned(7, 5);
+      when S08 =&gt; v := to_unsigned(8, 5);
+      when S09 =&gt; v := to_unsigned(9, 5);
+      when S10 =&gt; v := to_unsigned(10, 5);
+      when S11 =&gt; v := to_unsigned(11, 5);
+      when S12 =&gt; v := to_unsigned(12, 5);
+      when S13 =&gt; v := to_unsigned(13, 5);
+      when S14 =&gt; v := to_unsigned(14, 5);
+      when S15 =&gt; v := to_unsigned(15, 5);
+      when S16 =&gt; v := to_unsigned(16, 5);
+      when S17 =&gt; v := to_unsigned(17, 5);
+      when S18 =&gt; v := to_unsigned(18, 5);
+      when S19 =&gt; v := to_unsigned(19, 5);
+      when S20 =&gt; v := to_unsigned(20, 5);
+    end case;
+    return std_logic_vector(v);
+  end function;
+
+begin
+
+  -- ========================================================================
+  -- Salida de estado (debug):
+  --   idEstado refleja el estado ACTUAL (no el siguiente).
+  -- ========================================================================
+  idEstado &lt;= state_to_slv(current_state);
+
+  -- ========================================================================
+  -- Proceso secuencial (registro de estado):
+  --   - Reset asíncrono: cuando rst=1 se fuerza el estado inicial S00.
+  --   - En flanco de subida de clk se transfiere next_state a current_state.
+  -- ========================================================================
+  process(clk, rst)
+  begin
+    if rst = '1' then
+      current_state &lt;= S00;
+    elsif rising_edge(clk) then
+      current_state &lt;= next_state;
+    end if;
+  end process;
+
+  -- ========================================================================
+  -- Proceso combinacional (lógica de control):
+  --   - Define valores por defecto para TODAS las salidas en cada evaluación,
+  --     evitando inferencia de latches.
+  --   - Implementa:
+  --       * Función de transición de estados (next_state)
+  --       * Función de salida (señales de control) tipo Moore/Mealy híbrida:
+  --           - Principalmente Moore (depende del estado).
+  --           - Saltos condicionales en S06 dependen de Flags (Mealy local).
+  -- ========================================================================
+  process(current_state, CO, FZ, FS, FC)
+  begin
+    -------------------------------------------------------------------------
+    -- Defaults seguros:
+    --   Todas las salidas desactivadas por defecto; memoria inactiva.
+    -------------------------------------------------------------------------
+    clear    &lt;= '0';
+    Lpc      &lt;= '0';
+    Ipc      &lt;= '0';
+    SelDir   &lt;= '0';
+    inicia   &lt;= '0';
+
+    cs       &lt;= '1'; -- Chip Select RAM (activo bajo): 1 =&gt; deshabilitado
+    oe       &lt;= '1'; -- Output Enable (activo bajo): 1 =&gt; no leer al bus
+    we       &lt;= '0'; -- Write Enable (activo alto): 0 =&gt; no escribir
+
+    LH       &lt;= '0';
+    LL       &lt;= '0';
+    Lri      &lt;= '0';
+
+    SelRegW  &lt;= "000";
+    SelRegRA &lt;= "000";
+    SelRegRB &lt;= "000";
+    wr       &lt;= '0';
+
+    ope      &lt;= "000";
+    SalAlu   &lt;= '0';
+    LF       &lt;= '0';
+    fin      &lt;= '0';
+
+    -- Permanecer en el mismo estado si no se especifica transición
+    next_state &lt;= current_state;
+
+    case current_state is
+
+      -----------------------------------------------------------------------
+      -- S00: RESET/INIT
+      --   - clear: reset interno del datapath (registros).
+      --   - inicia: inicialización de memoria (si aplica).
+      --   - Pasa a FETCH.
+      -----------------------------------------------------------------------
+      when S00 =&gt;
+        clear  &lt;= '1';
+        inicia &lt;= '1';
+        next_state &lt;= S01;
+
+      -----------------------------------------------------------------------
+      -- S01: FETCH0
+      --   - Lee memoria en la dirección apuntada por PC (SelDir por defecto=0).
+      --   - cs/oe activos para colocar el OpCode en el bus.
+      --   - Lri captura el OpCode en el Registro de Instrucción.
+      -----------------------------------------------------------------------
+      when S01 =&gt;
+        cs  &lt;= '0';
+        oe  &lt;= '0';
+        Lri &lt;= '1';
+        next_state &lt;= S02;
+
+      -----------------------------------------------------------------------
+      -- S02: FETCH1 + DECODE
+      --   - Incrementa PC (Ipc=1) para apuntar al siguiente byte.
+      --   - Decodifica el OpCode (CO) para decidir la ruta de ejecución:
+      --       * Instrucciones con operando de 16 bits -&gt; rutina HL (S03)
+      --       * Instrucciones de ALU de 1 ciclo -&gt; estados S09..S20
+      --       * MOVI -&gt; S12 (carga inmediata)
+      --       * HALT -&gt; S11
+      --       * Otros -&gt; NOP/unknown =&gt; vuelve a S01
+      --
+      --   NOT  = x"40"
+      --   XOR  = x"30"
+      -----------------------------------------------------------------------
+      when S02 =&gt;
+        Ipc &lt;= '1';
+        case CO is
+          -- Requieren capturar dirección 16b (2 bytes) en HL
+          when x"70" | x"71" | x"80" | x"81" | x"82" | x"83" =&gt;
+            next_state &lt;= S03;
+
+          when x"40" =&gt; -- NOT
+            next_state &lt;= S15;
+
+          when x"41" =&gt; -- AND
+            next_state &lt;= S16;
+
+          when x"42" =&gt; -- DEC
+            next_state &lt;= S17;
+
+          when x"43" =&gt; -- INC
+            next_state &lt;= S18;
+
+          when x"44" =&gt; -- SUB
+            next_state &lt;= S19;
+
+          when x"45" =&gt; -- ADD
+            next_state &lt;= S09;
+
+          when x"46" =&gt; -- MOV R0 &lt;- R1
+            next_state &lt;= S10;
+
+          when x"30" =&gt; -- XOR
+            next_state &lt;= S20;
+
+          when x"47" =&gt; -- MOVI
+            next_state &lt;= S12;
+
+          when x"FF" =&gt; -- HALT
+            next_state &lt;= S11;
+
+          when others =&gt;
+            next_state &lt;= S01;
+        end case;
+
+      -----------------------------------------------------------------------
+      -- S03: Lee byte bajo de la dirección (PC apunta al low) y carga L
+      --   - cs/oe habilitan lectura de RAM.
+      --   - LL carga el registro L del par HL.
+      -----------------------------------------------------------------------
+      when S03 =&gt;
+        cs &lt;= '0';
+        oe &lt;= '0';
+        LL &lt;= '1';
+        next_state &lt;= S04;
+
+      -----------------------------------------------------------------------
+      -- S04: Incrementa PC para apuntar al byte alto de la dirección.
+      -----------------------------------------------------------------------
+      when S04 =&gt;
+        Ipc &lt;= '1';
+        next_state &lt;= S05;
+
+      -----------------------------------------------------------------------
+      -- S05: Lee byte alto de la dirección y carga H
+      --   - cs/oe habilitan lectura de RAM.
+      --   - LH carga el registro H del par HL.
+      -----------------------------------------------------------------------
+      when S05 =&gt;
+        cs &lt;= '0';
+        oe &lt;= '0';
+        LH &lt;= '1';
+        next_state &lt;= S06;
+
+      -----------------------------------------------------------------------
+      -- S06: Incrementa PC para apuntar a la siguiente instrucción y sub-decodifica
+      --   - Para LOAD/STORE ejecuta acceso a memoria usando HL.
+      --   - Para saltos condicionales evalúa flags:
+      --       JZ: FZ, JC: FC, JS: FS
+      --   - JMP/Jcc tomada =&gt; S14 (cargar PC con HL)
+      --   - No tomada =&gt; vuelve a FETCH (S01)
+      -----------------------------------------------------------------------
+      when S06 =&gt;
+        Ipc &lt;= '1';
+        case CO is
+          when x"70" =&gt; -- LOAD
+            next_state &lt;= S07;
+          when x"71" =&gt; -- STORE
+            next_state &lt;= S08;
+          when x"80" =&gt; -- JMP incondicional
+            next_state &lt;= S14;
+
+          when x"81" =&gt; -- JZ
+            if FZ = '1' then next_state &lt;= S14; else next_state &lt;= S01; end if;
+
+          when x"82" =&gt; -- JC
+            if FC = '1' then next_state &lt;= S14; else next_state &lt;= S01; end if;
+
+          when x"83" =&gt; -- JS
+            if FS = '1' then next_state &lt;= S14; else next_state &lt;= S01; end if;
+
+          when others =&gt;
+            next_state &lt;= S01;
+        end case;
+
+      -----------------------------------------------------------------------
+      -- S07: LOAD
+      --   - SelDir=1 selecciona HL como dirección hacia la RAM.
+      --   - cs/oe habilitan lectura; el dato va del bus a banco de registros.
+      --   - wr=1 escribe en el banco; SelRegW="001" selecciona R1 destino.
+      -----------------------------------------------------------------------
+      when S07 =&gt;
+        SelDir  &lt;= '1';
+        cs      &lt;= '0';
+        oe      &lt;= '0';
+        SelRegW &lt;= "001";
+        wr      &lt;= '1';
+        next_state &lt;= S01;
+
+      -----------------------------------------------------------------------
+      -- S08: STORE
+      --   - SelDir=1 direcciona con HL.
+      --   - cs=0 habilita chip; we=1 habilita escritura en RAM.
+      --   - SelRegRA="001" selecciona R1 como fuente.
+      --   - ope="000" (bypass) y SalAlu=1 ponen el dato al bus compartido
+      --     a través del buffer triestado de la ALU (según tu datapath).
+      -----------------------------------------------------------------------
+      when S08 =&gt;
+        SelDir   &lt;= '1';
+        cs       &lt;= '0';
+        we       &lt;= '1';
+        SelRegRA &lt;= "001";
+        ope      &lt;= "000";
+        SalAlu   &lt;= '1';
+        next_state &lt;= S01;
+
+      -----------------------------------------------------------------------
+      -- S14: JUMP (JMP/Jcc tomada)
+      --   - Lpc=1 carga el PC con el valor del par HL (dirección destino).
+      -----------------------------------------------------------------------
+      when S14 =&gt;
+        Lpc &lt;= '1';
+        next_state &lt;= S01;
+
+      -----------------------------------------------------------------------
+      -- S09: ADD  (R1 &lt;- R0 + R1)
+      --   - Selección operandos: RA=R0, RB=R1
+      --   - ope="101" indica suma en ALU
+      --   - SalAlu=1 habilita salida ALU al bus
+      --   - wr=1 escribe resultado en R1
+      --   - LF=1 captura flags Z/S/C en registro de banderas
+      -----------------------------------------------------------------------
+      when S09 =&gt;
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "000";
+        SelRegRB &lt;= "001";
+        ope      &lt;= "101";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      -----------------------------------------------------------------------
+      -- S10: MOV (R0 &lt;- R1)
+      --   - ope="000" bypass (pasar RA)
+      --   - RA=R1, destino W=R0
+      --   - wr=1 escribe en banco de registros
+      --   - No actualiza flags (LF=0).
+      -----------------------------------------------------------------------
+      when S10 =&gt;
+        SelRegW  &lt;= "000";
+        SelRegRA &lt;= "001";
+        ope      &lt;= "000";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        next_state &lt;= S01;
+
+      -----------------------------------------------------------------------
+      -- S12: MOVI (R1 &lt;- M(PC))
+      --   - Lee el inmediato desde memoria (cs/oe).
+      --   - Banco de registros escribe directamente desde BusDatos (datapath),
+      --     por eso SalAlu no se usa aquí.
+      --   - Luego pasa a S13 para incrementar PC.
+      -----------------------------------------------------------------------
+      when S12 =&gt;
+        cs      &lt;= '0';
+        oe      &lt;= '0';
+        SelRegW &lt;= "001";
+        wr      &lt;= '1';
+        next_state &lt;= S13;
+
+      -----------------------------------------------------------------------
+      -- S13: Ajuste PC tras MOVI
+      --   - Ipc=1 para consumir el inmediato.
+      -----------------------------------------------------------------------
+      when S13 =&gt;
+        Ipc &lt;= '1';
+        next_state &lt;= S01;
+
+      -----------------------------------------------------------------------
+      -- S15: NOT (R1 &lt;- not R1)
+      --   - RA=R1, ope="011" = NOT
+      --   - escribe en R1 y actualiza flags
+      -----------------------------------------------------------------------
+      when S15 =&gt;
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "001";
+        ope      &lt;= "011";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      -----------------------------------------------------------------------
+      -- S16: AND (R1 &lt;- R0 and R1)
+      --   - RA=R0, RB=R1, ope="010" = AND
+      --   - escribe en R1 y actualiza flags
+      -----------------------------------------------------------------------
+      when S16 =&gt;
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "000";
+        SelRegRB &lt;= "001";
+        ope      &lt;= "010";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      -----------------------------------------------------------------------
+      -- S17: DEC (R1 &lt;- R1 - 1)
+      --   - RA=R1, ope="100" = resta 1 (micro-op de ALU)
+      -----------------------------------------------------------------------
+      when S17 =&gt;
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "001";
+        ope      &lt;= "100";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      -----------------------------------------------------------------------
+      -- S18: INC (R1 &lt;- R1 + 1)
+      --   - RA=R1, ope="111" = suma 1
+      -----------------------------------------------------------------------
+      when S18 =&gt;
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "001";
+        ope      &lt;= "111";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      -----------------------------------------------------------------------
+      -- S19: SUB (R1 &lt;- R0 - R1)
+      --   - RA=R0, RB=R1, ope="110" = resta
+      -----------------------------------------------------------------------
+      when S19 =&gt;
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "000";
+        SelRegRB &lt;= "001";
+        ope      &lt;= "110";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      -----------------------------------------------------------------------
+      -- S20: XOR (R1 &lt;- R0 xor R1)
+      --   - RA=R0, RB=R1, ope="001" = XOR
+      -----------------------------------------------------------------------
+      when S20 =&gt;
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "000";
+        SelRegRB &lt;= "001";
+        ope      &lt;= "001";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      -----------------------------------------------------------------------
+      -- S11: HALT
+      --   - fin=1 indica detención.
+      --   - next_state se mantiene en S11 (bucle estable).
+      -----------------------------------------------------------------------
+      when S11 =&gt;
+        fin &lt;= '1';
+        next_state &lt;= S11;
+
+      -- Estado por defecto de recuperación
+      when others =&gt;
+        next_state &lt;= S00;
+    end case;
+  end process;
+
+end architecture una;</vhdl>
+</project>
