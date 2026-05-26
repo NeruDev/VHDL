@@ -1,0 +1,1228 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project source="3.8.0" version="1.0">
+  This file is intended to be loaded by Logisim-evolution v3.8.0(https://github.com/logisim-evolution/).
+
+  <lib desc="#Wiring" name="0">
+    <tool name="Pin">
+      <a name="appearance" val="classic"/>
+    </tool>
+  </lib>
+  <lib desc="#Gates" name="1"/>
+  <lib desc="#Plexers" name="2"/>
+  <lib desc="#Arithmetic" name="3"/>
+  <lib desc="#Memory" name="4"/>
+  <lib desc="#I/O" name="5"/>
+  <lib desc="#TTL" name="6"/>
+  <lib desc="#TCL" name="7"/>
+  <lib desc="#Base" name="8"/>
+  <lib desc="#BFH-Praktika" name="9"/>
+  <lib desc="#Input/Output-Extra" name="10"/>
+  <lib desc="#Soc" name="11"/>
+  <main name="main"/>
+  <options>
+    <a name="gateUndefined" val="ignore"/>
+    <a name="simlimit" val="1000"/>
+    <a name="simrand" val="0"/>
+  </options>
+  <mappings>
+    <tool lib="8" map="Button2" name="Poke Tool"/>
+    <tool lib="8" map="Button3" name="Menu Tool"/>
+    <tool lib="8" map="Ctrl Button1" name="Menu Tool"/>
+  </mappings>
+  <toolbar>
+    <tool lib="8" name="Poke Tool"/>
+    <tool lib="8" name="Edit Tool"/>
+    <tool lib="8" name="Wiring Tool"/>
+    <tool lib="8" name="Text Tool"/>
+    <sep/>
+    <tool lib="0" name="Pin"/>
+    <tool lib="0" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </tool>
+    <sep/>
+    <tool lib="1" name="NOT Gate"/>
+    <tool lib="1" name="AND Gate"/>
+    <tool lib="1" name="OR Gate"/>
+    <tool lib="1" name="XOR Gate"/>
+    <tool lib="1" name="NAND Gate"/>
+    <tool lib="1" name="NOR Gate"/>
+    <sep/>
+    <tool lib="4" name="D Flip-Flop"/>
+    <tool lib="4" name="Register"/>
+  </toolbar>
+  <circuit name="main">
+    <a name="appearance" val="logisim_evolution"/>
+    <a name="circuit" val="main"/>
+    <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="1000.0"/>
+    <comp lib="0" loc="(1180,1020)" name="Tunnel"/>
+    <comp lib="0" loc="(1180,870)" name="Tunnel">
+      <a name="label" val="dir"/>
+      <a name="width" val="16"/>
+    </comp>
+    <comp lib="0" loc="(1180,990)" name="Tunnel">
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(1190,210)" name="Tunnel">
+      <a name="label" val="SalidaHL"/>
+      <a name="width" val="16"/>
+    </comp>
+    <comp lib="0" loc="(1190,30)" name="Tunnel">
+      <a name="label" val="SalidaPC"/>
+      <a name="width" val="16"/>
+    </comp>
+    <comp lib="0" loc="(1190,380)" name="Tunnel">
+      <a name="label" val="CO"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(1190,530)" name="Tunnel">
+      <a name="label" val="SalidaALU"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(1190,560)" name="Tunnel"/>
+    <comp lib="0" loc="(1190,590)" name="Tunnel"/>
+    <comp lib="0" loc="(1190,620)" name="Tunnel"/>
+    <comp lib="0" loc="(1190,670)" name="Tunnel">
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(130,1010)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="SelRegRA"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(130,1040)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="SelRegRB"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(130,1070)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="EntDat"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(130,890)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="clk"/>
+    </comp>
+    <comp lib="0" loc="(130,920)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="clear"/>
+    </comp>
+    <comp lib="0" loc="(130,950)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="wr"/>
+    </comp>
+    <comp lib="0" loc="(130,980)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="SelRegW"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(160,650)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="clk"/>
+    </comp>
+    <comp lib="0" loc="(160,680)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="we"/>
+    </comp>
+    <comp lib="0" loc="(160,710)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="cs"/>
+    </comp>
+    <comp lib="0" loc="(160,740)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="oe"/>
+    </comp>
+    <comp lib="0" loc="(160,770)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="inicia"/>
+    </comp>
+    <comp lib="0" loc="(160,800)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="dir"/>
+      <a name="width" val="16"/>
+    </comp>
+    <comp lib="0" loc="(160,830)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="din"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(520,890)" name="Tunnel">
+      <a name="label" val="SalA"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(520,920)" name="Tunnel">
+      <a name="label" val="SalB"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(530,650)" name="Tunnel">
+      <a name="label" val="dout"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(540,120)" name="Tunnel">
+      <a name="label" val="SelDir"/>
+    </comp>
+    <comp lib="0" loc="(540,150)" name="Tunnel">
+      <a name="label" val="inicia"/>
+    </comp>
+    <comp lib="0" loc="(540,180)" name="Tunnel">
+      <a name="label" val="cs"/>
+    </comp>
+    <comp lib="0" loc="(540,210)" name="Tunnel">
+      <a name="label" val="oe"/>
+    </comp>
+    <comp lib="0" loc="(540,240)" name="Tunnel">
+      <a name="label" val="we"/>
+    </comp>
+    <comp lib="0" loc="(540,270)" name="Tunnel">
+      <a name="label" val="LH1"/>
+    </comp>
+    <comp lib="0" loc="(540,30)" name="Tunnel">
+      <a name="label" val="clear"/>
+    </comp>
+    <comp lib="0" loc="(540,300)" name="Tunnel">
+      <a name="label" val="LL"/>
+    </comp>
+    <comp lib="0" loc="(540,330)" name="Tunnel">
+      <a name="label" val="Lri"/>
+    </comp>
+    <comp lib="0" loc="(540,360)" name="Tunnel">
+      <a name="label" val="SelRegW"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(540,390)" name="Tunnel">
+      <a name="label" val="SelRegRA"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(540,420)" name="Tunnel">
+      <a name="label" val="SelRegRB"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(540,450)" name="Tunnel">
+      <a name="label" val="wr"/>
+    </comp>
+    <comp lib="0" loc="(540,480)" name="Tunnel">
+      <a name="label" val="ope"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(540,510)" name="Tunnel">
+      <a name="label" val="SalAlu"/>
+    </comp>
+    <comp lib="0" loc="(540,540)" name="Tunnel">
+      <a name="label" val="LF"/>
+    </comp>
+    <comp lib="0" loc="(540,570)" name="Tunnel">
+      <a name="label" val="fin"/>
+    </comp>
+    <comp lib="0" loc="(540,60)" name="Tunnel">
+      <a name="label" val="Lpc"/>
+    </comp>
+    <comp lib="0" loc="(540,600)" name="Probe">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="idEstado"/>
+    </comp>
+    <comp lib="0" loc="(540,90)" name="Tunnel">
+      <a name="label" val="Ipc"/>
+    </comp>
+    <comp lib="0" loc="(740,1020)" name="Tunnel">
+      <a name="facing" val="east"/>
+    </comp>
+    <comp lib="0" loc="(740,120)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="Ipc"/>
+    </comp>
+    <comp lib="0" loc="(740,150)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="SalidaHL"/>
+      <a name="width" val="16"/>
+    </comp>
+    <comp lib="0" loc="(740,210)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="clk"/>
+    </comp>
+    <comp lib="0" loc="(740,240)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="clear"/>
+    </comp>
+    <comp lib="0" loc="(740,270)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="LH1"/>
+    </comp>
+    <comp lib="0" loc="(740,30)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="clk"/>
+    </comp>
+    <comp lib="0" loc="(740,300)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="LL"/>
+    </comp>
+    <comp lib="0" loc="(740,330)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="BusDatos"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(740,380)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="clk"/>
+    </comp>
+    <comp lib="0" loc="(740,410)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="clear"/>
+    </comp>
+    <comp lib="0" loc="(740,440)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="Lri"/>
+    </comp>
+    <comp lib="0" loc="(740,470)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="BusDatos"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(740,530)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="SalA"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(740,560)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="SalB"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(740,590)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="ope"/>
+      <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(740,60)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="clear"/>
+    </comp>
+    <comp lib="0" loc="(740,670)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="clk"/>
+    </comp>
+    <comp lib="0" loc="(740,700)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="clear"/>
+    </comp>
+    <comp lib="0" loc="(740,730)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="LF"/>
+    </comp>
+    <comp lib="0" loc="(740,760)" name="Tunnel">
+      <a name="facing" val="east"/>
+    </comp>
+    <comp lib="0" loc="(740,790)" name="Tunnel">
+      <a name="facing" val="east"/>
+    </comp>
+    <comp lib="0" loc="(740,820)" name="Tunnel">
+      <a name="facing" val="east"/>
+    </comp>
+    <comp lib="0" loc="(740,870)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="SelDir"/>
+    </comp>
+    <comp lib="0" loc="(740,90)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="Lpc"/>
+    </comp>
+    <comp lib="0" loc="(740,900)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="SalidaPC"/>
+      <a name="width" val="16"/>
+    </comp>
+    <comp lib="0" loc="(740,930)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="SalidaHL"/>
+      <a name="width" val="16"/>
+    </comp>
+    <comp lib="0" loc="(740,990)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(90,130)" name="Tunnel">
+      <a name="facing" val="east"/>
+    </comp>
+    <comp lib="0" loc="(90,190)" name="Tunnel">
+      <a name="facing" val="east"/>
+    </comp>
+    <comp lib="0" loc="(90,220)" name="Tunnel">
+      <a name="facing" val="east"/>
+    </comp>
+    <comp loc="(1060,870)" name="mux_direcciones">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp loc="(1070,990)" name="buffer_triestado">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp loc="(1080,210)" name="registro_hl">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp loc="(1080,30)" name="pc">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp loc="(1080,380)" name="registro_instruccion">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp loc="(1080,530)" name="alu">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp loc="(1100,670)" name="registro_flags">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp loc="(410,130)" name="control">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp loc="(470,890)" name="banco_registros">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp loc="(480,650)" name="memoria_ram">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <wire from="(100,170)" to="(100,190)"/>
+    <wire from="(100,170)" to="(190,170)"/>
+    <wire from="(1060,870)" to="(1180,870)"/>
+    <wire from="(1070,1010)" to="(1170,1010)"/>
+    <wire from="(1070,990)" to="(1180,990)"/>
+    <wire from="(1080,210)" to="(1190,210)"/>
+    <wire from="(1080,30)" to="(1190,30)"/>
+    <wire from="(1080,380)" to="(1190,380)"/>
+    <wire from="(1080,530)" to="(1190,530)"/>
+    <wire from="(1080,550)" to="(1180,550)"/>
+    <wire from="(1080,570)" to="(1170,570)"/>
+    <wire from="(1080,590)" to="(1160,590)"/>
+    <wire from="(110,190)" to="(110,220)"/>
+    <wire from="(110,190)" to="(190,190)"/>
+    <wire from="(1100,670)" to="(1190,670)"/>
+    <wire from="(1160,590)" to="(1160,620)"/>
+    <wire from="(1160,620)" to="(1190,620)"/>
+    <wire from="(1170,1010)" to="(1170,1020)"/>
+    <wire from="(1170,1020)" to="(1180,1020)"/>
+    <wire from="(1170,570)" to="(1170,590)"/>
+    <wire from="(1170,590)" to="(1190,590)"/>
+    <wire from="(1180,550)" to="(1180,560)"/>
+    <wire from="(1180,560)" to="(1190,560)"/>
+    <wire from="(130,1010)" to="(170,1010)"/>
+    <wire from="(130,1040)" to="(180,1040)"/>
+    <wire from="(130,1070)" to="(190,1070)"/>
+    <wire from="(130,890)" to="(250,890)"/>
+    <wire from="(130,920)" to="(140,920)"/>
+    <wire from="(130,950)" to="(150,950)"/>
+    <wire from="(130,980)" to="(160,980)"/>
+    <wire from="(140,910)" to="(140,920)"/>
+    <wire from="(140,910)" to="(250,910)"/>
+    <wire from="(150,930)" to="(150,950)"/>
+    <wire from="(150,930)" to="(250,930)"/>
+    <wire from="(160,650)" to="(260,650)"/>
+    <wire from="(160,680)" to="(170,680)"/>
+    <wire from="(160,710)" to="(180,710)"/>
+    <wire from="(160,740)" to="(190,740)"/>
+    <wire from="(160,770)" to="(200,770)"/>
+    <wire from="(160,800)" to="(210,800)"/>
+    <wire from="(160,830)" to="(220,830)"/>
+    <wire from="(160,950)" to="(160,980)"/>
+    <wire from="(160,950)" to="(250,950)"/>
+    <wire from="(170,670)" to="(170,680)"/>
+    <wire from="(170,670)" to="(260,670)"/>
+    <wire from="(170,970)" to="(170,1010)"/>
+    <wire from="(170,970)" to="(250,970)"/>
+    <wire from="(180,690)" to="(180,710)"/>
+    <wire from="(180,690)" to="(260,690)"/>
+    <wire from="(180,990)" to="(180,1040)"/>
+    <wire from="(180,990)" to="(250,990)"/>
+    <wire from="(190,1010)" to="(190,1070)"/>
+    <wire from="(190,1010)" to="(250,1010)"/>
+    <wire from="(190,710)" to="(190,740)"/>
+    <wire from="(190,710)" to="(260,710)"/>
+    <wire from="(200,730)" to="(200,770)"/>
+    <wire from="(200,730)" to="(260,730)"/>
+    <wire from="(210,750)" to="(210,800)"/>
+    <wire from="(210,750)" to="(260,750)"/>
+    <wire from="(220,770)" to="(220,830)"/>
+    <wire from="(220,770)" to="(260,770)"/>
+    <wire from="(410,130)" to="(420,130)"/>
+    <wire from="(410,150)" to="(430,150)"/>
+    <wire from="(410,170)" to="(440,170)"/>
+    <wire from="(410,190)" to="(450,190)"/>
+    <wire from="(410,210)" to="(460,210)"/>
+    <wire from="(410,230)" to="(470,230)"/>
+    <wire from="(410,250)" to="(480,250)"/>
+    <wire from="(410,270)" to="(490,270)"/>
+    <wire from="(410,290)" to="(500,290)"/>
+    <wire from="(410,310)" to="(510,310)"/>
+    <wire from="(410,330)" to="(540,330)"/>
+    <wire from="(410,350)" to="(510,350)"/>
+    <wire from="(410,370)" to="(500,370)"/>
+    <wire from="(410,390)" to="(490,390)"/>
+    <wire from="(410,410)" to="(480,410)"/>
+    <wire from="(410,430)" to="(470,430)"/>
+    <wire from="(410,450)" to="(460,450)"/>
+    <wire from="(410,470)" to="(450,470)"/>
+    <wire from="(410,490)" to="(440,490)"/>
+    <wire from="(410,510)" to="(430,510)"/>
+    <wire from="(420,30)" to="(420,130)"/>
+    <wire from="(420,30)" to="(540,30)"/>
+    <wire from="(430,510)" to="(430,600)"/>
+    <wire from="(430,60)" to="(430,150)"/>
+    <wire from="(430,60)" to="(540,60)"/>
+    <wire from="(430,600)" to="(540,600)"/>
+    <wire from="(440,490)" to="(440,570)"/>
+    <wire from="(440,570)" to="(540,570)"/>
+    <wire from="(440,90)" to="(440,170)"/>
+    <wire from="(440,90)" to="(540,90)"/>
+    <wire from="(450,120)" to="(450,190)"/>
+    <wire from="(450,120)" to="(540,120)"/>
+    <wire from="(450,470)" to="(450,540)"/>
+    <wire from="(450,540)" to="(540,540)"/>
+    <wire from="(460,150)" to="(460,210)"/>
+    <wire from="(460,150)" to="(540,150)"/>
+    <wire from="(460,450)" to="(460,510)"/>
+    <wire from="(460,510)" to="(540,510)"/>
+    <wire from="(470,180)" to="(470,230)"/>
+    <wire from="(470,180)" to="(540,180)"/>
+    <wire from="(470,430)" to="(470,480)"/>
+    <wire from="(470,480)" to="(540,480)"/>
+    <wire from="(470,890)" to="(520,890)"/>
+    <wire from="(470,910)" to="(500,910)"/>
+    <wire from="(480,210)" to="(480,250)"/>
+    <wire from="(480,210)" to="(540,210)"/>
+    <wire from="(480,410)" to="(480,450)"/>
+    <wire from="(480,450)" to="(540,450)"/>
+    <wire from="(480,650)" to="(530,650)"/>
+    <wire from="(490,240)" to="(490,270)"/>
+    <wire from="(490,240)" to="(540,240)"/>
+    <wire from="(490,390)" to="(490,420)"/>
+    <wire from="(490,420)" to="(540,420)"/>
+    <wire from="(500,270)" to="(500,290)"/>
+    <wire from="(500,270)" to="(540,270)"/>
+    <wire from="(500,370)" to="(500,390)"/>
+    <wire from="(500,390)" to="(540,390)"/>
+    <wire from="(500,910)" to="(500,920)"/>
+    <wire from="(500,920)" to="(520,920)"/>
+    <wire from="(510,300)" to="(510,310)"/>
+    <wire from="(510,300)" to="(540,300)"/>
+    <wire from="(510,350)" to="(510,360)"/>
+    <wire from="(510,360)" to="(540,360)"/>
+    <wire from="(740,1020)" to="(750,1020)"/>
+    <wire from="(740,120)" to="(770,120)"/>
+    <wire from="(740,150)" to="(780,150)"/>
+    <wire from="(740,210)" to="(860,210)"/>
+    <wire from="(740,240)" to="(750,240)"/>
+    <wire from="(740,270)" to="(760,270)"/>
+    <wire from="(740,30)" to="(860,30)"/>
+    <wire from="(740,300)" to="(770,300)"/>
+    <wire from="(740,330)" to="(780,330)"/>
+    <wire from="(740,380)" to="(860,380)"/>
+    <wire from="(740,410)" to="(750,410)"/>
+    <wire from="(740,440)" to="(760,440)"/>
+    <wire from="(740,470)" to="(770,470)"/>
+    <wire from="(740,530)" to="(860,530)"/>
+    <wire from="(740,560)" to="(750,560)"/>
+    <wire from="(740,590)" to="(760,590)"/>
+    <wire from="(740,60)" to="(750,60)"/>
+    <wire from="(740,670)" to="(880,670)"/>
+    <wire from="(740,700)" to="(750,700)"/>
+    <wire from="(740,730)" to="(760,730)"/>
+    <wire from="(740,760)" to="(770,760)"/>
+    <wire from="(740,790)" to="(780,790)"/>
+    <wire from="(740,820)" to="(790,820)"/>
+    <wire from="(740,870)" to="(840,870)"/>
+    <wire from="(740,90)" to="(760,90)"/>
+    <wire from="(740,900)" to="(750,900)"/>
+    <wire from="(740,930)" to="(760,930)"/>
+    <wire from="(740,990)" to="(850,990)"/>
+    <wire from="(750,1010)" to="(750,1020)"/>
+    <wire from="(750,1010)" to="(850,1010)"/>
+    <wire from="(750,230)" to="(750,240)"/>
+    <wire from="(750,230)" to="(860,230)"/>
+    <wire from="(750,400)" to="(750,410)"/>
+    <wire from="(750,400)" to="(860,400)"/>
+    <wire from="(750,50)" to="(750,60)"/>
+    <wire from="(750,50)" to="(860,50)"/>
+    <wire from="(750,550)" to="(750,560)"/>
+    <wire from="(750,550)" to="(860,550)"/>
+    <wire from="(750,690)" to="(750,700)"/>
+    <wire from="(750,690)" to="(880,690)"/>
+    <wire from="(750,890)" to="(750,900)"/>
+    <wire from="(750,890)" to="(840,890)"/>
+    <wire from="(760,250)" to="(760,270)"/>
+    <wire from="(760,250)" to="(860,250)"/>
+    <wire from="(760,420)" to="(760,440)"/>
+    <wire from="(760,420)" to="(860,420)"/>
+    <wire from="(760,570)" to="(760,590)"/>
+    <wire from="(760,570)" to="(860,570)"/>
+    <wire from="(760,70)" to="(760,90)"/>
+    <wire from="(760,70)" to="(860,70)"/>
+    <wire from="(760,710)" to="(760,730)"/>
+    <wire from="(760,710)" to="(880,710)"/>
+    <wire from="(760,910)" to="(760,930)"/>
+    <wire from="(760,910)" to="(840,910)"/>
+    <wire from="(770,270)" to="(770,300)"/>
+    <wire from="(770,270)" to="(860,270)"/>
+    <wire from="(770,440)" to="(770,470)"/>
+    <wire from="(770,440)" to="(860,440)"/>
+    <wire from="(770,730)" to="(770,760)"/>
+    <wire from="(770,730)" to="(880,730)"/>
+    <wire from="(770,90)" to="(770,120)"/>
+    <wire from="(770,90)" to="(860,90)"/>
+    <wire from="(780,110)" to="(780,150)"/>
+    <wire from="(780,110)" to="(860,110)"/>
+    <wire from="(780,290)" to="(780,330)"/>
+    <wire from="(780,290)" to="(860,290)"/>
+    <wire from="(780,750)" to="(780,790)"/>
+    <wire from="(780,750)" to="(880,750)"/>
+    <wire from="(790,770)" to="(790,820)"/>
+    <wire from="(790,770)" to="(880,770)"/>
+    <wire from="(90,130)" to="(190,130)"/>
+    <wire from="(90,190)" to="(100,190)"/>
+    <wire from="(90,220)" to="(110,220)"/>
+  </circuit>
+  <vhdl name="pc">library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity pc is
+    port (
+        clk       : in  std_logic;
+        clear     : in  std_logic;
+        Lpc       : in  std_logic;
+        Ipc       : in  std_logic;
+        EntradaPC : in  std_logic_vector(15 downto 0);
+        salidaPC  : out std_logic_vector(15 downto 0)
+    );
+end entity pc;
+
+architecture rtl of pc is
+    constant ADDR_WIDTH : integer := 16;
+    signal cuenta : unsigned(ADDR_WIDTH-1 downto 0);
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if clear = '1' then
+                cuenta &lt;= (others =&gt; '0');
+            elsif Lpc = '1' then
+                cuenta &lt;= unsigned(EntradaPC);
+            elsif Ipc = '1' then
+                cuenta &lt;= cuenta + 1;
+            end if;
+        end if;
+    end process;
+
+    salidaPC &lt;= std_logic_vector(cuenta);
+end architecture rtl;</vhdl>
+  <vhdl name="registro_instruccion">library ieee;
+use ieee.std_logic_1164.all;
+
+entity registro_instruccion is
+    port (
+        clk         : in  std_logic;
+        clear       : in  std_logic;
+        Lri         : in  std_logic;
+        BusDatos_in : in  std_logic_vector(7 downto 0);
+        CO          : out std_logic_vector(7 downto 0)
+    );
+end entity registro_instruccion;
+
+architecture rtl of registro_instruccion is
+    constant DATA_WIDTH : integer := 8;
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if clear = '1' then
+                CO &lt;= (others =&gt; '0');
+            elsif Lri = '1' then
+                CO &lt;= BusDatos_in;
+            end if;
+        end if;
+    end process;
+end architecture rtl;
+</vhdl>
+  <vhdl name="registro_hl">library ieee;
+use ieee.std_logic_1164.all;
+
+entity registro_hl is
+    port (
+        clk         : in  std_logic;
+        clear       : in  std_logic;
+        LH1         : in  std_logic;
+        LL          : in  std_logic;
+        BusDatos_in : in  std_logic_vector(7 downto 0);
+        SalidaHL    : out std_logic_vector(15 downto 0)
+    );
+end entity registro_hl;
+
+architecture rtl of registro_hl is
+    constant DATA_WIDTH : integer := 8;
+    signal H, L : std_logic_vector(DATA_WIDTH-1 downto 0);
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if clear = '1' then
+                H &lt;= (others =&gt; '0');
+                L &lt;= (others =&gt; '0');
+            else
+                if LH1 = '1' then H &lt;= BusDatos_in; end if;
+                if LL  = '1' then L &lt;= BusDatos_in; end if;
+            end if;
+        end if;
+    end process;
+
+    SalidaHL &lt;= H &amp; L;
+end architecture rtl;</vhdl>
+  <vhdl name="mux_direcciones">library ieee;
+use ieee.std_logic_1164.all;
+
+entity mux_direcciones is
+    port (
+        SelDir   : in  std_logic;
+        salidaPC : in  std_logic_vector(15 downto 0);
+        SalidaHL : in  std_logic_vector(15 downto 0);
+        dir      : out std_logic_vector(15 downto 0)
+    );
+end entity mux_direcciones;
+
+architecture rtl of mux_direcciones is
+begin
+    dir &lt;= salidaPC when SelDir = '0' else SalidaHL;
+end architecture rtl;</vhdl>
+  <vhdl name="banco_registros">library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity banco_registros is
+    port (
+        clk      : in  std_logic;
+        clear    : in  std_logic;
+        wr       : in  std_logic;
+        SelRegW  : in  std_logic_vector(2 downto 0);
+        SelRegRA : in  std_logic_vector(2 downto 0);
+        SelRegRB : in  std_logic_vector(2 downto 0);
+        entDat   : in  std_logic_vector(7 downto 0);
+        SalA     : out std_logic_vector(7 downto 0);
+        SalB     : out std_logic_vector(7 downto 0)
+    );
+end entity banco_registros;
+
+architecture rtl of banco_registros is
+    constant DATA_WIDTH     : integer := 8;
+    constant REG_ADDR_WIDTH : integer := 3;
+
+    type registro_array is array (0 to (2**REG_ADDR_WIDTH)-1) of std_logic_vector(DATA_WIDTH-1 downto 0);
+    signal registros : registro_array;
+begin
+    SalA &lt;= registros(to_integer(unsigned(SelRegRA)));
+    SalB &lt;= registros(to_integer(unsigned(SelRegRB)));
+
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if clear = '1' then
+                for i in 0 to (2**REG_ADDR_WIDTH)-1 loop
+                    registros(i) &lt;= (others =&gt; '0');
+                end loop;
+            elsif wr = '1' then
+                registros(to_integer(unsigned(SelRegW))) &lt;= entDat;
+            end if;
+        end if;
+    end process;
+end architecture rtl;</vhdl>
+  <vhdl name="alu">library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity alu is
+    port (
+        SalA      : in  std_logic_vector(7 downto 0);
+        SalB      : in  std_logic_vector(7 downto 0);
+        ope       : in  std_logic_vector(2 downto 0);
+        SalidaALU : out std_logic_vector(7 downto 0);
+        Z         : out std_logic;
+        S         : out std_logic;
+        C         : out std_logic
+    );
+end entity alu;
+
+architecture rtl of alu is
+    constant DATA_WIDTH : integer := 8;
+begin
+    process(SalA, SalB, ope)
+        variable res_9bit : unsigned(DATA_WIDTH downto 0);
+        variable a_9bit   : unsigned(DATA_WIDTH downto 0);
+        variable b_9bit   : unsigned(DATA_WIDTH downto 0);
+        variable res_8bit : std_logic_vector(DATA_WIDTH-1 downto 0);
+    begin
+        a_9bit := unsigned('0' &amp; SalA);
+        b_9bit := unsigned('0' &amp; SalB);
+        res_9bit := (others =&gt; '0');
+
+        case ope is
+            when "000" =&gt; res_9bit := a_9bit;
+            when "001" =&gt; res_9bit := a_9bit xor b_9bit; res_9bit(DATA_WIDTH) := '0';
+            when "010" =&gt; res_9bit := a_9bit and b_9bit;
+            when "011" =&gt; res_9bit := not a_9bit;        res_9bit(DATA_WIDTH) := '0';
+            when "100" =&gt; res_9bit := a_9bit - 1;
+            when "101" =&gt; res_9bit := a_9bit + b_9bit;
+            when "110" =&gt; res_9bit := a_9bit - b_9bit;
+            when "111" =&gt; res_9bit := a_9bit + 1;
+            when others =&gt; res_9bit := a_9bit;
+        end case;
+
+        res_8bit := std_logic_vector(res_9bit(DATA_WIDTH-1 downto 0));
+        SalidaALU &lt;= res_8bit;
+
+        if res_8bit = x"00" then Z &lt;= '1'; else Z &lt;= '0'; end if;
+        S &lt;= res_8bit(DATA_WIDTH-1);
+
+        if (ope = "100") or (ope = "110") then
+            C &lt;= res_9bit(DATA_WIDTH);
+        elsif (ope = "101") or (ope = "111") then
+            C &lt;= res_9bit(DATA_WIDTH);
+        else
+            C &lt;= '0';
+        end if;
+    end process;
+end architecture rtl;</vhdl>
+  <vhdl name="buffer_triestado">library ieee;
+use ieee.std_logic_1164.all;
+
+entity buffer_triestado is
+    port (
+        entrada   : in  std_logic_vector(7 downto 0);
+        habilitar : in  std_logic;
+        salida    : out std_logic_vector(7 downto 0);
+        oe        : out std_logic
+    );
+end entity buffer_triestado;
+
+architecture rtl of buffer_triestado is
+begin
+    salida &lt;= entrada;
+    oe     &lt;= habilitar;
+end architecture rtl;</vhdl>
+  <vhdl name="registro_flags">library ieee;
+use ieee.std_logic_1164.all;
+
+entity registro_flags is
+    port (
+        clk       : in  std_logic;
+        clear     : in  std_logic;
+        Lf        : in  std_logic;
+        Z_in      : in  std_logic;
+        S_in      : in  std_logic;
+        C_in      : in  std_logic;
+        Flags_out : out std_logic_vector(7 downto 0)
+    );
+end entity registro_flags;
+
+architecture rtl of registro_flags is
+    signal reg : std_logic_vector(7 downto 0);
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if clear = '1' then
+                reg &lt;= (others =&gt; '0');
+            elsif Lf = '1' then
+                reg(0) &lt;= Z_in;
+                reg(1) &lt;= S_in;
+                reg(2) &lt;= C_in;
+                reg(7 downto 3) &lt;= (others =&gt; '0');
+            end if;
+        end if;
+    end process;
+
+    Flags_out &lt;= reg;
+end architecture rtl;</vhdl>
+  <vhdl name="memoria_ram">library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity memoria_ram is
+    port (
+        clk    : in  std_logic;
+        we     : in  std_logic;
+        cs     : in  std_logic;
+        oe     : in  std_logic;
+        inicia : in  std_logic;
+        dir    : in  std_logic_vector(15 downto 0);
+
+        din    : in  std_logic_vector(7 downto 0);
+        dout   : out std_logic_vector(7 downto 0)
+    );
+end entity memoria_ram;
+
+architecture rtl of memoria_ram is
+    constant DATA_WIDTH : integer := 8;
+
+    type banco is array (0 to 255) of std_logic_vector(DATA_WIDTH-1 downto 0);
+
+    function inicia_ram return banco is
+        variable tempo : banco := (others =&gt; (others =&gt; '0'));
+    begin
+        for addr in 0 to 255 loop
+            tempo(addr) := std_logic_vector(to_unsigned(addr, DATA_WIDTH));
+        end loop;
+
+        tempo(0)  := x"70"; tempo(1)  := x"35"; tempo(2)  := x"00";
+        tempo(3)  := x"46";
+        tempo(4)  := x"47"; tempo(5)  := x"5E";
+        tempo(6)  := x"45";
+        tempo(7)  := x"71"; tempo(8)  := x"36"; tempo(9)  := x"00";
+        tempo(10) := x"82"; tempo(11) := x"0F"; tempo(12) := x"00";
+        tempo(13) := x"10"; tempo(14) := x"20";
+        tempo(15) := x"42";
+        tempo(16) := x"81"; tempo(17) := x"2C"; tempo(18) := x"00";
+        tempo(19) := x"42";
+        tempo(20) := x"81"; tempo(21) := x"19"; tempo(22) := x"00";
+        tempo(23) := x"11"; tempo(24) := x"21";
+        tempo(25) := x"43";
+        tempo(26) := x"40";
+        tempo(27) := x"83"; tempo(28) := x"20"; tempo(29) := x"00";
+        tempo(30) := x"12"; tempo(31) := x"22";
+        tempo(32) := x"47"; tempo(33) := x"F9";
+        tempo(34) := x"41";
+        tempo(35) := x"70"; tempo(36) := x"36"; tempo(37) := x"00";
+        tempo(38) := x"80"; tempo(39) := x"2C"; tempo(40) := x"00";
+        tempo(44) := x"FF";
+
+        tempo(16#035#) := x"A4";
+        tempo(16#036#) := x"B5";
+        tempo(16#037#) := x"C6";
+        return tempo;
+    end function;
+
+    signal contenido : banco := inicia_ram;
+    signal addr8 : integer range 0 to 255;
+begin
+    addr8 &lt;= to_integer(unsigned(dir(7 downto 0)));
+
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if inicia = '1' then
+                contenido &lt;= inicia_ram;
+            elsif (cs = '0') and (we = '1') then
+                contenido(addr8) &lt;= din;
+            end if;
+        end if;
+    end process;
+
+    dout &lt;= contenido(addr8) when (cs = '0') and (oe = '0') else (others =&gt; '0');
+end architecture rtl;</vhdl>
+  <vhdl name="control">library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity control is
+  port (
+    clk      : in  std_logic;
+    rst      : in  std_logic;
+    Flags    : in  std_logic_vector(7 downto 0);
+    CO       : in  std_logic_vector(7 downto 0);
+
+    clear    : out std_logic;
+    Lpc      : out std_logic;
+    Ipc      : out std_logic;
+    SelDir   : out std_logic;
+
+    inicia   : out std_logic;
+    cs       : out std_logic;
+    oe       : out std_logic;
+    we       : out std_logic;
+
+    LH1      : out std_logic;  -- &lt;&lt; consistente con registro_hl y ruta_datos
+    LL       : out std_logic;
+    Lri      : out std_logic;
+
+    SelRegW  : out std_logic_vector(2 downto 0);
+    SelRegRA : out std_logic_vector(2 downto 0);
+    SelRegRB : out std_logic_vector(2 downto 0);
+    wr       : out std_logic;
+
+    ope      : out std_logic_vector(2 downto 0);
+    SalAlu   : out std_logic;
+    LF       : out std_logic;
+    fin      : out std_logic;
+
+    idEstado : out std_logic_vector(4 downto 0)
+  );
+end entity control;
+
+architecture una of control is
+
+  type state_type is (
+    S00, S01, S02, S03, S04, S05, S06, S07, S08, S09,
+    S10, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20
+  );
+
+  signal current_state, next_state : state_type;
+
+  alias FZ : std_logic is Flags(0);
+  alias FS : std_logic is Flags(1);
+  alias FC : std_logic is Flags(2);
+
+  function state_to_slv(s : state_type) return std_logic_vector is
+    variable v : unsigned(4 downto 0);
+  begin
+    case s is
+      when S00 =&gt; v := to_unsigned(0, 5);
+      when S01 =&gt; v := to_unsigned(1, 5);
+      when S02 =&gt; v := to_unsigned(2, 5);
+      when S03 =&gt; v := to_unsigned(3, 5);
+      when S04 =&gt; v := to_unsigned(4, 5);
+      when S05 =&gt; v := to_unsigned(5, 5);
+      when S06 =&gt; v := to_unsigned(6, 5);
+      when S07 =&gt; v := to_unsigned(7, 5);
+      when S08 =&gt; v := to_unsigned(8, 5);
+      when S09 =&gt; v := to_unsigned(9, 5);
+      when S10 =&gt; v := to_unsigned(10, 5);
+      when S11 =&gt; v := to_unsigned(11, 5);
+      when S12 =&gt; v := to_unsigned(12, 5);
+      when S13 =&gt; v := to_unsigned(13, 5);
+      when S14 =&gt; v := to_unsigned(14, 5);
+      when S15 =&gt; v := to_unsigned(15, 5);
+      when S16 =&gt; v := to_unsigned(16, 5);
+      when S17 =&gt; v := to_unsigned(17, 5);
+      when S18 =&gt; v := to_unsigned(18, 5);
+      when S19 =&gt; v := to_unsigned(19, 5);
+      when S20 =&gt; v := to_unsigned(20, 5);
+    end case;
+    return std_logic_vector(v);
+  end function;
+
+begin
+
+  idEstado &lt;= state_to_slv(current_state);
+
+  process(clk, rst)
+  begin
+    if rst = '1' then
+      current_state &lt;= S00;
+    elsif rising_edge(clk) then
+      current_state &lt;= next_state;
+    end if;
+  end process;
+
+  process(current_state, CO, FZ, FS, FC)
+  begin
+    -- defaults
+    clear    &lt;= '0';
+    Lpc      &lt;= '0';
+    Ipc      &lt;= '0';
+    SelDir   &lt;= '0';
+    inicia   &lt;= '0';
+
+    cs       &lt;= '1';
+    oe       &lt;= '1';
+    we       &lt;= '0';
+
+    LH1      &lt;= '0';
+    LL       &lt;= '0';
+    Lri      &lt;= '0';
+
+    SelRegW  &lt;= "000";
+    SelRegRA &lt;= "000";
+    SelRegRB &lt;= "000";
+    wr       &lt;= '0';
+
+    ope      &lt;= "000";
+    SalAlu   &lt;= '0';
+    LF       &lt;= '0';
+    fin      &lt;= '0';
+
+    next_state &lt;= current_state;
+
+    case current_state is
+
+      when S00 =&gt;
+        clear  &lt;= '1';
+        inicia &lt;= '1';
+        next_state &lt;= S01;
+
+      when S01 =&gt;
+        cs  &lt;= '0';
+        oe  &lt;= '0';
+        Lri &lt;= '1';
+        next_state &lt;= S02;
+
+      when S02 =&gt;
+        Ipc &lt;= '1';
+        case CO is
+          when x"70" | x"71" | x"80" | x"81" | x"82" | x"83" =&gt;
+            next_state &lt;= S03;
+
+          when x"40" =&gt; next_state &lt;= S15; -- NOT
+          when x"41" =&gt; next_state &lt;= S16; -- AND
+          when x"42" =&gt; next_state &lt;= S17; -- DEC
+          when x"43" =&gt; next_state &lt;= S18; -- INC
+          when x"44" =&gt; next_state &lt;= S19; -- SUB
+          when x"45" =&gt; next_state &lt;= S09; -- ADD
+          when x"46" =&gt; next_state &lt;= S10; -- MOV
+          when x"30" =&gt; next_state &lt;= S20; -- XOR
+          when x"47" =&gt; next_state &lt;= S12; -- MOVI
+          when x"FF" =&gt; next_state &lt;= S11; -- HALT
+
+          when others =&gt;
+            next_state &lt;= S01;
+        end case;
+
+      when S03 =&gt;
+        cs &lt;= '0';
+        oe &lt;= '0';
+        LL &lt;= '1';
+        next_state &lt;= S04;
+
+      when S04 =&gt;
+        Ipc &lt;= '1';
+        next_state &lt;= S05;
+
+      when S05 =&gt;
+        cs  &lt;= '0';
+        oe  &lt;= '0';
+        LH1 &lt;= '1';
+        next_state &lt;= S06;
+
+      when S06 =&gt;
+        Ipc &lt;= '1';
+        case CO is
+          when x"70" =&gt; next_state &lt;= S07; -- LOAD
+          when x"71" =&gt; next_state &lt;= S08; -- STORE
+          when x"80" =&gt; next_state &lt;= S14; -- JMP
+
+          when x"81" =&gt; -- JZ
+            if FZ = '1' then next_state &lt;= S14; else next_state &lt;= S01; end if;
+
+          when x"82" =&gt; -- JC
+            if FC = '1' then next_state &lt;= S14; else next_state &lt;= S01; end if;
+
+          when x"83" =&gt; -- JS
+            if FS = '1' then next_state &lt;= S14; else next_state &lt;= S01; end if;
+
+          when others =&gt;
+            next_state &lt;= S01;
+        end case;
+
+      when S07 =&gt; -- LOAD: R1 &lt;- M(HL)
+        SelDir  &lt;= '1';
+        cs      &lt;= '0';
+        oe      &lt;= '0';
+        SelRegW &lt;= "001";
+        wr      &lt;= '1';
+        next_state &lt;= S01;
+
+      when S08 =&gt; -- STORE: M(HL) &lt;- R1
+        SelDir   &lt;= '1';
+        cs       &lt;= '0';
+        we       &lt;= '1';
+        SelRegRA &lt;= "001";
+        ope      &lt;= "000";
+        SalAlu   &lt;= '1';
+        next_state &lt;= S01;
+
+      when S14 =&gt; -- JUMP: PC &lt;- HL
+        Lpc &lt;= '1';
+        next_state &lt;= S01;
+
+      when S09 =&gt; -- ADD: R1 &lt;- R0 + R1
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "000";
+        SelRegRB &lt;= "001";
+        ope      &lt;= "101";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      when S10 =&gt; -- MOV: R0 &lt;- R1
+        SelRegW  &lt;= "000";
+        SelRegRA &lt;= "001";
+        ope      &lt;= "000";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        next_state &lt;= S01;
+
+      when S12 =&gt; -- MOVI: R1 &lt;- M(PC)
+        cs      &lt;= '0';
+        oe      &lt;= '0';
+        SelRegW &lt;= "001";
+        wr      &lt;= '1';
+        next_state &lt;= S13;
+
+      when S13 =&gt;
+        Ipc &lt;= '1';
+        next_state &lt;= S01;
+
+      when S15 =&gt; -- NOT
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "001";
+        ope      &lt;= "011";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      when S16 =&gt; -- AND
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "000";
+        SelRegRB &lt;= "001";
+        ope      &lt;= "010";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      when S17 =&gt; -- DEC
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "001";
+        ope      &lt;= "100";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      when S18 =&gt; -- INC
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "001";
+        ope      &lt;= "111";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      when S19 =&gt; -- SUB
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "000";
+        SelRegRB &lt;= "001";
+        ope      &lt;= "110";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      when S20 =&gt; -- XOR
+        SelRegW  &lt;= "001";
+        SelRegRA &lt;= "000";
+        SelRegRB &lt;= "001";
+        ope      &lt;= "001";
+        SalAlu   &lt;= '1';
+        wr       &lt;= '1';
+        LF       &lt;= '1';
+        next_state &lt;= S01;
+
+      when S11 =&gt;
+        fin &lt;= '1';
+        next_state &lt;= S11;
+
+      when others =&gt;
+        next_state &lt;= S00;
+
+    end case;
+  end process;
+
+end architecture una;</vhdl>
+</project>
