@@ -24,3 +24,10 @@ keywords: [progreso, tareas, bitacora, vhdl]
 - **Acciones:**
   1. Movido `PROYECTO_COMPLETO.md` a `SEXTO SEMESTRE/PROYECTO_COMPLETO.md`.
   2. Analizada la utilidad de `modelsim.ini` y `vhdl_ls.toml` en el entorno Linux Codespaces.
+
+## [2026-08-26 03:19:00]
+- **Estado:** Reorganización de carpeta Teoria y archivo de configuraciones históricas.
+- **Acciones:**
+  1. Movidos `modelsim.ini` y `vhdl_ls.toml` a `SEXTO SEMESTRE/`.
+  2. Creado el directorio `Teoria/` y movido `Teoria.md` a `Teoria/Teoria.md`.
+  3. Agregado frontmatter YAML a `Teoria/Teoria.md` conforme al estándar `AGENTS.md`.

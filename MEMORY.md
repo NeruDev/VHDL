@@ -22,3 +22,7 @@ keywords: [memoria, lecciones-aprendidas, decisiones-diseno, vhdl]
 - **PROYECTO_COMPLETO.md:** Reubicado dentro de `SEXTO SEMESTRE/` como documentación complementaria del procesador.
 - **modelsim.ini:** Archivo de configuración específico para el simulador ModelSim (Mentor Graphics / Intel FPGA). En Linux Codespaces es innecesario (se usa GHDL), pero puede preservarse en `SEXTO SEMESTRE/` o descartarse.
 - **vhdl_ls.toml:** Archivo de configuración del Language Server (VHDL LS / RustHDL). Permite indexación de dependencias y navegación de símbolos en VS Code. Útil en la raíz para habilitar LSP global o reubicable a subproyectos.
+
+## [2026-08-26 03:19] Creación de Directorio Teoria y Reubicación de Configuraciones Históricas
+- **Teoria/:** Creación del directorio dedicado para manuales y conceptos teóricos (`Teoria/Teoria.md` con metadatos frontmatter YAML).
+- **modelsim.ini y vhdl_ls.toml:** Reubicados en `SEXTO SEMESTRE/` como configuraciones históricas asociadas al procesador y ModelSim.

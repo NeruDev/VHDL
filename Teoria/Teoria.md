@@ -1,4 +1,15 @@
 
+---
+file: Teoria/Teoria.md
+description: Manual teorico integral de VHDL (sintaxis, tipos de datos, senales, arquitectura y FSMs)
+type: doc/theory
+version: 1.0.0
+date: 2026-08-26
+covers: []
+relations: [README.md, Asignacion de pines.md]
+keywords: [vhdl, teoria, fsm, tipos-de-datos, senales-variables, sintaxis]
+---
+
 # Teoría de VHDL
 
 ## Índice

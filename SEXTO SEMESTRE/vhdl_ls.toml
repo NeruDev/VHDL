@@ -1,0 +1,11 @@
+# Configuracion del analizador VHDL LS para el subproyecto procesador.
+
+[libraries]
+work.files = [
+  "procesador/src/pkg/procesador_pkg.vhd",
+  "procesador/src/control/**/*.vhd",
+  "procesador/src/datapath/**/*.vhd",
+  "procesador/src/memoria/**/*.vhd",
+  "procesador/src/procesador_top.vhd",
+  "procesador/tb/**/*.vhd"
+]
