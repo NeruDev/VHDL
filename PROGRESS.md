@@ -57,3 +57,10 @@ keywords: [progreso, tareas, bitacora, vhdl]
   2. Creado `.vscode/extensions.json` con recomendaciones de extensiones para VHDL.
   3. Actualizado `AGENTS.md` con las políticas completas de idioma, entorno de ejecución y paletas Mermaid.
   4. Sincronizados y actualizados `GEMINI.md` y `.github/copilot-instructions.md` reflejando `AGENTS.md` como estándar central.
+
+## [2026-08-26 03:41:00]
+- **Estado:** Investigación de capacidades de TerosHDL y corrección de IDs de extensiones.
+- **Acciones:**
+  1. Confirmado que TerosHDL integra nativamente el Language Server `vhdl-ls` (RustHDL), formateador, linter GHDL y visor de esquemáticos/FSM.
+  2. Corregido el ID de la extensión de visor de ondas a `wavetrace.wavetrace` (instalado y probado con éxito).
+  3. Actualizado `.vscode/extensions.json` con los IDs exactos del Marketplace.

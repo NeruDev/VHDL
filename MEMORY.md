@@ -42,3 +42,7 @@ keywords: [memoria, lecciones-aprendidas, decisiones-diseno, vhdl]
 - **Consolidación en AGENTS.md:** `AGENTS.md` se establece como la fuente única de verdad para directivas de desarrollo, idioma (español), entornos de ejecución (PowerShell/Bash) y especificaciones Mermaid.
 - **GEMINI.md y .github/copilot-instructions.md:** Sincronizados y actualizados como archivos de contexto compatibles que enlazan a `AGENTS.md`.
 - **Limpieza:** Eliminada la carpeta residual `.gemini/` y creado `.vscode/extensions.json` para estandarizar las extensiones de VHDL del proyecto.
+
+## [2026-08-26 03:41] Análisis del Ecosistema de Extensiones VS Code para VHDL
+- **TerosHDL como Suite Todo-en-Uno:** `teros-technology.teroshdl` integra de forma nativa el servidor de lenguaje `vhdl-ls` (RustHDL), formateador, linter en tiempo real (GHDL) y generador de diagramas de estado/esquemáticos, haciendo redundante la instalación de extensiones LSP individuales.
+- **Visor de Ondas:** La extensión oficial y verificada en el Marketplace es `wavetrace.wavetrace` (sin guion en el publicador). Alternativas viables: `vaporview.vaporview`.
