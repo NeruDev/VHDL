@@ -1,3 +1,4 @@
+<!--
 ---
 file: MEMORY.md
 description: Registro de memoria, lecciones aprendidas y decisiones de diseno del proyecto
@@ -8,6 +9,7 @@ covers: []
 relations: [AGENTS.md, PROGRESS.md]
 keywords: [memoria, lecciones-aprendidas, decisiones-diseno, vhdl]
 ---
+-->
 
 # Registro de Memoria y Lecciones Aprendidas (MEMORY.md)
 
@@ -26,3 +28,7 @@ keywords: [memoria, lecciones-aprendidas, decisiones-diseno, vhdl]
 ## [2026-08-26 03:19] Creación de Directorio Teoria y Reubicación de Configuraciones Históricas
 - **Teoria/:** Creación del directorio dedicado para manuales y conceptos teóricos (`Teoria/Teoria.md` con metadatos frontmatter YAML).
 - **modelsim.ini y vhdl_ls.toml:** Reubicados en `SEXTO SEMESTRE/` como configuraciones históricas asociadas al procesador y ModelSim.
+
+## [2026-08-26 03:26] Modularización de Teoría y Ocultamiento de Frontmatter en Markdown
+- **Modularización:** División de `Teoria.md` en 10 archivos atómicos en `Teoria/` vinculados mediante un índice navegable `Teoria/README.md`.
+- **Estándar de Metadatos Markdown:** Inclusión obligatoria de delimitadores HTML `<!-- ... -->` para encapsular frontmatter YAML en documentos Markdown, evitando interferencias visuales en previsualizadores.

@@ -1,3 +1,4 @@
+<!--
 ---
 file: PROGRESS.md
 description: Diario de avance y registro cronologico de tareas del proyecto
@@ -8,6 +9,7 @@ covers: []
 relations: [AGENTS.md, MEMORY.md]
 keywords: [progreso, tareas, bitacora, vhdl]
 ---
+-->
 
 # Diario de Progreso y Tareas (PROGRESS.md)
 
@@ -31,3 +33,11 @@ keywords: [progreso, tareas, bitacora, vhdl]
   1. Movidos `modelsim.ini` y `vhdl_ls.toml` a `SEXTO SEMESTRE/`.
   2. Creado el directorio `Teoria/` y movido `Teoria.md` a `Teoria/Teoria.md`.
   3. Agregado frontmatter YAML a `Teoria/Teoria.md` conforme al estándar `AGENTS.md`.
+
+## [2026-08-26 03:26:00]
+- **Estado:** Modularización de Teoría VHDL y actualización de estándar frontmatter.
+- **Acciones:**
+  1. Dividido `Teoria/Teoria.md` en 10 archivos markdown atómicos (`01_estructura_codigo.md` a `10_verificacion_testbenches_depuracion.md`).
+  2. Creado `Teoria/README.md` con hipervínculos estructurados y mapa de aprendizaje Mermaid.
+  3. Actualizado `AGENTS.md` para estipular que el frontmatter YAML en Markdown debe estar envuelto en comentarios HTML (`<!-- ... -->`).
+  4. Actualizados `MEMORY.md` y `PROGRESS.md` con el nuevo formato de comentarios HTML.

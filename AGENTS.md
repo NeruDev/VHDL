@@ -15,9 +15,11 @@ Este documento contiene las reglas fundamentales de desarrollo, convenciones de 
 ### 1.1 Estándar de Frontmatter y Metadatos YAML
 - **Excepción para código VHDL:** El código fuente VHDL (`.vhd`, `.vhdl`) **NO** debe incluir bloques de metadatos frontmatter YAML en el encabezado. Su documentación interna se realiza mediante comentarios estándar VHDL (`--`) en español siguiendo las plantillas del proyecto.
 - **Obligatoriedad para Documentación y Scripts:** Todos los archivos de documentación Markdown (`.md`), archivos de configuración y scripts ejecutables (Python, JavaScript, etc.) que no estén en `sandbox/` o en el registro histórico `SEXTO SEMESTRE/` DEBEN incluir un bloque estructurado de metadatos YAML.
+- **Ocultamiento en Vista Previa (Comentarios HTML para Markdown):** En todos los archivos de documentación Markdown (`.md`), el bloque de metadatos frontmatter DEBE colocarse dentro de un comentario HTML (`<!-- ... -->`) para evitar que se renderice como texto visible en la vista previa de VS Code o GitHub, manteniéndose estructurado e indexable.
 
 *Plantilla para Documentación (`.md`):*
-```yaml
+```markdown
+<!--
 ---
 file: String (Ruta relativa desde la raíz)
 description: String (1 sola línea con propósito funcional)
@@ -28,6 +30,7 @@ covers: List[String] (Rutas de código fuente que este documento explica)
 relations: List[String] (Documentos relacionados o de lectura previa)
 keywords: List[String] (Conceptos en minúsculas/kebab-case para RAG)
 ---
+-->
 ```
 
 *Plantilla para Scripts Ejecutables (`.py`, `.ts`, `.js`, etc.):*
