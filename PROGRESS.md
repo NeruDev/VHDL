@@ -71,3 +71,9 @@ keywords: [progreso, tareas, bitacora, vhdl]
   1. Revisado el diseño `TEMA_1/design_1.vhd` (puertas lógicas básicas).
   2. Corregido `TEMA_1/testbench_1.vhd` declarando las señales faltantes (`ty_nand`, `ty_nor`, `ty_xor`, `ty_xnor`).
   3. Ejecutado el flujo completo de GHDL (análisis `-a`, elaboración `-e` y simulación `-r` con exportación de onda VCD) con 100% de éxito.
+
+## [2026-08-26 03:52:00]
+- **Estado:** Diagnóstico de error de renderizado de WaveTrace en Codespaces Web.
+- **Acciones:**
+  1. Identificada la incompatibilidad del Custom Editor de WaveTrace con el entorno de navegador web de Codespaces (error `Assertion Failed` por falta de APIs nativas de Electron en webview).
+  2. Documentadas las alternativas operativas: abrir en VS Code Desktop o usar visores web VCD (Surfer Web / VCDrom).

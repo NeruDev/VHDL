@@ -50,3 +50,9 @@ keywords: [memoria, lecciones-aprendidas, decisiones-diseno, vhdl]
 ## [2026-08-26 03:48] Verificación y Simulación de TEMA_1 con GHDL
 - **Diagnóstico y Corrección:** `TEMA_1/testbench_1.vhd` omitía la declaración de las señales `ty_nand`, `ty_nor`, `ty_xor`, `ty_xnor` conectadas al port map de `puertas_logicas`.
 - **Validación:** Tras corregir la declaración de señales, el testbench compila, se elabora y simula generando `TEMA_1/tb_puertas_logicas.vcd` visualizable con WaveTrace.
+
+## [2026-08-26 03:52] Causa y Solución de Error en WaveTrace en Codespaces Web
+- **Causa:** El visor gráfico WaveTrace requiere APIs nativas de Electron / Custom Editor que no están presentes en el renderizador web de VS Code (Codespaces en el navegador), generando el fallo `Assertion Failed: Argument is undefined or null`.
+- **Solución Recomendada:** Para visualizar ondas directamente:
+  1. Conectar VS Code Desktop local al Codespace (`Open in VS Code Desktop`), donde WaveTrace funciona nativamente sin fallos.
+  2. Abrir el archivo `.vcd` en un visor web interactivo como Surfer Web (`https://app.surfer-project.org`) o VCDrom (`https://app.vcdrom.com`).
