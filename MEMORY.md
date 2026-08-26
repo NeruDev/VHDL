@@ -46,3 +46,7 @@ keywords: [memoria, lecciones-aprendidas, decisiones-diseno, vhdl]
 ## [2026-08-26 03:41] Análisis del Ecosistema de Extensiones VS Code para VHDL
 - **TerosHDL como Suite Todo-en-Uno:** `teros-technology.teroshdl` integra de forma nativa el servidor de lenguaje `vhdl-ls` (RustHDL), formateador, linter en tiempo real (GHDL) y generador de diagramas de estado/esquemáticos, haciendo redundante la instalación de extensiones LSP individuales.
 - **Visor de Ondas:** La extensión oficial y verificada en el Marketplace es `wavetrace.wavetrace` (sin guion en el publicador). Alternativas viables: `vaporview.vaporview`.
+
+## [2026-08-26 03:48] Verificación y Simulación de TEMA_1 con GHDL
+- **Diagnóstico y Corrección:** `TEMA_1/testbench_1.vhd` omitía la declaración de las señales `ty_nand`, `ty_nor`, `ty_xor`, `ty_xnor` conectadas al port map de `puertas_logicas`.
+- **Validación:** Tras corregir la declaración de señales, el testbench compila, se elabora y simula generando `TEMA_1/tb_puertas_logicas.vcd` visualizable con WaveTrace.

@@ -64,3 +64,10 @@ keywords: [progreso, tareas, bitacora, vhdl]
   1. Confirmado que TerosHDL integra nativamente el Language Server `vhdl-ls` (RustHDL), formateador, linter GHDL y visor de esquemáticos/FSM.
   2. Corregido el ID de la extensión de visor de ondas a `wavetrace.wavetrace` (instalado y probado con éxito).
   3. Actualizado `.vscode/extensions.json` con los IDs exactos del Marketplace.
+
+## [2026-08-26 03:48:00]
+- **Estado:** Revisión y compilación de nuevo directorio TEMA_1 en GHDL.
+- **Acciones:**
+  1. Revisado el diseño `TEMA_1/design_1.vhd` (puertas lógicas básicas).
+  2. Corregido `TEMA_1/testbench_1.vhd` declarando las señales faltantes (`ty_nand`, `ty_nor`, `ty_xor`, `ty_xnor`).
+  3. Ejecutado el flujo completo de GHDL (análisis `-a`, elaboración `-e` y simulación `-r` con exportación de onda VCD) con 100% de éxito.
