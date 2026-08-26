@@ -41,3 +41,11 @@ keywords: [progreso, tareas, bitacora, vhdl]
   2. Creado `Teoria/README.md` con hipervínculos estructurados y mapa de aprendizaje Mermaid.
   3. Actualizado `AGENTS.md` para estipular que el frontmatter YAML en Markdown debe estar envuelto en comentarios HTML (`<!-- ... -->`).
   4. Actualizados `MEMORY.md` y `PROGRESS.md` con el nuevo formato de comentarios HTML.
+
+## [2026-08-26 03:30:30]
+- **Estado:** Verificación y validación de ejemplos de código en Teoria.
+- **Acciones:**
+  1. Ejecutado script de pruebas de sintaxis GHDL en todos los bloques VHDL de los 10 módulos.
+  2. Añadidas bibliotecas estándar IEEE en ejemplos de `04_palabras_clave_principales.md` y `09_buenas_practicas_y_estilo.md`.
+  3. Implementados ejemplos de código VHDL completos para Flip-Flops D y FSMs (Moore y Mealy) en `07_circuitos_secuenciales.md`.
+  4. Corregidos enlaces de retorno al índice (`[⬆ Volver al Índice](README.md)`) en todos los archivos.

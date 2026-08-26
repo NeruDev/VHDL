@@ -447,6 +447,10 @@ configurables sin duplicar código. Se declaran en la entidad antes de los puert
 **Declaración con valores por defecto:**
 
 ```vhdl
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+USE ieee.numeric_std.all;
+
 ENTITY contador IS
     GENERIC (
         NBITS  : INTEGER := 8;      -- ancho del contador
@@ -645,6 +649,10 @@ se quieren compartir entre múltiples archivos del proyecto.
 
 ```vhdl
 -- Archivo: tipos_proyecto.vhd
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+USE ieee.numeric_std.all;
+
 PACKAGE tipos_proyecto IS
     -- Tipos globales del proyecto
     CONSTANT CLK_FREQ  : INTEGER := 50_000_000;  -- 50 MHz
@@ -676,6 +684,10 @@ END PACKAGE BODY tipos_proyecto;
 **Uso en otro archivo:**
 
 ```vhdl
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+USE ieee.numeric_std.all;
+
 LIBRARY work;
 USE work.tipos_proyecto.all;
 
@@ -829,6 +841,6 @@ END ARCHITECTURE rtl;
 
 ---
 
-*[⬆ Volver al Índice](#índice)*
+*[⬆ Volver al Índice](README.md)*
 
 ---

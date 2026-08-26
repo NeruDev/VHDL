@@ -25,6 +25,33 @@ La memoria básica en electrónica digital se basa en la realimentación.
 *   **Flip-Flop (Biestable):** Es sensible al **flanco** (transición) de la señal de reloj (`CLK`). Solo actualiza su salida en el instante preciso del cambio de 0 a 1 (flanco de subida) o 1 a 0.
     *   *En VHDL:* Se infiere usando `RISING_EDGE(clk)` o `clk'EVENT AND clk='1'`. Es el bloque constructivo fundamental de las FPGAs.
 
+```vhdl
+-- Flip-Flop D con Reset Asíncrono (Estándar en FPGAs)
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+
+ENTITY dff_async_rst IS
+    PORT (
+        clk   : IN  STD_LOGIC;
+        reset : IN  STD_LOGIC;
+        d     : IN  STD_LOGIC;
+        q     : OUT STD_LOGIC
+    );
+END ENTITY dff_async_rst;
+
+ARCHITECTURE rtl OF dff_async_rst IS
+BEGIN
+    PROCESS(clk, reset)
+    BEGIN
+        IF reset = '1' THEN
+            q <= '0';
+        ELSIF RISING_EDGE(clk) THEN
+            q <= d;
+        END IF;
+    END PROCESS;
+END ARCHITECTURE rtl;
+```
+
 ### 7.2 Tipos de circuitos secuenciales
 
 1.  **Asíncronos:** Los cambios de estado ocurren en cuanto cambian las entradas, sin una señal de reloj global que sincronice todo. Son rápidos pero difíciles de diseñar y propensos a condiciones de carrera.
@@ -105,6 +132,72 @@ stateDiagram-v2
 - **DETECTADO**: Secuencia `01` completa. **Salida = `1`**
   - Si entrada = `0`: va a CERO (nueva secuencia posible)
   - Si entrada = `1`: va a E_Inicial (resetea)
+
+**Implementación VHDL (Estándar de 2 procesos):**
+
+```vhdl
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+
+ENTITY fsm_moore_01 IS
+    PORT (
+        clk     : IN  STD_LOGIC;
+        reset   : IN  STD_LOGIC;
+        entrada : IN  STD_LOGIC;
+        salida  : OUT STD_LOGIC
+    );
+END ENTITY fsm_moore_01;
+
+ARCHITECTURE rtl OF fsm_moore_01 IS
+    -- Declaración de tipo enumerado para los estados
+    TYPE estado_t IS (E_Inicial, CERO, DETECTADO);
+    SIGNAL estado_actual, estado_siguiente : estado_t;
+BEGIN
+    -- 1. Proceso síncrono: Registro de estado
+    PROCESS(clk, reset)
+    BEGIN
+        IF reset = '1' THEN
+            estado_actual <= E_Inicial;
+        ELSIF RISING_EDGE(clk) THEN
+            estado_actual <= estado_siguiente;
+        END IF;
+    END PROCESS;
+
+    -- 2. Proceso combinacional: Lógica de estado siguiente y salidas (Moore)
+    PROCESS(estado_actual, entrada)
+    BEGIN
+        -- Valores por defecto para evitar latches
+        estado_siguiente <= estado_actual;
+        salida <= '0';
+
+        CASE estado_actual IS
+            WHEN E_Inicial =>
+                salida <= '0';
+                IF entrada = '0' THEN
+                    estado_siguiente <= CERO;
+                ELSE
+                    estado_siguiente <= E_Inicial;
+                END IF;
+
+            WHEN CERO =>
+                salida <= '0';
+                IF entrada = '1' THEN
+                    estado_siguiente <= DETECTADO;
+                ELSE
+                    estado_siguiente <= CERO;
+                END IF;
+
+            WHEN DETECTADO =>
+                salida <= '1'; -- Salida depende exclusivamente del estado
+                IF entrada = '0' THEN
+                    estado_siguiente <= CERO;
+                ELSE
+                    estado_siguiente <= E_Inicial;
+                END IF;
+        END CASE;
+    END PROCESS;
+END ARCHITECTURE rtl;
+```
 
 **Ejemplo 2: Detector de Secuencia "101" (Moore)**
 
@@ -271,6 +364,66 @@ stateDiagram-v2
   - `0/0`: permanece en CERO, salida = `0`
   - **`1/1`**: va a E_Inicial, **salida = `1`** (secuencia detectada en este ciclo)
 
+**Implementación VHDL (Estándar de 2 procesos):**
+
+```vhdl
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+
+ENTITY fsm_mealy_01 IS
+    PORT (
+        clk     : IN  STD_LOGIC;
+        reset   : IN  STD_LOGIC;
+        entrada : IN  STD_LOGIC;
+        salida  : OUT STD_LOGIC
+    );
+END ENTITY fsm_mealy_01;
+
+ARCHITECTURE rtl OF fsm_mealy_01 IS
+    -- Declaración de tipo enumerado para los estados
+    TYPE estado_t IS (E_Inicial, CERO);
+    SIGNAL estado_actual, estado_siguiente : estado_t;
+BEGIN
+    -- 1. Proceso síncrono: Registro de estado
+    PROCESS(clk, reset)
+    BEGIN
+        IF reset = '1' THEN
+            estado_actual <= E_Inicial;
+        ELSIF RISING_EDGE(clk) THEN
+            estado_actual <= estado_siguiente;
+        END IF;
+    END PROCESS;
+
+    -- 2. Proceso combinacional: Lógica de estado siguiente y salida Mealy (depende de entrada)
+    PROCESS(estado_actual, entrada)
+    BEGIN
+        -- Valores por defecto
+        estado_siguiente <= estado_actual;
+        salida <= '0';
+
+        CASE estado_actual IS
+            WHEN E_Inicial =>
+                IF entrada = '0' THEN
+                    estado_siguiente <= CERO;
+                    salida <= '0';
+                ELSE
+                    estado_siguiente <= E_Inicial;
+                    salida <= '0';
+                END IF;
+
+            WHEN CERO =>
+                IF entrada = '1' THEN
+                    estado_siguiente <= E_Inicial;
+                    salida <= '1'; -- Secuencia 01 detectada en el ciclo actual
+                ELSE
+                    estado_siguiente <= CERO;
+                    salida <= '0';
+                END IF;
+        END CASE;
+    END PROCESS;
+END ARCHITECTURE rtl;
+```
+
 **Comparación para este ejemplo:**
 - Moore: 3 estados, salida estable durante todo el ciclo
 - Mealy: 2 estados, salida se activa inmediatamente con la entrada
@@ -376,7 +529,7 @@ stateDiagram-v2
 | **Uso típico** | Control, decodificación | Protocolos, detección de patrones |
 ---
 
-*[⬆ Volver al Índice](#índice)*
+*[⬆ Volver al Índice](README.md)*
 
 
 ---

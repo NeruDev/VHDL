@@ -237,4 +237,4 @@ Recomendaciones prácticas:
 
 ---
 
-*[⬆ Volver al Índice](#índice)*
+*[⬆ Volver al Índice](README.md)*

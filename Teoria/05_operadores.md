@@ -125,6 +125,6 @@ y <= (a AND b) OR c;
 
 ---
 
-*[⬆ Volver al Índice](#índice)*
+*[⬆ Volver al Índice](README.md)*
 
 ---

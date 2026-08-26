@@ -148,6 +148,6 @@ shift16: shift_reg
 
 ---
 
-*[⬆ Volver al Índice](#índice)*
+*[⬆ Volver al Índice](README.md)*
 
 ---

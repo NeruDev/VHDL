@@ -32,3 +32,8 @@ keywords: [memoria, lecciones-aprendidas, decisiones-diseno, vhdl]
 ## [2026-08-26 03:26] Modularización de Teoría y Ocultamiento de Frontmatter en Markdown
 - **Modularización:** División de `Teoria.md` en 10 archivos atómicos en `Teoria/` vinculados mediante un índice navegable `Teoria/README.md`.
 - **Estándar de Metadatos Markdown:** Inclusión obligatoria de delimitadores HTML `<!-- ... -->` para encapsular frontmatter YAML en documentos Markdown, evitando interferencias visuales en previsualizadores.
+
+## [2026-08-26 03:30] Validación y Enriquecimiento de Sintaxis VHDL en Teoría
+- **Validación Automática:** Comprobación de todas las entidades, paquetes y arquitecturas con el compilador GHDL (`--std=08`).
+- **Autocontención de Ejemplos:** Aseguramiento de declaraciones de biblioteca IEEE completas en cada ejemplo para que compilen de forma autónoma.
+- **Circuitos Secuenciales:** Enriquecimiento del módulo 07 con código VHDL completo para Flip-Flop D y FSMs canónicas (Moore y Mealy de 2 procesos).

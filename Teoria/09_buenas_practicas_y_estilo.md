@@ -100,12 +100,15 @@ Herramientas típicas en VHDL:
 Ejemplo: constantes y tipos en un paquete (reutilizable):
 
 ```vhdl
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+
 PACKAGE cfg_pkg IS
     CONSTANT DATA_W : POSITIVE := 8;
     CONSTANT DEPTH  : POSITIVE := 16;
     SUBTYPE dato_t IS STD_LOGIC_VECTOR(DATA_W-1 DOWNTO 0);
     TYPE ram_t IS ARRAY (0 TO DEPTH-1) OF dato_t;
-END PACKAGE;
+END PACKAGE cfg_pkg;
 ```
 
 > **Nota (compatibilidad):** este estilo es VHDL-93 y funciona bien en flujos conservadores.
@@ -203,6 +206,6 @@ END PROCESS;
 
 ---
 
-*[⬆ Volver al Índice](#índice)*
+*[⬆ Volver al Índice](README.md)*
 
 ---
