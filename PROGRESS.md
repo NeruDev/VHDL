@@ -49,3 +49,11 @@ keywords: [progreso, tareas, bitacora, vhdl]
   2. Añadidas bibliotecas estándar IEEE en ejemplos de `04_palabras_clave_principales.md` y `09_buenas_practicas_y_estilo.md`.
   3. Implementados ejemplos de código VHDL completos para Flip-Flops D y FSMs (Moore y Mealy) en `07_circuitos_secuenciales.md`.
   4. Corregidos enlaces de retorno al índice (`[⬆ Volver al Índice](README.md)`) en todos los archivos.
+
+## [2026-08-26 03:34:30]
+- **Estado:** Limpieza de carpetas de configuración y consolidación de directivas.
+- **Acciones:**
+  1. Eliminada la carpeta `.gemini/`.
+  2. Creado `.vscode/extensions.json` con recomendaciones de extensiones para VHDL.
+  3. Actualizado `AGENTS.md` con las políticas completas de idioma, entorno de ejecución y paletas Mermaid.
+  4. Sincronizados y actualizados `GEMINI.md` y `.github/copilot-instructions.md` reflejando `AGENTS.md` como estándar central.

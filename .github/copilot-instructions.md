@@ -64,22 +64,27 @@ Non-compliance with this rule is considered a configuration failure.
 ## Reglas de Desarrollo
 - **Lenguaje:** VHDL.
 - **Idioma de comentarios y documentación:** Español.
+- **Estándar Principal:** Todas las directivas fundamentales, formatos y reglas de agentes están centralizadas en [`AGENTS.md`](../AGENTS.md).
 - **Estilo:** Nombres descriptivos para señales; procesos bien estructurados; evitar lógica duplicada; preferir arquitecturas claras y legibles.
 
 ## Estructura de Carpetas
-- `Tema X/`: Unidades temáticas (ej. `Tema 1/`). Dentro se ubican los `.vhd` de cada práctica o ejemplo.
-- `PLANTILLAS/`: Plantillas base para nuevos diseños y testbenches. Respetar estas estructuras al crear archivos.
-- Archivos de referencia en raíz: `Asignacion de pines.md`, `Mapeo de placa.vhd`.
+- `Teoria/`: Documentación teórica modular y manuales de referencia de VHDL.
+- `PLANTILLAS/`: Plantillas base para nuevos diseños y testbenches.
+- `sandbox/`: Entorno para pruebas temporales, simulaciones experimentales y scripts auxiliares.
+- `SEXTO SEMESTRE/`: Registro histórico de proyectos, procesadores y prácticas de semestres anteriores.
+- `LOGISIM/`: Archivos de diseño y circuitos en Logisim Evolution.
+- `QUARTUS/`: Proyectos y configuraciones de síntesis para Quartus II.
 
 ## Convenciones de Nombres
 - Módulos/diseños: minúsculas descriptivas (`mux4a1.vhd`, `demux1a4.vhd`).
-- Testbenches: sufijo `_tb` (ej. `mux4a1_tb.vhd`).
+- Testbenches: prefijo `tb_` o sufijo `_tb.vhd` (ej. `tb_alu.vhd`, `mux4a1_tb.vhd`).
 - Evitar caracteres especiales o espacios en nombres de archivos.
 
 ## Herramientas y Entorno Esperado
-- Simulación: Testbenches VHDL y Logisim Evolution v3.8.0.
-- Síntesis/Compilación: Quartus II 64-Bit 13.0.1 (Build 232).
-- Hardware: Placa FPGA según asignación de pines descrita en `Asignacion de pines.md` y `Mapeo de placa.vhd`.
+- **Simulación en la Nube (Codespaces / Linux):** **GHDL** + **WaveTrace** (visor VCD) + **TerosHDL**.
+- **Simulación Visual / Didáctica:** **Logisim Evolution v3.8.0**.
+- **Síntesis y Carga a FPGA (Local Windows):** **Quartus II 64-Bit 13.0.1 (Build 232)** con USB-Blaster.
+- **Hardware:** Placa FPGA según asignación de pines descrita en `Asignacion de pines.md` y `Mapeo de placa.vhd`.
 
 ## Pautas para Nuevos Aportes de IA
 - Mantener comentarios breves y útiles solo donde aclaren lógica no evidente.

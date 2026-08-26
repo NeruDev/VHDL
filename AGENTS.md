@@ -127,8 +127,27 @@ Es MANDATORIO el uso de **Google Style Docstrings** para toda la documentación 
 
 - **Árbol de Directorios en Formato YAML:** Para la representación del árbol de directorios de cualquier archivo o paquete en la documentación, SIEMPRE se debe generar en formato **YAML** (` ```yaml ... ``` `), reemplazando esquemas e hilos ASCII.
 - **Gráficos y Diagramas en Formato Mermaid:** Para representar flujos de trabajo, esquemas arquitecturales y máquinas de estado (FSM), se recurre obligatoriamente al formato **Mermaid** (` ```mermaid ... ``` `), eliminando el uso de sintaxis ASCII para representaciones visuales:
-  - **FSMs (State Diagrams):** Usar `stateDiagram-v2`, con punto de inicio `RESET`, estado inicial `E_Inicial`, convención Moore (`entrada=valor`) y Mealy (`entrada/salida`), notas descriptivas y paleta de colores claros pastel.
-  - **Diagramas de Bloques / RTL:** Usar `graph LR` con estilos diferenciados para registros, lógica de estado y salida.
+  - **FSMs (State Diagrams):**
+    - Usar formato `stateDiagram-v2`.
+    - Punto de inicio: `RESET` (no usar `[*]`).
+    - Estado inicial: Nombrar como `E_Inicial` (no IDLE ni S0).
+    - Estados intermedios: Nombres descriptivos (ej. `CERO`, `DETECTADO`) o `S1`, `S2`, `S3` según contexto.
+    - Notas explicativas: Con `note right of` para cada estado clave.
+    - Convención Moore: Formato `entrada=valor` en las transiciones. La salida se especifica en las notas del estado.
+    - Convención Mealy: Formato `entrada/salida` en las transiciones (ej. `0/0`, `1/1`).
+    - Paletas de colores pastel recomendadas vía directiva:
+      - *Azul claro (Índigo):* `primaryColor:'#e8eaf6'`, `primaryTextColor:'#3f51b5'`, `primaryBorderColor:'#7986cb'`, `lineColor:'#5c6bc0'`
+      - *Verde claro:* `primaryColor:'#e8f5e9'`, `primaryTextColor:'#2e7d32'`, `primaryBorderColor:'#81c784'`, `lineColor:'#4caf50'`
+      - *Naranja claro:* `primaryColor:'#fff3e0'`, `primaryTextColor:'#e65100'`, `primaryBorderColor:'#ffb74d'`, `lineColor:'#ff9800'`
+      - *Rosa claro:* `primaryColor:'#fce4ec'`, `primaryTextColor:'#880e4f'`, `primaryBorderColor:'#f06292'`, `lineColor:'#e91e63'`
+      - *Turquesa claro:* `primaryColor:'#e0f2f1'`, `primaryTextColor:'#00695c'`, `primaryBorderColor:'#4db6ac'`, `lineColor:'#009688'`
+      - *Púrpura claro:* `primaryColor:'#f3e5f5'`, `primaryTextColor:'#4a148c'`, `primaryBorderColor:'#ba68c8'`, `lineColor:'#9c27b0'`
+  - **Diagramas de Bloques / RTL:**
+    - Usar `graph LR` (left-to-right).
+    - Registro de Estado: `fill:#bbdefb` (azul)
+    - Lógica de Salida: `fill:#ffccbc` (naranja/coral)
+    - Lógica de Estado Siguiente: `fill:#c8e6c9` (verde)
+    - Señal de reloj (`CLK`) conectada hacia los registros.
 
 ---
 
@@ -139,3 +158,15 @@ Es MANDATORIO el uso de **Google Style Docstrings** para toda la documentación 
   - Contiene el histórico de prácticas, tareas, procesadores y proyectos desarrollados durante semestres anteriores (incluyendo las carpetas `procesador/`, `procesador_vhdl/`, `Proyecto/`, `Tema 1/` y `Tema 2/`).
   - **Excepción de Metadatos:** Al igual que `sandbox/`, los archivos dentro de `SEXTO SEMESTRE/` forman parte del registro histórico y quedan exentos de la inclusión obligatoria de metadatos frontmatter YAML o refactorizaciones retrospectivas, manteniéndose como biblioteca de consulta.
 - **Mantenimiento del Repositorio:** Está estrictamente prohibido crear scripts de prueba o archivos temporales en la raíz del proyecto o en directorios principales, a fin de evitar la acumulación de archivos residuales y mantener limpio el árbol de trabajo.
+
+---
+
+## 6. Política de Idioma y Entorno de Ejecución
+
+- **Idioma Oficial:** Todas las respuestas, explicaciones, comentarios de código y documentación técnica DEBEN generarse en **Español** (es-ES / es-MX).
+- **Entorno de Comandos:**
+  - **Entorno Local (Windows):** Windows PowerShell por defecto.
+  - **Entorno en la Nube (GitHub Codespaces / Linux):** Bash, indicando y etiquetando siempre el bloque correspondiente (` ```bash `).
+- **Herramientas de Compilación:**
+  - *Codespaces / Linux:* GHDL (`ghdl -a`, `ghdl -e`, `ghdl -r`) + WaveTrace + TerosHDL.
+  - *Local Windows:* Quartus II 13.0.1 (síntesis y carga a FPGA) / ModelSim (opcional).

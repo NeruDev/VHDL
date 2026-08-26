@@ -37,3 +37,8 @@ keywords: [memoria, lecciones-aprendidas, decisiones-diseno, vhdl]
 - **Validación Automática:** Comprobación de todas las entidades, paquetes y arquitecturas con el compilador GHDL (`--std=08`).
 - **Autocontención de Ejemplos:** Aseguramiento de declaraciones de biblioteca IEEE completas en cada ejemplo para que compilen de forma autónoma.
 - **Circuitos Secuenciales:** Enriquecimiento del módulo 07 con código VHDL completo para Flip-Flop D y FSMs canónicas (Moore y Mealy de 2 procesos).
+
+## [2026-08-26 03:34] Consolidación de Directivas de Agentes y Limpieza de Configuración
+- **Consolidación en AGENTS.md:** `AGENTS.md` se establece como la fuente única de verdad para directivas de desarrollo, idioma (español), entornos de ejecución (PowerShell/Bash) y especificaciones Mermaid.
+- **GEMINI.md y .github/copilot-instructions.md:** Sincronizados y actualizados como archivos de contexto compatibles que enlazan a `AGENTS.md`.
+- **Limpieza:** Eliminada la carpeta residual `.gemini/` y creado `.vscode/extensions.json` para estandarizar las extensiones de VHDL del proyecto.

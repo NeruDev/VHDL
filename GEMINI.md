@@ -60,19 +60,23 @@ Non-compliance with this rule is considered a configuration failure.
 ## Reglas de Desarrollo
 - **Lenguaje:** VHDL.
 - **Idioma:** Los comentarios y la documentación técnica deben estar en español.
-- **Estilo de Código:** Seguir las mejores prácticas de diseño hardware (nombres descriptivos para señales, procesos bien estructurados).
+- **Estándar Principal:** Todas las directivas fundamentales, formatos y reglas de agentes están centralizadas en [`AGENTS.md`](AGENTS.md).
 
 ## Estructura de Carpetas y Nomenclatura
-- La organización se basa en unidades temáticas: `Tema X/` (ej. `Tema 1/`, `Tema 2/`).
-- Cada carpeta temática contendrá los archivos `.vhd` correspondientes a las prácticas o ejemplos.
+- `Teoria/`: Documentación teórica modular y manuales de referencia de VHDL.
+- `PLANTILLAS/`: Plantillas base para nuevos diseños y testbenches.
+- `sandbox/`: Entorno para pruebas temporales, simulaciones experimentales y scripts auxiliares.
+- `SEXTO SEMESTRE/`: Registro histórico de proyectos, procesadores y prácticas de semestres anteriores.
+- `LOGISIM/`: Archivos de diseño y circuitos en Logisim Evolution.
+- `QUARTUS/`: Proyectos y configuraciones de síntesis para Quartus II.
 - **Nomenclatura de archivos:** 
   - Archivos de diseño: Nombres descriptivos en minúsculas (ej. `mux4a1.vhd`).
-  - Testbenches: Usar el sufijo `_tb` (ej. `mux4a1_tb.vhd`).
-- **Plantillas:** El directorio `PLANTILLAS/` contiene las bases para nuevos diseños y testbenches. Se deben respetar estas estructuras al crear nuevos archivos.
+  - Testbenches: Usar el prefijo `tb_` o sufijo `_tb.vhd` (ej. `tb_alu.vhd`, `mux4a1_tb.vhd`).
 
 ## Herramientas y Entorno
-- **Simulación:** Testbenches VHDL y **Logisim Evolution v3.8.0**.
-- **Síntesis/Compilación:** **Quartus II 64-Bit versión 13.0.1 (Build 232)**.
+- **Simulación en la Nube (Codespaces / Linux):** **GHDL** + **WaveTrace** (visor VCD) + **TerosHDL**.
+- **Simulación Visual / Didáctica:** **Logisim Evolution v3.8.0**.
+- **Síntesis y Carga a FPGA (Local Windows):** **Quartus II 64-Bit versión 13.0.1 (Build 232)** con USB-Blaster.
 - **Hardware:** El proyecto incluye configuraciones para placas de desarrollo (ver `Asignacion de pines.md` y `Mapeo de placa.vhd`).
 
 ## Objetivos
