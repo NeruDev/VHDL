@@ -1,19 +1,45 @@
 # ==============================================================================
-# .gitignore para Proyecto VHDL
-# Conserva: .vhd, .circ (Logisim), .md (Documentación)
-# Ignora: Archivos temporales de compilación, simulación y proyectos de Quartus
+# .gitignore para Proyecto VHDL (Codespaces / Linux / Quartus / ModelSim)
 # ==============================================================================
 
-# --- Quartus II / Altera ---
-# Ignorar carpetas de bases de datos y archivos de salida de síntesis
-db/
-incremental_db/
-output_files/
-greybox_tmp/
-hc_output/
+# --- GHDL (Compilador / Simulador en Linux) ---
+*.cf
+work-obj*.cf
+*.o
+e~*
+*.vcd
+*.ghw
+*.fst
+
+# --- NVC & Open Source EDA ---
+_build/
+.nvc/
+*.nvc
+
+# --- TerosHDL & IDE Caches ---
+teroshdl/
+.cache/
+.gemini/
+*.tmp
+*~
+
+# --- ModelSim / QuestaSim ---
+work/
+transcript
+vsim.wlf
+*.wlf
+*.vstf
+*.vsim
+wlft*
+
+# --- Quartus II / Intel FPGA ---
+**/db/
+**/incremental_db/
+**/output_files/
+**/greybox_tmp/
+**/hc_output/
+**/simulation/
 *.qws
-*.bak
-*.orig
 *.rpt
 *.summary
 *.jdi
@@ -23,6 +49,7 @@ hc_output/
 *.sta
 *.done
 *.qmsg
+*.smsg
 *.dfp
 *.rcfdb
 *.dpi
@@ -35,29 +62,31 @@ hc_output/
 *.hdb
 *.ddb
 *.ammdb
+*.rdb
+*.sci
+*.tdb
+*.qdf
+*.cbx.xml
 
-# --- ModelSim / Simulación ---
-# Ignorar la librería de trabajo de ModelSim y archivos de log
-work/
-transcript
-vsim.wlf
-*.vstf
-*.vsim
+# --- Logisim & Respaldos ---
+*.bak
+*.circ.bak
+*.orig
 
-# --- VS Code / IDE ---
-.vscode/
-.gemini/
-*.tmp
-
-# --- SO / Generales ---
+# --- Sistema Operativo ---
 Thumbs.db
 .DS_Store
 
-# --- Reglas de Exclusión (Asegurar que se mantengan) ---
+# --- Reglas de Exclusión (Asegurar que nunca se ignoren) ---
 !*.vhd
+!*.vhdl
 !*.circ
 !*.md
 !*.qpf
 !*.qsf
+!*.tcl
+!*.do
+!modelsim.ini
+!vhdl_ls.toml
 !README.md
 !GEMINI.md
