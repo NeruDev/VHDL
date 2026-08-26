@@ -18,3 +18,9 @@ keywords: [progreso, tareas, bitacora, vhdl]
   2. Creado el directorio `sandbox/` para pruebas temporales.
   3. Creado `AGENTS.md` adaptando los estándares de agentes y excluyendo frontmatter en archivos VHDL.
   4. Actualizado `vhdl_ls.toml` para reflejar las nuevas rutas relativas en `SEXTO SEMESTRE/`.
+
+## [2026-08-26 03:16:00]
+- **Estado:** Reubicación de documentación histórica y análisis de archivos raíz.
+- **Acciones:**
+  1. Movido `PROYECTO_COMPLETO.md` a `SEXTO SEMESTRE/PROYECTO_COMPLETO.md`.
+  2. Analizada la utilidad de `modelsim.ini` y `vhdl_ls.toml` en el entorno Linux Codespaces.

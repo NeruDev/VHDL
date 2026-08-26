@@ -17,3 +17,8 @@ keywords: [memoria, lecciones-aprendidas, decisiones-diseno, vhdl]
 - **Estructura Histórica:** Creación del directorio `SEXTO SEMESTRE/` para archivar proyectos previos (`procesador/`, `procesador_vhdl/`, `Proyecto/`, `Tema 1/`, `Tema 2/`) con exención de metadatos frontmatter.
 - **Entorno de Pruebas:** Creación del directorio `sandbox/` para archivos temporales y experimentos.
 - **Estándares de Agente:** Creación de `AGENTS.md` adaptado a proyectos VHDL (sin frontmatter YAML en código VHDL, obligatorio en Markdown y scripts de soporte).
+
+## [2026-08-26 03:16] Evaluación de Utilidad de Archivos Raíz
+- **PROYECTO_COMPLETO.md:** Reubicado dentro de `SEXTO SEMESTRE/` como documentación complementaria del procesador.
+- **modelsim.ini:** Archivo de configuración específico para el simulador ModelSim (Mentor Graphics / Intel FPGA). En Linux Codespaces es innecesario (se usa GHDL), pero puede preservarse en `SEXTO SEMESTRE/` o descartarse.
+- **vhdl_ls.toml:** Archivo de configuración del Language Server (VHDL LS / RustHDL). Permite indexación de dependencias y navegación de símbolos en VS Code. Útil en la raíz para habilitar LSP global o reubicable a subproyectos.
