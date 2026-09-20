@@ -1,11 +1,11 @@
 {
-    "workbench.colorTheme": "Dark Modern",
+    "workbench.colorTheme": "Dracula Theme",
     "remote.autoForwardPortsSource": "hybrid",
     "files.associations": {
         "*.vhd": "vhdl"
     },
     
-    "workbench.iconTheme": "vscode-icons",
+    "workbench.iconTheme": "material-icon-theme",
     "git.autofetch": true,
 
     "[vhdl]": {
