@@ -56,3 +56,12 @@ keywords: [memoria, lecciones-aprendidas, decisiones-diseno, vhdl]
 - **Solución Recomendada:** Para visualizar ondas directamente:
   1. Conectar VS Code Desktop local al Codespace (`Open in VS Code Desktop`), donde WaveTrace funciona nativamente sin fallos.
   2. Abrir el archivo `.vcd` en un visor web interactivo como Surfer Web (`https://app.surfer-project.org`) o VCDrom (`https://app.vcdrom.com`).
+
+## [2026-09-20 14:49] Diagnóstico y Corrección del Fallo de Sincronización Git (SSH)
+- **Síntoma:** `git fetch` y `git pull` fallaban con `git@ssh.github.com: Permission denied (publickey)` acompañado del error `Cannot find module ...vscode.git\askpass\...\askpass-main.js`.
+- **Causa Raíz (doble):**
+  1. Git for Windows ejecuta su propio cliente `C:\Program Files\Git\usr\bin\ssh.exe`, el cual no puede comunicarse con el servicio `ssh-agent` de Windows; al recurrir al archivo `~/.ssh/id_ed25519` (protegido con passphrase) requería interacción.
+  2. El script askpass de VS Code invocaba un `askpass-main.js` inexistente en el directorio de sesión `askpass\70789581cae28aa7`, por lo que la solicitud de passphrase terminaba en error.
+- **Solución Aplicada:** `git config --global core.sshCommand '"C:/Windows/System32/OpenSSH/ssh.exe"'` para usar el OpenSSH de Windows (que sí accede al agente con la clave cargada) y eliminación del directorio askpass obsoleto.
+- **Refuerzo:** `~/.ssh/config` ampliado con `User git`, `IdentityFile ~/.ssh/id_ed25519`, `IdentitiesOnly yes` y `AddKeysToAgent yes`.
+- **Verificación:** `ssh -T git@github.com` responde `Hi NeruDev!` y `git ls-remote`/`git fetch` finalizan con código de salida 0.

@@ -77,3 +77,12 @@ keywords: [progreso, tareas, bitacora, vhdl]
 - **Acciones:**
   1. Identificada la incompatibilidad del Custom Editor de WaveTrace con el entorno de navegador web de Codespaces (error `Assertion Failed` por falta de APIs nativas de Electron en webview).
   2. Documentadas las alternativas operativas: abrir en VS Code Desktop o usar visores web VCD (Surfer Web / VCDrom).
+
+## [2026-09-20 14:49:17]
+- **Estado:** Corrección del error de autenticación SSH que impedía sincronizar el repositorio local con el remoto.
+- **Acciones:**
+  1. Reproducido el fallo desde la terminal y comparado el comportamiento de ambos clientes SSH: `C:\Program Files\Git\usr\bin\ssh.exe` falla con `Permission denied (publickey)`, mientras que `C:\Windows\System32\OpenSSH\ssh.exe` autentica correctamente.
+  2. Confirmado que `~/.ssh/id_ed25519` está cifrada con passphrase y que la clave solo resulta accesible a través del servicio `ssh-agent` de Windows (activo y con la clave cargada).
+  3. Configurado `core.sshCommand` global apuntando al OpenSSH de Windows y reforzado `~/.ssh/config` con `User`, `IdentityFile`, `IdentitiesOnly` y `AddKeysToAgent`.
+  4. Eliminado el directorio `askpass\70789581cae28aa7` (sin `askpass-main.js`) que originaba el error `MODULE_NOT_FOUND` durante la solicitud de credenciales.
+  5. Verificado el flujo completo con `git ls-remote --heads origin` y `git fetch`, ambos con código de salida 0.
