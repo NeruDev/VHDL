@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project source="3.8.0" version="1.0">
+  This file is intended to be loaded by Logisim-evolution v3.8.0(https://github.com/logisim-evolution/).
+
+  <lib desc="#Wiring" name="0">
+    <tool name="Pin">
+      <a name="appearance" val="classic"/>
+    </tool>
+  </lib>
+  <lib desc="#Gates" name="1"/>
+  <lib desc="#Plexers" name="2"/>
+  <lib desc="#Arithmetic" name="3"/>
+  <lib desc="#Memory" name="4"/>
+  <lib desc="#I/O" name="5"/>
+  <lib desc="#TTL" name="6"/>
+  <lib desc="#TCL" name="7"/>
+  <lib desc="#Base" name="8"/>
+  <lib desc="#BFH-Praktika" name="9"/>
+  <lib desc="#Input/Output-Extra" name="10"/>
+  <lib desc="#Soc" name="11"/>
+  <main name="main"/>
+  <options>
+    <a name="gateUndefined" val="ignore"/>
+    <a name="simlimit" val="1000"/>
+    <a name="simrand" val="0"/>
+  </options>
+  <mappings>
+    <tool lib="8" map="Button2" name="Poke Tool"/>
+    <tool lib="8" map="Button3" name="Menu Tool"/>
+    <tool lib="8" map="Ctrl Button1" name="Menu Tool"/>
+  </mappings>
+  <toolbar>
+    <tool lib="8" name="Poke Tool"/>
+    <tool lib="8" name="Edit Tool"/>
+    <tool lib="8" name="Wiring Tool"/>
+    <tool lib="8" name="Text Tool"/>
+    <sep/>
+    <tool lib="0" name="Pin"/>
+    <tool lib="0" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+    </tool>
+    <sep/>
+    <tool lib="1" name="NOT Gate"/>
+    <tool lib="1" name="AND Gate"/>
+    <tool lib="1" name="OR Gate"/>
+    <tool lib="1" name="XOR Gate"/>
+    <tool lib="1" name="NAND Gate"/>
+    <tool lib="1" name="NOR Gate"/>
+    <sep/>
+    <tool lib="4" name="D Flip-Flop"/>
+    <tool lib="4" name="Register"/>
+  </toolbar>
+  <circuit name="main">
+    <a name="appearance" val="logisim_evolution"/>
+    <a name="circuit" val="main"/>
+    <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="1.0"/>
+    <comp lib="0" loc="(120,110)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="width" val="7"/>
+    </comp>
+    <comp lib="0" loc="(150,110)" name="Splitter">
+      <a name="appear" val="right"/>
+      <a name="fanout" val="7"/>
+      <a name="incoming" val="7"/>
+    </comp>
+    <comp lib="0" loc="(470,120)" name="Splitter">
+      <a name="fanout" val="7"/>
+      <a name="incoming" val="7"/>
+    </comp>
+    <comp lib="0" loc="(480,210)" name="Splitter">
+      <a name="appear" val="right"/>
+      <a name="fanout" val="7"/>
+      <a name="incoming" val="7"/>
+    </comp>
+    <comp lib="5" loc="(580,60)" name="7-Segment Display"/>
+    <comp lib="5" loc="(680,60)" name="7-Segment Display"/>
+    <comp loc="(450,120)" name="cuenta_unos_o_ceros">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <wire from="(120,110)" to="(150,110)"/>
+    <wire from="(170,120)" to="(230,120)"/>
+    <wire from="(170,130)" to="(220,130)"/>
+    <wire from="(170,140)" to="(210,140)"/>
+    <wire from="(170,150)" to="(200,150)"/>
+    <wire from="(170,160)" to="(190,160)"/>
+    <wire from="(170,170)" to="(180,170)"/>
+    <wire from="(170,180)" to="(170,240)"/>
+    <wire from="(170,240)" to="(230,240)"/>
+    <wire from="(180,170)" to="(180,220)"/>
+    <wire from="(180,220)" to="(230,220)"/>
+    <wire from="(190,160)" to="(190,200)"/>
+    <wire from="(190,200)" to="(230,200)"/>
+    <wire from="(200,150)" to="(200,180)"/>
+    <wire from="(200,180)" to="(230,180)"/>
+    <wire from="(210,140)" to="(210,160)"/>
+    <wire from="(210,160)" to="(230,160)"/>
+    <wire from="(220,130)" to="(220,140)"/>
+    <wire from="(220,140)" to="(230,140)"/>
+    <wire from="(450,120)" to="(470,120)"/>
+    <wire from="(450,140)" to="(480,140)"/>
+    <wire from="(480,140)" to="(480,210)"/>
+    <wire from="(490,100)" to="(510,100)"/>
+    <wire from="(490,110)" to="(520,110)"/>
+    <wire from="(490,20)" to="(490,50)"/>
+    <wire from="(490,20)" to="(600,20)"/>
+    <wire from="(490,60)" to="(500,60)"/>
+    <wire from="(490,70)" to="(550,70)"/>
+    <wire from="(490,80)" to="(540,80)"/>
+    <wire from="(490,90)" to="(530,90)"/>
+    <wire from="(500,220)" to="(660,220)"/>
+    <wire from="(500,230)" to="(650,230)"/>
+    <wire from="(500,240)" to="(700,240)"/>
+    <wire from="(500,250)" to="(690,250)"/>
+    <wire from="(500,260)" to="(680,260)"/>
+    <wire from="(500,270)" to="(640,270)"/>
+    <wire from="(500,280)" to="(630,280)"/>
+    <wire from="(500,30)" to="(500,60)"/>
+    <wire from="(500,30)" to="(610,30)"/>
+    <wire from="(510,40)" to="(510,100)"/>
+    <wire from="(510,40)" to="(590,40)"/>
+    <wire from="(520,50)" to="(520,110)"/>
+    <wire from="(520,50)" to="(580,50)"/>
+    <wire from="(530,150)" to="(580,150)"/>
+    <wire from="(530,90)" to="(530,150)"/>
+    <wire from="(540,140)" to="(590,140)"/>
+    <wire from="(540,80)" to="(540,140)"/>
+    <wire from="(550,130)" to="(600,130)"/>
+    <wire from="(550,70)" to="(550,130)"/>
+    <wire from="(580,120)" to="(580,150)"/>
+    <wire from="(580,50)" to="(580,60)"/>
+    <wire from="(590,120)" to="(590,140)"/>
+    <wire from="(590,40)" to="(590,60)"/>
+    <wire from="(600,120)" to="(600,130)"/>
+    <wire from="(600,20)" to="(600,60)"/>
+    <wire from="(610,30)" to="(610,60)"/>
+    <wire from="(630,10)" to="(630,280)"/>
+    <wire from="(630,10)" to="(680,10)"/>
+    <wire from="(640,20)" to="(640,270)"/>
+    <wire from="(640,20)" to="(690,20)"/>
+    <wire from="(650,30)" to="(650,230)"/>
+    <wire from="(650,30)" to="(710,30)"/>
+    <wire from="(660,40)" to="(660,220)"/>
+    <wire from="(660,40)" to="(700,40)"/>
+    <wire from="(680,10)" to="(680,60)"/>
+    <wire from="(680,120)" to="(680,260)"/>
+    <wire from="(690,120)" to="(690,250)"/>
+    <wire from="(690,20)" to="(690,60)"/>
+    <wire from="(700,120)" to="(700,240)"/>
+    <wire from="(700,40)" to="(700,60)"/>
+    <wire from="(710,30)" to="(710,60)"/>
+  </circuit>
+  <vhdl name="cuenta_unos_o_ceros">LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+USE ieee.numeric_std.all;
+
+ENTITY cuenta_unos_o_ceros IS
+  PORT(
+        a, b, c, d, e, f, g : IN  std_logic; -- 7 entradas (a: LSB, g: MSB)
+        cantidad            : OUT std_logic_vector(6 DOWNTO 0); -- Display 1 (Conteo)
+        tipo                : OUT std_logic_vector(6 DOWNTO 0)  -- Display 2 ('0' o '1')
+  );  
+END ENTITY cuenta_unos_o_ceros;
+
+ARCHITECTURE una OF cuenta_unos_o_ceros IS
+
+    -- Función para convertir un entero (0-7) al patrón de un display de 7 segmentos (g f e d c b a)
+    FUNCTION decodificar_7seg(num : INTEGER) RETURN std_logic_vector IS
+    BEGIN
+        CASE num IS
+            WHEN 0 =&gt; RETURN "0111111"; -- Muestra '0'
+            WHEN 1 =&gt; RETURN "0000110"; -- Muestra '1'
+            WHEN 2 =&gt; RETURN "1011011"; -- Muestra '2'
+            WHEN 3 =&gt; RETURN "1001111"; -- Muestra '3'
+            WHEN 4 =&gt; RETURN "1100110"; -- Muestra '4'
+            WHEN 5 =&gt; RETURN "1101101"; -- Muestra '5'
+            WHEN 6 =&gt; RETURN "1111101"; -- Muestra '6'
+            WHEN 7 =&gt; RETURN "0000111"; -- Muestra '7'
+            WHEN OTHERS =&gt; RETURN "0000000";
+        END CASE;
+    END FUNCTION;
+
+BEGIN
+
+    PROCESS(a, b, c, d, e, f, g) IS
+        VARIABLE numero      : std_logic_vector(6 DOWNTO 0);
+        VARIABLE unos, ceros : INTEGER RANGE 0 TO 7; 
+        VARIABLE valor_mayor : INTEGER RANGE 0 TO 7;
+    BEGIN
+    
+        ceros := 0;
+        unos  := 0;
+        
+        -- Concatenación de las 7 entradas
+        numero := g &amp; f &amp; e &amp; d &amp; c &amp; b &amp; a;
+        
+        FOR i IN 0 TO 6 LOOP
+            IF numero(i) = '0' THEN
+                ceros := ceros + 1; 
+            ELSE 
+                unos := unos + 1; 
+            END IF;
+        END LOOP;
+
+        IF ceros &gt; unos THEN
+            valor_mayor := ceros;
+            tipo        &lt;= decodificar_7seg(0); -- Muestra el símbolo '0'
+        ELSE 
+            valor_mayor := unos;
+            tipo        &lt;= decodificar_7seg(1); -- Muestra el símbolo '1'
+        END IF;
+        
+        cantidad &lt;= decodificar_7seg(valor_mayor);
+        
+    END PROCESS;
+
+END ARCHITECTURE una;</vhdl>
+</project>
