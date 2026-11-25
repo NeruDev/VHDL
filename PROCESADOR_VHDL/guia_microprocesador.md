@@ -9,6 +9,8 @@ Este documento reúne y unifica todo lo visto hasta ahora:
 
 Está organizado así: primero cada parte del microprocesador por separado, luego las tablas de estados, el juego de instrucciones, el funcionamiento general unificado, el contraste entre fuentes y, al final, las guías para modificar instrucciones, opcodes y operaciones de la ALU.
 
+> **Actualización.** Esta versión incluye dos instrucciones agregadas al `control.vhd` original: **MOV R2 ← R1** (opcode `48h`, estado `S20`) y **OR** (opcode `49h`, estado `S21`, `ope="001"`). Con ellas la FSM pasa de 20 a 22 estados (`S00` a `S21`) y el banco de registros usa R0, R1 y R2.
+
 ---
 
 ## Índice
@@ -31,28 +33,30 @@ Está organizado así: primero cada parte del microprocesador por separado, lueg
 
 ### 0.1 Fuentes y su grado de confianza
 
-| Etiqueta | Fuente | Qué aporta | Confianza |
-|---|---|---|---|
-| **[Código]** | `control.vhd` | Lo que realmente hace la FSM: estados, transiciones, salidas | Máxima (es lo que se simula) |
-| **[Profesor]** | Tablas y texto del profesor | Comportamiento esperado, pines modificados por estado | Alta, con erratas de nomenclatura (ver sección 7) |
-| **[Guía previa]** | `unidad_control_comentada.vhd` + esquema de Logisim | Componentes de la ruta de datos, bits de banderas, tamaño de memoria | Media: describe otra versión del archivo |
-| **[Deducción]** | Inferencias propias | Lo que no está escrito en ningún lado pero se desprende de la lógica | A verificar en el esquema |
+
+| Etiqueta           | Fuente                                              | Qué aporta                                                             | Confianza                                          |
+| -------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------- | ---------------------------------------------------- |
+| **[Código]**      | `control.vhd`                                       | Lo que realmente hace la FSM: estados, transiciones, salidas            | Máxima (es lo que se simula)                      |
+| **[Profesor]**     | Tablas y texto del profesor                         | Comportamiento esperado, pines modificados por estado                   | Alta, con erratas de nomenclatura (ver sección 7) |
+| **[Guía previa]** | `unidad_control_comentada.vhd` + esquema de Logisim | Componentes de la ruta de datos, bits de banderas, tamaño de memoria   | Media: describe otra versión del archivo          |
+| **[Deducción]**   | Inferencias propias                                 | Lo que no está escrito en ningún lado pero se desprende de la lógica | A verificar en el esquema                          |
 
 ### 0.2 Notación de señales
 
 - `X=H` significa que la señal `X` vale `'1'` (nivel alto). `X=L` significa `'0'` (nivel bajo).
 - Una prima (`cs'`, `oe'`) indica **señal activa en bajo**: se activa cuando vale `L`.
 - `SelRegW=001` indica el valor binario del selector de 3 bits.
-- `R0` = selector `"000"`, `R1` = selector `"001"`.
+- `R0` = selector `"000"`, `R1` = selector `"001"`, `R2` = selector `"010"`.
 - VHDL no distingue mayúsculas de minúsculas: `lF` y `LF` son la misma señal.
 
 ### 0.3 Polaridad de las señales de memoria
 
-| Señal | Activa en | Para leer | Para escribir | Por defecto |
-|---|---|---|---|---|
-| `cs` | **bajo** (`'0'`) | `cs='0'` | `cs='0'` | `'1'` (memoria no seleccionada) |
-| `oe` | **bajo** (`'0'`) | `oe='0'` | `oe='1'` | `'1'` (salida deshabilitada) |
-| `we` | **alto** (`'1'`) | `we='0'` | `we='1'` | `'0'` |
+
+| Señal | Activa en        | Para leer | Para escribir | Por defecto                     |
+| -------- | ------------------ | ----------- | --------------- | --------------------------------- |
+| `cs`   | **bajo** (`'0'`) | `cs='0'`  | `cs='0'`      | `'1'` (memoria no seleccionada) |
+| `oe`   | **bajo** (`'0'`) | `oe='0'`  | `oe='1'`      | `'1'` (salida deshabilitada)    |
+| `we`   | **alto** (`'1'`) | `we='0'`  | `we='1'`      | `'0'`                           |
 
 > **Advertencia.** La guía previa escribía `oe <= '1'` para leer memoria. En este código eso **deshabilita** la lectura. Toda lectura se escribe `cs <= '0'; oe <= '0';`. Las tablas del profesor (`[cs', L], [oe', L]`) coinciden con el código.
 
@@ -62,10 +66,11 @@ Está organizado así: primero cada parte del microprocesador por separado, lueg
 
 ### 1.1 Dos bloques que trabajan juntos
 
-| Bloque | Qué hace | Dónde vive |
-|---|---|---|
-| **Ruta de datos (datapath)** | Guarda y transforma datos: registros, ALU, memoria, buses | Esquema de Logisim |
-| **Unidad de control** | En cada ciclo de reloj decide qué componentes de la ruta de datos se activan | `control` (VHDL) |
+
+| Bloque                       | Qué hace                                                                     | Dónde vive        |
+| ------------------------------ | ------------------------------------------------------------------------------- | -------------------- |
+| **Ruta de datos (datapath)** | Guarda y transforma datos: registros, ALU, memoria, buses                     | Esquema de Logisim |
+| **Unidad de control**        | En cada ciclo de reloj decide qué componentes de la ruta de datos se activan | `control` (VHDL)   |
 
 La unidad de control es una **máquina de estados finitos (FSM) tipo Moore**: no toca los datos, solo genera señales (`Lpc`, `oe`, `wr`, `ope`…) que abren o cierran caminos en la ruta de datos. Sus salidas dependen únicamente del estado presente.
 
@@ -95,17 +100,18 @@ La arquitectura es **von Neumann**: instrucciones y datos conviven en la misma m
 
 ### 1.3 Componentes de la ruta de datos
 
-| Bloque | Función | Entradas de control | Salida principal |
-|---|---|---|---|
-| **PC** | Contador de programa: dirección del siguiente byte a leer | `Lpc`, `Ipc` | Dirección (hacia el MUX) |
-| **RI** | Registro de instrucción: guarda el opcode | `Lri` | `CO` (hacia la unidad de control) |
-| **HL** | Par de registros de dirección (`L` byte bajo, `H` byte alto) | `LL`, `LH` | `SalidaHL` (hacia el MUX y hacia la carga del PC) |
-| **MUX de dirección** | Elige quién direcciona la memoria | `SelDir` | Dirección de memoria |
-| **Memoria** | Almacena programa y datos | `cs`, `oe`, `we` | Dato (hacia `BusDatos`) |
-| **BR** | Banco de registros (R0, R1…) | `SelRegW`, `SelRegRA`, `SelRegRB`, `wr` | `SalA`, `SalB` |
-| **ALU** | Opera sobre `SalA` y `SalB` | `ope` | Resultado y banderas |
-| **BUFFERALU** | Buffer triestado: pone el resultado de la ALU en el bus | `SalAlu` | `BusDatos` |
-| **FLAGS** | Registro de banderas | `LF` | `Flags` (hacia la unidad de control) |
+
+| Bloque                | Función                                                      | Entradas de control                     | Salida principal                                  |
+| ----------------------- | --------------------------------------------------------------- | ----------------------------------------- | --------------------------------------------------- |
+| **PC**                | Contador de programa: dirección del siguiente byte a leer    | `Lpc`, `Ipc`                            | Dirección (hacia el MUX)                         |
+| **RI**                | Registro de instrucción: guarda el opcode                    | `Lri`                                   | `CO` (hacia la unidad de control)                 |
+| **HL**                | Par de registros de dirección (`L` byte bajo, `H` byte alto) | `LL`, `LH`                              | `SalidaHL` (hacia el MUX y hacia la carga del PC) |
+| **MUX de dirección** | Elige quién direcciona la memoria                            | `SelDir`                                | Dirección de memoria                             |
+| **Memoria**           | Almacena programa y datos                                     | `cs`, `oe`, `we`                        | Dato (hacia `BusDatos`)                           |
+| **BR**                | Banco de registros (R0, R1…)                                 | `SelRegW`, `SelRegRA`, `SelRegRB`, `wr` | `SalA`, `SalB`                                    |
+| **ALU**               | Opera sobre `SalA` y `SalB`                                   | `ope`                                   | Resultado y banderas                              |
+| **BUFFERALU**         | Buffer triestado: pone el resultado de la ALU en el bus       | `SalAlu`                                | `BusDatos`                                        |
+| **FLAGS**             | Registro de banderas                                          | `LF`                                    | `Flags` (hacia la unidad de control)              |
 
 ---
 
@@ -119,27 +125,29 @@ Cada subsección describe una parte: qué hace, qué señales la gobiernan, en q
 
 **Estructura en el código [Código].** Tres procesos VHDL:
 
-| Proceso | Tipo | Qué hace |
-|---|---|---|
-| 1. Registro de estado | Secuencial (`clk`, `rst`) | Guarda `edo_pre`; reset asíncrono a `S00` |
-| 2. Estado siguiente | Combinacional (`edo_pre`, `CO`, `Flags`) | Decide `edo_sig` (decodificador de instrucciones) |
-| 3. Salidas | Combinacional (`edo_pre`) | Genera todas las señales de control (Moore) |
 
-**Estados.** El tipo `ESTADOS` tiene 20 valores (`S00`…`S19`):
+| Proceso               | Tipo                                     | Qué hace                                         |
+| ----------------------- | ------------------------------------------ | --------------------------------------------------- |
+| 1. Registro de estado | Secuencial (`clk`, `rst`)                | Guarda `edo_pre`; reset asíncrono a `S00`        |
+| 2. Estado siguiente   | Combinacional (`edo_pre`, `CO`, `Flags`) | Decide `edo_sig` (decodificador de instrucciones) |
+| 3. Salidas            | Combinacional (`edo_pre`)                | Genera todas las señales de control (Moore)      |
 
-| Grupo | Estados | Función |
-|---|---|---|
-| Inicio | S00 | Reset |
-| Búsqueda | S01, S02 | Traer y decodificar el opcode |
-| Lectura de dirección | S03 a S06 | Compartidos por LOAD, STORE y los 4 saltos |
-| Memoria | S07 (LOAD), S08 (STORE) | Acceso a `M(HL)` |
-| ALU | S09 (ADD), S15 (NOT), S16 (AND), S17 (DEC), S18 (INC), S19 (SUB) | Una operación por estado |
-| Transferencia | S10 (MOV), S12 y S13 (MOVI) | Copiar datos |
-| Control | S11 (FIN), S14 (salto) | Detener / saltar |
+**Estados.** El tipo `ESTADOS` tiene 22 valores (`S00`…`S21`):
+
+
+| Grupo                 | Estados                                                                    | Función                                   |
+| ----------------------- | ---------------------------------------------------------------------------- | -------------------------------------------- |
+| Inicio                | S00                                                                        | Reset                                      |
+| Búsqueda             | S01, S02                                                                   | Traer y decodificar el opcode              |
+| Lectura de dirección | S03 a S06                                                                  | Compartidos por LOAD, STORE y los 4 saltos |
+| Memoria               | S07 (LOAD), S08 (STORE)                                                    | Acceso a `M(HL)`                           |
+| ALU                   | S09 (ADD), S15 (NOT), S16 (AND), S17 (DEC), S18 (INC), S19 (SUB), S21 (OR) | Una operación por estado                  |
+| Transferencia         | S10 (MOV R0←R1), S20 (MOV R2←R1), S12 y S13 (MOVI)                       | Copiar datos                               |
+| Control               | S11 (FIN), S14 (salto)                                                     | Detener / saltar                           |
 
 **Valores por defecto.** Al inicio del proceso 3 todas las salidas se ponen en su valor inactivo y cada estado solo cambia las que necesita. Así no queda nada activo por accidente y se evitan *latches*. Del mismo modo, `edo_sig <= edo_pre` al inicio del proceso 2 hace que, si ninguna rama asigna, la FSM retenga el estado.
 
-**Estado ilegal.** `when others` del proceso 2 envía a `S00` (reinicia la CPU y vuelve a activar `clear`). Con los 20 estados cubiertos, solo se alcanzaría con un valor inválido de `edo_pre`.
+**Estado ilegal.** `when others` del proceso 2 envía a `S00` (reinicia la CPU y vuelve a activar `clear`). Con los 22 estados cubiertos, solo se alcanzaría con un valor inválido de `edo_pre`.
 
 ### 2.2 PC (Contador de Programa)
 
@@ -147,10 +155,11 @@ Cada subsección describe una parte: qué hace, qué señales la gobiernan, en q
 - **Señales.** `Lpc` (cargar con `HL`), `Ipc` (incrementar en 1).
 - **Se activa en:**
 
-| Señal | Estados | Efecto |
-|---|---|---|
-| `Ipc` | S02, S04, S06, S13 | `PC ← PC + 1` |
-| `Lpc` | S14 | `PC ← HL` |
+
+| Señal | Estados            | Efecto         |
+| -------- | -------------------- | ---------------- |
+| `Ipc`  | S02, S04, S06, S13 | `PC ← PC + 1` |
+| `Lpc`  | S14                | `PC ← HL`     |
 
 - **Regla de contabilidad del PC.** Cada byte de la instrucción consume exactamente un `Ipc`: el opcode en S02, el byte `L` en S04, el byte `H` en S06 y el dato inmediato en S13. Al volver a S01, el PC debe apuntar al primer byte de la instrucción siguiente. Si agregas estados, esta cuenta debe seguir cuadrando.
 - **Carga de salto.** Según el esquema, la entrada de carga del PC sale **directamente** de la salida de `HL`; por eso S14 no activa `SelDir` [Código + Guía previa].
@@ -174,10 +183,11 @@ Cada subsección describe una parte: qué hace, qué señales la gobiernan, en q
 - **Función.** Elige quién direcciona la memoria.
 - **Señal.** `SelDir`.
 
-| `SelDir` | Dirección de memoria | Estados |
-|---|---|---|
-| `L` (por defecto) | Salida del PC | S01, S03, S05, S12 (lecturas del flujo de instrucciones) |
-| `H` | Salida de HL | S07 (LOAD), S08 (STORE) |
+
+| `SelDir`          | Dirección de memoria | Estados                                                  |
+| ------------------- | ----------------------- | ---------------------------------------------------------- |
+| `L` (por defecto) | Salida del PC         | S01, S03, S05, S12 (lecturas del flujo de instrucciones) |
+| `H`               | Salida de HL          | S07 (LOAD), S08 (STORE)                                  |
 
 - En S14 (salto) `SelDir` **no** se activa: el PC se carga directo de `HL`.
 
@@ -186,12 +196,13 @@ Cada subsección describe una parte: qué hace, qué señales la gobiernan, en q
 - **Función.** Almacena programa y datos en una sola memoria (von Neumann).
 - **Señales.** `cs'`, `oe'`, `we` (ver polaridades en 0.3).
 
-| Operación | Estados | Señales |
-|---|---|---|
-| Leer (opcode, operandos, inmediato) | S01, S03, S05, S12 | `cs'=L`, `oe'=L` (dirección = PC) |
-| Leer dato | S07 | `cs'=L`, `oe'=L`, `SelDir=H` (dirección = HL) |
-| Escribir dato | S08 | `cs'=L`, `we=H`, `SelDir=H` (el dato lo pone la ALU en el bus) |
-| Inactiva | resto de estados | `cs'=H`, `oe'=H`, `we=L` |
+
+| Operación                          | Estados            | Señales                                                       |
+| ------------------------------------- | -------------------- | ---------------------------------------------------------------- |
+| Leer (opcode, operandos, inmediato) | S01, S03, S05, S12 | `cs'=L`, `oe'=L` (dirección = PC)                             |
+| Leer dato                           | S07                | `cs'=L`, `oe'=L`, `SelDir=H` (dirección = HL)                 |
+| Escribir dato                       | S08                | `cs'=L`, `we=H`, `SelDir=H` (el dato lo pone la ALU en el bus) |
+| Inactiva                            | resto de estados   | `cs'=H`, `oe'=H`, `we=L`                                       |
 
 - En STORE `oe'` queda en `H` (la memoria no emite) y `SalAlu=H` (emite la ALU): así no hay dos emisores en el bus.
 
@@ -199,41 +210,46 @@ Cada subsección describe una parte: qué hace, qué señales la gobiernan, en q
 
 `BusDatos` es el bus compartido de 8 bits. En cada estado **como máximo un componente puede escribir en él**.
 
-| Emisor | Condición | Estados |
-|---|---|---|
-| Memoria | `cs'=L` y `oe'=L` | S01, S03, S05, S07, S12 |
-| BUFFERALU | `SalAlu=H` | S08, S09, S10, S15, S16, S17, S18, S19 |
-| Ninguno (bus libre) | — | S00, S02, S04, S06, S11, S13, S14 |
 
-| Receptor | Estados |
-|---|---|
-| RI | S01 |
-| L | S03 |
-| H | S05 |
-| BR (registro `SelRegW`) | S07, S12 (dato de memoria); S09, S10, S15 a S19 (resultado de la ALU) |
-| Memoria (escritura) | S08 |
+| Emisor              | Condición        | Estados                           |
+| --------------------- | ------------------- | ----------------------------------- |
+| Memoria             | `cs'=L` y `oe'=L` | S01, S03, S05, S07, S12           |
+| BUFFERALU           | `SalAlu=H`        | S08, S09, S10, S15 a S21          |
+| Ninguno (bus libre) | —                | S00, S02, S04, S06, S11, S13, S14 |
+
+
+| Receptor                | Estados                                                               |
+| ------------------------- | ----------------------------------------------------------------------- |
+| RI                      | S01                                                                   |
+| L                       | S03                                                                   |
+| H                       | S05                                                                   |
+| BR (registro `SelRegW`) | S07, S12 (dato de memoria); S09, S10, S15 a S21 (resultado de la ALU) |
+| Memoria (escritura)     | S08                                                                   |
 
 **Regla de oro:** nunca `SalAlu=H` junto con `oe'=L`. Verificado en el código: ningún estado activa ambos.
 
 ### 2.8 Banco de registros (BR)
 
-- **Función.** Almacena los registros de propósito general. Con selectores de 3 bits cabrían hasta 8 ($2^3 = 8$); **este código solo usa R0 y R1**.
+- **Función.** Almacena los registros de propósito general. Con selectores de 3 bits cabrían hasta 8 ($2^3 = 8$); **este código usa R0, R1 y R2**.
 - **Señales.**
 
-| Señal | Función |
-|---|---|
-| `SelRegRA` | Registro que sale por el puerto A (`SalA`, hacia la ALU) |
-| `SelRegRB` | Registro que sale por el puerto B (`SalB`, hacia la ALU) |
-| `SelRegW` | Registro destino de escritura |
-| `wr` | Habilita la escritura; el registro captura en el flanco que cierra el estado |
+
+| Señal     | Función                                                                     |
+| ------------ | ------------------------------------------------------------------------------ |
+| `SelRegRA` | Registro que sale por el puerto A (`SalA`, hacia la ALU)                     |
+| `SelRegRB` | Registro que sale por el puerto B (`SalB`, hacia la ALU)                     |
+| `SelRegW`  | Registro destino de escritura                                                |
+| `wr`       | Habilita la escritura; el registro captura en el flanco que cierra el estado |
 
 - La entrada de escritura del BR viene de `BusDatos` [Guía previa].
 - **Roles de los registros en esta FSM:**
 
-| Registro | Selector | Uso |
-|---|---|---|
-| R0 | `"000"` | Operando A de las operaciones de dos operandos; destino solo de MOV |
-| R1 | `"001"` | Operando B, destino de casi todo, y registro de LOAD/STORE/MOVI (acumulador implícito) |
+
+| Registro | Selector | Uso                                                                                     |
+| ---------- | ---------- | ----------------------------------------------------------------------------------------- |
+| R0       | `"000"`  | Operando A de las operaciones de dos operandos; destino solo de MOV                     |
+| R1       | `"001"`  | Operando B, destino de casi todo, y registro de LOAD/STORE/MOVI (acumulador implícito) |
+| R2       | `"010"`  | Destino solo de MOV R2←R1 (S20). Ninguna instrucción lo lee: es de solo escritura     |
 
 - **Valor por defecto.** `SelRegRB` vale `"000"` si un estado no lo asigna: el puerto B lee R0 aunque la ALU no lo use (NOT, DEC, INC).
 
@@ -242,19 +258,22 @@ Cada subsección describe una parte: qué hace, qué señales la gobiernan, en q
 - **Función.** La ALU calcula una operación sobre `SalA` y `SalB`; el BUFFERALU (triestado) pone el resultado en `BusDatos` cuando `SalAlu=H`.
 - **Señal de operación.** `ope` (3 bits). La FSM solo *pide* la operación; qué hace cada código lo decide el módulo `ALU` del esquema.
 
-| `ope` | Operación | Estados que la usan |
-|---|---|---|
-| `000` | Paso directo: salida = A | S08 (STORE), S10 (MOV) |
-| `001` | **Libre** (no usado) | — |
-| `010` | A AND B | S16 |
-| `011` | NOT A | S15 |
-| `100` | A − 1 | S17 |
-| `101` | A + B | S09 |
-| `110` | A − B | S19 |
-| `111` | A + 1 | S18 |
+
+| `ope` | Operación               | Estados que la usan                             |
+| ------- | -------------------------- | ------------------------------------------------- |
+| `000` | Paso directo: salida = A | S08 (STORE), S10 (MOV R0←R1), S20 (MOV R2←R1) |
+| `001` | A OR B                   | S21                                             |
+| `010` | A AND B                  | S16                                             |
+| `011` | NOT A                    | S15                                             |
+| `100` | A − 1                   | S17                                             |
+| `101` | A + B                    | S09                                             |
+| `110` | A − B                   | S19                                             |
+| `111` | A + 1                    | S18                                             |
 
 - **Receta de un estado de ALU:** elegir orígenes (`SelRegRA`, `SelRegRB`), elegir operación (`ope`), habilitar el buffer (`SalAlu=H`), elegir destino (`SelRegW`) y escribir (`wr=H`), y guardar banderas (`LF=H`).
-- **Paso directo.** `ope=000` actúa como *bypass*: mueve un dato sin alterarlo (se usa en STORE y MOV).
+- **Paso directo.** `ope=000` actúa como *bypass*: mueve un dato sin alterarlo (se usa en STORE y en los dos MOV).
+- **Código `001`.** Antes pasaba `SalB` como buffer; ninguna instrucción lo usaba y es redundante (basta elegir `SelRegRA`), así que ahora implementa OR. La ALU de Logisim debe producir `SalA OR SalB` con ese código.
+- **Sin códigos libres.** Los $2^3 = 8$ códigos de `ope` ya están ocupados; una operación nueva exige ensanchar `ope` a 4 bits (sección 9.5).
 
 ### 2.10 Registro de banderas (FLAGS)
 
@@ -262,24 +281,26 @@ Cada subsección describe una parte: qué hace, qué señales la gobiernan, en q
 - **Señal.** `LF` (carga las banderas con el resultado actual de la ALU).
 - **Bits usados** [Guía previa y Profesor]:
 
-| Bit | Bandera | Usada por |
-|---|---|---|
-| `Flags(0)` | FZ (cero) | JZ (81h) |
-| `Flags(1)` | FC (acarreo) | JC (82h) |
-| `Flags(2)` | FS (signo) | JS (83h) |
 
-- **Quién las actualiza (`LF=H`):** ADD (S09), NOT (S15), AND (S16), DEC (S17), INC (S18), SUB (S19).
-- **Quién NO las actualiza:** LOAD (S07), STORE (S08), MOV (S10), MOVI (S12). Por tanto un valor recién cargado no puede probarse con un salto sin una operación de ALU intermedia.
+| Bit        | Bandera      | Usada por |
+| ------------ | -------------- | ----------- |
+| `Flags(0)` | FZ (cero)    | JZ (81h)  |
+| `Flags(1)` | FC (acarreo) | JC (82h)  |
+| `Flags(2)` | FS (signo)   | JS (83h)  |
+
+- **Quién las actualiza (`LF=H`):** ADD (S09), NOT (S15), AND (S16), DEC (S17), INC (S18), SUB (S19), OR (S21).
+- **Quién NO las actualiza:** LOAD (S07), STORE (S08), MOV (S10 y S20), MOVI (S12). Por tanto un valor recién cargado no puede probarse con un salto sin una operación de ALU intermedia.
 - El puerto `Flags` es de 8 bits, pero solo los bits 0 a 2 se usan.
 
 ### 2.11 Señales de supervisión
 
-| Señal | Qué hace | Estados |
-|---|---|---|
-| `clear` | Limpia la ruta de datos (PC, HL, RI, BR y FLAGS, según la guía previa) | S00 |
-| `inicia` | Señal de arranque; su destino exacto no se deduce del código ni de las guías | S00 |
-| `fin` | Indica que el procesador se detuvo | S11 |
-| `idEstado` (5 bits) | Número binario del estado actual, para sondas/displays en Logisim | todos |
+
+| Señal              | Qué hace                                                                       | Estados |
+| --------------------- | --------------------------------------------------------------------------------- | --------- |
+| `clear`             | Limpia la ruta de datos (PC, HL, RI, BR y FLAGS, según la guía previa)        | S00     |
+| `inicia`            | Señal de arranque; su destino exacto no se deduce del código ni de las guías | S00     |
+| `fin`               | Indica que el procesador se detuvo                                              | S11     |
+| `idEstado` (5 bits) | Número binario del estado actual, para sondas/displays en Logisim              | todos   |
 
 **Arranque.** `rst='1'` fuerza `edo_pre = S00` de forma asíncrona. Mientras la FSM está en S00, `clear=H` e `inicia=H`. La ruta de datos se limpia con `clear`, que **genera la unidad de control**: `rst` no llega directamente a PC, HL, RI, BR ni FLAGS. S00 dura hasta el primer flanco de reloj con `rst='0'`, cuando pasa a S01.
 
@@ -289,14 +310,15 @@ Cada subsección describe una parte: qué hace, qué señales la gobiernan, en q
 
 El archivo `control_comentado.vhd` contiene los comentarios operativos. Esta tabla resume su estructura:
 
-| Sección | Contenido | Qué conviene saber |
-|---|---|---|
-| [0] Librerías | `std_logic_1164` y `numeric_std` | `numeric_std` no se usa directamente |
-| [1] Entidad | Puertos de la unidad de control | Ver glosario (apéndice A) |
-| [2] Arquitectura | Tipo `ESTADOS`, señales `edo_pre` y `edo_sig` | Para agregar estados, ampliar el tipo |
-| [3] Proceso 1 | Registro de estado (reset asíncrono) | Es lo único con reloj |
-| [4] Proceso 2 | Estado siguiente | Decodificación en `S02` (`if/elsif`) y en `S06`; `others → S00` |
-| [5] Proceso 3 | Salidas por estado | `idEstado` se asigna dentro de cada estado |
+
+| Sección         | Contenido                                      | Qué conviene saber                                               |
+| ------------------ | ------------------------------------------------ | ------------------------------------------------------------------- |
+| [0] Librerías   | `std_logic_1164` y `numeric_std`               | `numeric_std` no se usa directamente                              |
+| [1] Entidad      | Puertos de la unidad de control                | Ver glosario (apéndice A)                                        |
+| [2] Arquitectura | Tipo `ESTADOS`, señales `edo_pre` y `edo_sig` | Para agregar estados, ampliar el tipo                             |
+| [3] Proceso 1    | Registro de estado (reset asíncrono)          | Es lo único con reloj                                            |
+| [4] Proceso 2    | Estado siguiente                               | Decodificación en `S02` (`if/elsif`) y en `S06`; `others → S00` |
+| [5] Proceso 3    | Salidas por estado                             | `idEstado` se asigna dentro de cada estado                        |
 
 Detalles del proceso 2:
 
@@ -311,64 +333,72 @@ Detalles del proceso 2:
 
 Solo se listan las salidas distintas de su valor por defecto. Los estados `S03` a `S06` son compartidos por LOAD, STORE y los saltos (el profesor los rotula `LOAD0–3` y `STORE0–3` por reutilización).
 
-| Estado | `idEstado` | Nombre (profesor) | Acción | Salidas activas | Siguiente |
-|---|---|---|---|---|---|
-| S00 | `00000` | RESET0 | Reset | `clear=H`, `inicia=H` | S01 |
-| S01 | `00001` | FETCH0 | `RI ← M(PC)` | `cs'=L`, `oe'=L`, `Lri=H` | S02 |
-| S02 | `00010` | FETCH1 | `PC ← PC + 1` | `Ipc=H` | según `CO` |
-| S03 | `00011` | LOAD0 / STORE0 | `L ← M(PC)` | `cs'=L`, `oe'=L`, `LL=H` | S04 |
-| S04 | `00100` | LOAD1 / STORE1 | `PC ← PC + 1` | `Ipc=H` | S05 |
-| S05 | `00101` | LOAD2 / STORE2 | `H ← M(PC)` | `cs'=L`, `oe'=L`, `LH=H` | S06 |
-| S06 | `00110` | LOAD3 / STORE3 | `PC ← PC + 1` | `Ipc=H` | S07 / S08 / S14 / S01 |
-| S07 | `00111` | LOAD4 | `R1 ← M(HL)` | `SelDir=H`, `cs'=L`, `oe'=L`, `SelRegW=001`, `wr=H` | S01 |
-| S08 | `01000` | STORE5 | `M(HL) ← R1` | `SelDir=H`, `cs'=L`, `we=H`, `SelRegRA=001`, `ope=000`, `SalAlu=H` | S01 |
-| S09 | `01001` | ADD0 | `R1 ← R0 + R1` | ver 4.2 | S01 |
-| S10 | `01010` | MOV0 | `R0 ← R1` | ver 4.2 | S01 |
-| S11 | `01011` | FIN0 | Fin | `fin=H` | S11 |
-| S12 | `01100` | MOVI0 | `R1 ← M(PC)` | `cs'=L`, `oe'=L`, `SelRegW=001`, `wr=H` | S13 |
-| S13 | `01101` | MOVI1 | `PC ← PC + 1` | `Ipc=H` | S01 |
-| S14 | `01110` | JMP/JZ/JC/JS (final) | `PC ← HL` | `Lpc=H` | S01 |
-| S15 | `01111` | NOT0 | `R1 ← not R1` | ver 4.2 | S01 |
-| S16 | `10000` | AND0 | `R1 ← R0 and R1` | ver 4.2 | S01 |
-| S17 | `10001` | DEC0 | `R1 ← R1 − 1` | ver 4.2 | S01 |
-| S18 | `10010` | INC0 | `R1 ← R1 + 1` | ver 4.2 | S01 |
-| S19 | `10011` | SUB0 | `R1 ← R0 − R1` | ver 4.2 | S01 |
-| otro | `11111` | — | Estado ilegal | (solo `idEstado`) | S00 |
+
+| Estado | `idEstado` | Nombre (profesor)    | Acción           | Salidas activas                                                    | Siguiente             |
+| -------- | ------------ | ---------------------- | ------------------- | -------------------------------------------------------------------- | ----------------------- |
+| S00    | `00000`    | RESET0               | Reset             | `clear=H`, `inicia=H`                                              | S01                   |
+| S01    | `00001`    | FETCH0               | `RI ← M(PC)`     | `cs'=L`, `oe'=L`, `Lri=H`                                          | S02                   |
+| S02    | `00010`    | FETCH1               | `PC ← PC + 1`    | `Ipc=H`                                                            | según `CO`           |
+| S03    | `00011`    | LOAD0 / STORE0       | `L ← M(PC)`      | `cs'=L`, `oe'=L`, `LL=H`                                           | S04                   |
+| S04    | `00100`    | LOAD1 / STORE1       | `PC ← PC + 1`    | `Ipc=H`                                                            | S05                   |
+| S05    | `00101`    | LOAD2 / STORE2       | `H ← M(PC)`      | `cs'=L`, `oe'=L`, `LH=H`                                           | S06                   |
+| S06    | `00110`    | LOAD3 / STORE3       | `PC ← PC + 1`    | `Ipc=H`                                                            | S07 / S08 / S14 / S01 |
+| S07    | `00111`    | LOAD4                | `R1 ← M(HL)`     | `SelDir=H`, `cs'=L`, `oe'=L`, `SelRegW=001`, `wr=H`                | S01                   |
+| S08    | `01000`    | STORE5               | `M(HL) ← R1`     | `SelDir=H`, `cs'=L`, `we=H`, `SelRegRA=001`, `ope=000`, `SalAlu=H` | S01                   |
+| S09    | `01001`    | ADD0                 | `R1 ← R0 + R1`   | ver 4.2                                                            | S01                   |
+| S10    | `01010`    | MOV0                 | `R0 ← R1`        | ver 4.2                                                            | S01                   |
+| S11    | `01011`    | FIN0                 | Fin               | `fin=H`                                                            | S11                   |
+| S12    | `01100`    | MOVI0                | `R1 ← M(PC)`     | `cs'=L`, `oe'=L`, `SelRegW=001`, `wr=H`                            | S13                   |
+| S13    | `01101`    | MOVI1                | `PC ← PC + 1`    | `Ipc=H`                                                            | S01                   |
+| S14    | `01110`    | JMP/JZ/JC/JS (final) | `PC ← HL`        | `Lpc=H`                                                            | S01                   |
+| S15    | `01111`    | NOT0                 | `R1 ← not R1`    | ver 4.2                                                            | S01                   |
+| S16    | `10000`    | AND0                 | `R1 ← R0 and R1` | ver 4.2                                                            | S01                   |
+| S17    | `10001`    | DEC0                 | `R1 ← R1 − 1`   | ver 4.2                                                            | S01                   |
+| S18    | `10010`    | INC0                 | `R1 ← R1 + 1`    | ver 4.2                                                            | S01                   |
+| S19    | `10011`    | SUB0                 | `R1 ← R0 − R1`  | ver 4.2                                                            | S01                   |
+| S20    | `10100`    | — (agregado)        | `R2 ← R1`        | ver 4.2                                                            | S01                   |
+| S21    | `10101`    | — (agregado)        | `R1 ← R0 or R1`  | ver 4.2                                                            | S01                   |
+| otro   | `11111`    | —                   | Estado ilegal     | (solo `idEstado`)                                                  | S00                   |
 
 ### 4.2 Estados de ALU y transferencia entre registros
 
 Todos tienen `wr=H` y `SalAlu=H`. La columna `LF` indica si actualizan banderas. Una celda vacía en `SelRegRB` significa que el estado no lo asigna (queda en `"000"`, pero la ALU no lo usa).
 
-| Estado | Instrucción | Acción | `SelRegW` | `SelRegRA` | `SelRegRB` | `ope` | `LF` |
-|---|---|---|---|---|---|---|---|
-| S15 | NOT | `SalA ← R1; R1 ← ALU(not A)` | 001 | 001 |  | 011 | H |
-| S16 | AND | `SalA ← R0; SalB ← R1; R1 ← ALU(A and B)` | 001 | 000 | 001 | 010 | H |
-| S17 | DEC | `SalA ← R1; R1 ← ALU(A − 1)` | 001 | 001 |  | 100 | H |
-| S18 | INC | `SalA ← R1; R1 ← ALU(A + 1)` | 001 | 001 |  | 111 | H |
-| S19 | SUB | `SalA ← R0; SalB ← R1; R1 ← ALU(A − B)` | 001 | 000 | 001 | 110 | H |
-| S09 | ADD | `SalA ← R0; SalB ← R1; R1 ← ALU(A + B)` | 001 | 000 | 001 | 101 | H |
-| S10 | MOV | `SalA ← R1; R0 ← ALU(A)` | 000 | 001 |  | 000 | **L** |
+
+| Estado | Instrucción | Acción                                      | `SelRegW` | `SelRegRA` | `SelRegRB` | `ope` | `LF`  |
+| -------- | -------------- | ---------------------------------------------- | ----------- | ------------ | ------------ | ------- | ------- |
+| S15    | NOT          | `SalA ← R1; R1 ← ALU(not A)`               | 001       | 001        |            | 011   | H     |
+| S16    | AND          | `SalA ← R0; SalB ← R1; R1 ← ALU(A and B)` | 001       | 000        | 001        | 010   | H     |
+| S17    | DEC          | `SalA ← R1; R1 ← ALU(A − 1)`              | 001       | 001        |            | 100   | H     |
+| S18    | INC          | `SalA ← R1; R1 ← ALU(A + 1)`               | 001       | 001        |            | 111   | H     |
+| S19    | SUB          | `SalA ← R0; SalB ← R1; R1 ← ALU(A − B)`  | 001       | 000        | 001        | 110   | H     |
+| S09    | ADD          | `SalA ← R0; SalB ← R1; R1 ← ALU(A + B)`   | 001       | 000        | 001        | 101   | H     |
+| S10    | MOV R0       | `SalA ← R1; R0 ← ALU(A)`                   | 000       | 001        |            | 000   | **L** |
+| S20    | MOV R2       | `SalA ← R1; R2 ← ALU(A)`                   | 010       | 001        |            | 000   | **L** |
+| S21    | OR           | `SalA ← R0; SalB ← R1; R1 ← ALU(A or B)`  | 001       | 000        | 001        | 001   | H     |
 
 ### 4.3 Resumen de señales por estado
 
-| Señal | Estados donde está activa |
-|---|---|
-| `clear`, `inicia` | S00 |
-| `Lri` | S01 |
-| `Ipc` | S02, S04, S06, S13 |
-| `LL` | S03 |
-| `LH` | S05 |
-| `Lpc` | S14 |
-| `fin` | S11 |
-| `cs'=L` | S01, S03, S05, S07, S08, S12 |
-| `oe'=L` | S01, S03, S05, S07, S12 |
-| `we=H` | S08 |
-| `SelDir=H` | S07, S08 |
-| `wr=H` | S07, S09, S10, S12, S15 a S19 |
-| `SalAlu=H` | S08, S09, S10, S15 a S19 |
-| `LF=H` | S09, S15 a S19 |
-| `SelRegW=000` | S10 |
-| `SelRegW=001` | S07, S09, S12, S15 a S19 |
+
+| Señal            | Estados donde está activa    |
+| ------------------- | ------------------------------- |
+| `clear`, `inicia` | S00                           |
+| `Lri`             | S01                           |
+| `Ipc`             | S02, S04, S06, S13            |
+| `LL`              | S03                           |
+| `LH`              | S05                           |
+| `Lpc`             | S14                           |
+| `fin`             | S11                           |
+| `cs'=L`           | S01, S03, S05, S07, S08, S12  |
+| `oe'=L`           | S01, S03, S05, S07, S12       |
+| `we=H`            | S08                           |
+| `SelDir=H`        | S07, S08                      |
+| `wr=H`            | S07, S09, S10, S12, S15 a S21 |
+| `SalAlu=H`        | S08, S09, S10, S15 a S21      |
+| `LF=H`            | S09, S15 a S19, S21           |
+| `SelRegW=000`     | S10                           |
+| `SelRegW=001`     | S07, S09, S12, S15 a S19, S21 |
+| `SelRegW=010`     | S20                           |
 
 ---
 
@@ -376,61 +406,75 @@ Todos tienen `wr=H` y `SalAlu=H`. La columna `LF` indica si actualizan banderas.
 
 ### 5.1 Formatos
 
-| Formato | Bytes | Contenido | Instrucciones |
-|---|---|---|---|
-| Sin operando | 1 | `[opcode]` | NOT, AND, DEC, INC, SUB, ADD, MOV, FIN |
-| Con inmediato | 2 | `[opcode][dato]` | MOVI |
-| Con dirección | 3 | `[opcode][L][H]` | LOAD, STORE, JMP, JZ, JC, JS |
+
+| Formato        | Bytes | Contenido        | Instrucciones                                                 |
+| ---------------- | ------- | ------------------ | --------------------------------------------------------------- |
+| Sin operando   | 1     | `[opcode]`       | NOT, AND, OR, DEC, INC, SUB, ADD, MOV R0←R1, MOV R2←R1, FIN |
+| Con inmediato  | 2     | `[opcode][dato]` | MOVI                                                          |
+| Con dirección | 3     | `[opcode][L][H]` | LOAD, STORE, JMP, JZ, JC, JS                                  |
 
 ### 5.2 Tabla de instrucciones
 
-| CO | Instrucción | Efecto | Estados | Ciclos |
-|---|---|---|---|---|
-| 40h | NOT | `R1 ← not R1` | S15 | 3 |
-| 41h | AND | `R1 ← R0 and R1` | S16 | 3 |
-| 42h | DEC | `R1 ← R1 − 1` | S17 | 3 |
-| 43h | INC | `R1 ← R1 + 1` | S18 | 3 |
-| 44h | SUB | `R1 ← R0 − R1` | S19 | 3 |
-| 45h | ADD | `R1 ← R0 + R1` | S09 | 3 |
-| 46h | MOV | `R0 ← R1` | S10 | 3 |
-| 47h | MOVI K | `R1 ← K` | S12, S13 | 4 |
-| 70h | LOAD dir | `R1 ← M(dirH dirL)` | S03 a S07 | 7 |
-| 71h | STORE dir | `M(dirH dirL) ← R1` | S03 a S06, S08 | 7 |
-| 80h | JMP dir | `PC ← dirH dirL` | S03 a S06, S14 | 7 |
-| 81h | JZ dir | si FZ=1: `PC ← dirH dirL` | S03 a S06, S14 | 7 (6 si no salta) |
-| 82h | JC dir | si FC=1: `PC ← dirH dirL` | S03 a S06, S14 | 7 (6 si no salta) |
-| 83h | JS dir | si FS=1: `PC ← dirH dirL` | S03 a S06, S14 | 7 (6 si no salta) |
-| FFh | FIN | Detiene el procesador | S11 | 3 y se queda |
-| otro | (NOP implícito) | No hace nada | S02 → S01 | 2 |
+
+| CO   | Instrucción     | Efecto                     | Estados        | Ciclos            |
+| ------ | ------------------ | ---------------------------- | ---------------- | ------------------- |
+| 40h  | NOT              | `R1 ← not R1`             | S15            | 3                 |
+| 41h  | AND              | `R1 ← R0 and R1`          | S16            | 3                 |
+| 42h  | DEC              | `R1 ← R1 − 1`            | S17            | 3                 |
+| 43h  | INC              | `R1 ← R1 + 1`             | S18            | 3                 |
+| 44h  | SUB              | `R1 ← R0 − R1`           | S19            | 3                 |
+| 45h  | ADD              | `R1 ← R0 + R1`            | S09            | 3                 |
+| 46h  | MOV R0           | `R0 ← R1`                 | S10            | 3                 |
+| 47h  | MOVI K           | `R1 ← K`                  | S12, S13       | 4                 |
+| 48h  | MOV R2           | `R2 ← R1`                 | S20            | 3                 |
+| 49h  | OR               | `R1 ← R0 or R1`           | S21            | 3                 |
+| 70h  | LOAD dir         | `R1 ← M(dirH dirL)`       | S03 a S07      | 7                 |
+| 71h  | STORE dir        | `M(dirH dirL) ← R1`       | S03 a S06, S08 | 7                 |
+| 80h  | JMP dir          | `PC ← dirH dirL`          | S03 a S06, S14 | 7                 |
+| 81h  | JZ dir           | si FZ=1: `PC ← dirH dirL` | S03 a S06, S14 | 7 (6 si no salta) |
+| 82h  | JC dir           | si FC=1: `PC ← dirH dirL` | S03 a S06, S14 | 7 (6 si no salta) |
+| 83h  | JS dir           | si FS=1: `PC ← dirH dirL` | S03 a S06, S14 | 7 (6 si no salta) |
+| FFh  | FIN              | Detiene el procesador      | S11            | 3 y se queda      |
+| otro | (NOP implícito) | No hace nada               | S02 → S01     | 2                 |
 
 ### 5.3 Cálculo de ciclos
 
 Toda instrucción gasta 2 ciclos de búsqueda (S01 y S02) más los estados de ejecución:
 
-$$N_{instr} = 2 + N_{ejec}$$
+$$
+N_{instr} = 2 + N_{ejec}
+
+$$
 
 El tiempo total de un programa es:
 
-$$T = N_{ciclos} \cdot T_{clk}$$
+$$
+T = N_{ciclos} \cdot T_{clk}
+
+$$
 
 Capacidad de direccionamiento según el ancho de dirección:
 
-$$2^8 = 256 \text{ direcciones} \qquad 2^{16} = 65\,536 \text{ direcciones}$$
+$$
+2^8 = 256 \text{ direcciones} \qquad 2^{16} = 65\,536 \text{ direcciones}
+
+$$
 
 ### 5.4 Traza de `LOAD 0010h`
 
 Memoria desde `0000h`: `70 10 00` (opcode, L = 10h, H = 00h). Supón `M[0010h] = 2Ah`.
 
-| Ciclo | Estado | PC | Señales activas | Qué ocurre |
-|---|---|---|---|---|
-| 1 | S01 | 0 | `cs'`, `oe'`, `Lri` | Se lee `M[0]` = 70h y se guarda en RI |
-| 2 | S02 | 0 | `Ipc` | PC pasa a 1; `CO` = 70h → va a S03 |
-| 3 | S03 | 1 | `cs'`, `oe'`, `LL` | L ← `M[1]` = 10h |
-| 4 | S04 | 1 | `Ipc` | PC pasa a 2 |
-| 5 | S05 | 2 | `cs'`, `oe'`, `LH` | H ← `M[2]` = 00h |
-| 6 | S06 | 2 | `Ipc` | PC pasa a 3; `CO` = 70h → va a S07 |
-| 7 | S07 | 3 | `SelDir`, `cs'`, `oe'`, `wr` (`SelRegW=001`) | R1 ← `M[HL]` = `M[0010h]` = 2Ah |
-| 8 | S01 | 3 | `cs'`, `oe'`, `Lri` | Empieza la instrucción siguiente |
+
+| Ciclo | Estado | PC | Señales activas                             | Qué ocurre                           |
+| ------- | -------- | ---- | ---------------------------------------------- | --------------------------------------- |
+| 1     | S01    | 0  | `cs'`, `oe'`, `Lri`                          | Se lee `M[0]` = 70h y se guarda en RI |
+| 2     | S02    | 0  | `Ipc`                                        | PC pasa a 1; `CO` = 70h → va a S03   |
+| 3     | S03    | 1  | `cs'`, `oe'`, `LL`                           | L ← `M[1]` = 10h                     |
+| 4     | S04    | 1  | `Ipc`                                        | PC pasa a 2                           |
+| 5     | S05    | 2  | `cs'`, `oe'`, `LH`                           | H ← `M[2]` = 00h                     |
+| 6     | S06    | 2  | `Ipc`                                        | PC pasa a 3; `CO` = 70h → va a S07   |
+| 7     | S07    | 3  | `SelDir`, `cs'`, `oe'`, `wr` (`SelRegW=001`) | R1 ← `M[HL]` = `M[0010h]` = 2Ah      |
+| 8     | S01    | 3  | `cs'`, `oe'`, `Lri`                          | Empieza la instrucción siguiente     |
 
 ### 5.5 Comportamiento de un salto condicional
 
@@ -443,26 +487,62 @@ Para `JZ dir` con las banderas ya cargadas:
 
 Objetivo: cargar 5 en R1 y restar 1 hasta llegar a 0.
 
-| Dirección | Byte | Significado |
-|---|---|---|
-| 00h | `47` | MOVI |
-| 01h | `05` | dato inmediato = 5 |
-| 02h | `42` | DEC |
-| 03h | `81` | JZ |
-| 04h | `09` | L del destino |
-| 05h | `00` | H del destino |
-| 06h | `80` | JMP |
-| 07h | `02` | L del destino |
-| 08h | `00` | H del destino |
-| 09h | `FF` | FIN |
+
+| Dirección | Byte | Significado        |
+| ------------ | ------ | -------------------- |
+| 00h        | `47` | MOVI               |
+| 01h        | `05` | dato inmediato = 5 |
+| 02h        | `42` | DEC                |
+| 03h        | `81` | JZ                 |
+| 04h        | `09` | L del destino      |
+| 05h        | `00` | H del destino      |
+| 06h        | `80` | JMP                |
+| 07h        | `02` | L del destino      |
+| 08h        | `00` | H del destino      |
+| 09h        | `FF` | FIN                |
 
 R1 baja 5 → 4 → 3 → 2 → 1 → 0. Mientras R1 ≠ 0, `JZ` no salta y `JMP 0002h` repite el `DEC`. Cuando R1 = 0 se activa FZ, `JZ` salta a `0009h` y la FSM llega a FIN. Esto depende de que la ALU active Z cuando el resultado sea 0 y de que `DEC` actualice banderas (`LF=H` en S17, lo cual se cumple).
 
 Ciclos hasta que `fin = 1`:
 
-$$N = 4 + 4\,(3 + 6 + 7) + (3 + 7) + 3 = 81$$
+$$
+N = 4 + 4\,(3 + 6 + 7) + (3 + 7) + 3 = 81
+
+$$
 
 (MOVI; cuatro vueltas completas de DEC + JZ sin salto + JMP; la última pasada con DEC + JZ con salto; y los tres ciclos de FIN.)
+
+### 5.7 Programa de ejemplo con `OR` y `MOV R2`
+
+Objetivo: `R0 ← 87h and 9Ch` (resultado `84h`) y `R2 ← 87h or 9Ch` (resultado `9Fh`).
+
+Se hace el OR **antes** del AND porque OR no modifica R0: deja `R0 = 87h` listo para el AND. Si el AND fuera primero, el `MOV R0←R1` destruiría el 87h y habría que recargarlo. Sin la instrucción OR, el cálculo con De Morgan, $\overline{\overline{A} \land \overline{B}}$, costaría 7 instrucciones.
+
+
+| Dirección | Bytes   | Instrucción | Resultado                  |
+| ------------ | --------- | -------------- | ---------------------------- |
+| 00h        | `47 87` | MOVI 87h     | R1 = 87h                   |
+| 02h        | `46`    | MOV R0←R1   | R0 = 87h                   |
+| 03h        | `47 9C` | MOVI 9Ch     | R1 = 9Ch                   |
+| 05h        | `49`    | OR           | R1 = 87h or 9Ch = **9Fh**  |
+| 06h        | `48`    | MOV R2←R1   | **R2 = 9Fh**               |
+| 07h        | `47 9C` | MOVI 9Ch     | R1 = 9Ch (R0 sigue en 87h) |
+| 09h        | `41`    | AND          | R1 = 87h and 9Ch = 84h     |
+| 0Ah        | `46`    | MOV R0←R1   | **R0 = 84h**               |
+| 0Bh        | `FF`    | FIN          | se detiene                 |
+
+Memoria desde `00h`:
+
+```text
+47 87 46 47 9C 49 48 47 9C 41 46 FF
+```
+
+Ciclos hasta que `fin = 1`:
+
+$$
+N = 4 + 3 + 4 + 3 + 3 + 4 + 3 + 3 + 3 = 30
+
+$$
 
 ---
 
@@ -494,8 +574,10 @@ S00 ──► S01 ──► S02 ──(según CO)──┬─ 40 ─► S15 ─�
                                   ├─ 43 ─► S18 ─► S01        INC
                                   ├─ 44 ─► S19 ─► S01        SUB
                                   ├─ 45 ─► S09 ─► S01        ADD
-                                  ├─ 46 ─► S10 ─► S01        MOV
+                                  ├─ 46 ─► S10 ─► S01        MOV R0
                                   ├─ 47 ─► S12 ─► S13 ─► S01 MOVI
+                                  ├─ 48 ─► S20 ─► S01        MOV R2
+                                  ├─ 49 ─► S21 ─► S01        OR
                                   ├─ FF ─► S11 ─► S11 ...    FIN (permanente)
                                   ├─ otro ─► S01             NOP implícito
                                   └─ 70,71,80,81,82,83 ─► S03 ─► S04 ─► S05 ─► S06
@@ -528,15 +610,18 @@ S00 ──► S01 ──► S02 ──(según CO)──┬─ 40 ─► S15 ─�
 ### 6.5 Explicación del profesor por categoría, con precisiones
 
 **Búsqueda y control básico.**
+
 - En S01 el PC es el que direcciona la memoria (`SelDir=L`). `cs'=L` y `oe'=L` habilitan la salida de la memoria y `Lri=H` hace que el RI atrape el opcode en el flanco de reloj.
 - En S02, `Ipc=H` suma 1 al PC, dejándolo apuntando al siguiente byte (operando o siguiente opcode).
 - MOVI lee igual que el fetch pero, en lugar de `Lri`, escribe en el banco de registros (`SelRegW=001`, `wr=H`).
 
 **Ejecución de operaciones rápidas (ALU y registros).**
+
 - Es un camino **registro → ALU → registro** sin acceso a memoria. `SelRegRA` y `SelRegRB` son selectores de los multiplexores del banco de registros; `ope` entra al decodificador interno de la ALU; `SelRegW` y `wr` eligen y habilitan el registro destino.
 - *Precisión:* el estado de ejecución dura un ciclo, pero la instrucción completa dura 3 (S01, S02 y el estado de ejecución).
 
 **Ejecución de operaciones complejas (memoria y saltos).**
+
 - La rutina compartida S03 a S06 ensambla la dirección de 16 bits en `HL` leyendo `L` y luego `H`.
 - `SelDir=H` desconecta el PC de la memoria y conecta `HL`; después `oe'` lee o `we` escribe.
 - En JMP, `Lpc=H` hace que `PC ← HL`.
@@ -545,7 +630,7 @@ S00 ──► S01 ──► S02 ──(según CO)──┬─ 40 ─► S15 ─�
 
 ### 6.6 Resumen en pocas líneas
 
-Al arrancar, `rst` lleva la FSM a S00, que limpia la ruta de datos. Después la FSM repite sin parar: S01 lee el opcode de `M(PC)` hacia `RI`; S02 avanza el PC y decodifica `CO`. Las instrucciones de 1 byte ejecutan en un estado y regresan a S01. MOVI lee un byte inmediato en S12 y avanza el PC en S13. Las instrucciones de 3 bytes cargan `L` y `H` (S03 a S06), y luego LOAD/STORE acceden a `M(HL)` (S07/S08), mientras los saltos cargan `PC ← HL` en S14 si la condición se cumple. Las operaciones aritmético-lógicas siempre toman operandos de R0/R1, calculan en la ALU, escriben en R1 y actualizan banderas. FIN deja la FSM en S11 hasta un reset.
+Al arrancar, `rst` lleva la FSM a S00, que limpia la ruta de datos. Después la FSM repite sin parar: S01 lee el opcode de `M(PC)` hacia `RI`; S02 avanza el PC y decodifica `CO`. Las instrucciones de 1 byte ejecutan en un estado y regresan a S01. MOVI lee un byte inmediato en S12 y avanza el PC en S13. Las instrucciones de 3 bytes cargan `L` y `H` (S03 a S06), y luego LOAD/STORE acceden a `M(HL)` (S07/S08), mientras los saltos cargan `PC ← HL` en S14 si la condición se cumple. Las operaciones aritmético-lógicas (incluida OR) siempre toman operandos de R0/R1, calculan en la ALU, escriben en R1 y actualizan banderas. MOV copia R1 a R0 (S10) o a R2 (S20) sin tocar las banderas. FIN deja la FSM en S11 hasta un reset.
 
 ---
 
@@ -553,33 +638,36 @@ Al arrancar, `rst` lleva la FSM a S00, que limpia la ruta de datos. Después la 
 
 ### 7.1 Guía previa frente a este código
 
-| Concepto | Guía previa | Este código |
-|---|---|---|
-| Nombre de entidad | `unidad_control` | `control` |
-| Banderas | `FLGS` con alias `FZ/FC/FS` | `Flags` (sin alias): `Flags(0)=Z`, `(1)=C`, `(2)=S` |
-| Fin / depuración | `Fin` / `estado_out` | `fin` / `idEstado` |
-| Estados | `S01_FETCH0`, `S03_LOAD0_STORE0`… | `S00` a `S19` |
-| Estado presente / siguiente | `estado_actual` / `estado_siguiente` | `edo_pre` / `edo_sig` |
-| Estructura | Un proceso combinacional | Dos procesos combinacionales + uno secuencial |
-| Salida de `idEstado` | `WITH … SELECT` | Dentro del proceso de salidas |
-| Memoria | `oe` y `we` activos en alto, sin `cs` | `cs'` y `oe'` activos en bajo, `we` en alto |
-| Puertos `clear`/`inicia` | No aparecen | Existen; S00 los activa |
-| S00 | Sin salidas | `clear=H`, `inicia=H` |
-| S14 | `SelDir='1'` y `Lpc='1'` | Solo `Lpc='1'` |
-| `when others` (siguiente) | → S01 | → S00 |
 
-**Coinciden:** opcodes, formatos, códigos de `ope`, registros usados, estados compartidos S03 a S06, decisión del salto en S06, conteo de ciclos y los ejemplos de traza.
+| Concepto                    | Guía previa                          | Este código                                        |
+| ----------------------------- | --------------------------------------- | ----------------------------------------------------- |
+| Nombre de entidad           | `unidad_control`                      | `control`                                           |
+| Banderas                    | `FLGS` con alias `FZ/FC/FS`           | `Flags` (sin alias): `Flags(0)=Z`, `(1)=C`, `(2)=S` |
+| Fin / depuración           | `Fin` / `estado_out`                  | `fin` / `idEstado`                                  |
+| Estados                     | `S01_FETCH0`, `S03_LOAD0_STORE0`…    | `S00` a `S21`                                       |
+| Estado presente / siguiente | `estado_actual` / `estado_siguiente`  | `edo_pre` / `edo_sig`                               |
+| Estructura                  | Un proceso combinacional              | Dos procesos combinacionales + uno secuencial       |
+| Salida de `idEstado`        | `WITH … SELECT`                      | Dentro del proceso de salidas                       |
+| Memoria                     | `oe` y `we` activos en alto, sin `cs` | `cs'` y `oe'` activos en bajo, `we` en alto         |
+| Puertos `clear`/`inicia`    | No aparecen                           | Existen; S00 los activa                             |
+| S00                         | Sin salidas                           | `clear=H`, `inicia=H`                               |
+| S14                         | `SelDir='1'` y `Lpc='1'`              | Solo `Lpc='1'`                                      |
+| `when others` (siguiente)   | → S01                                | → S00                                              |
+
+**Coinciden** (salvo lo agregado después, MOV R2 y OR): opcodes, formatos, códigos de `ope`, registros usados, estados compartidos S03 a S06, decisión del salto en S06, conteo de ciclos y los ejemplos de traza.
 
 ### 7.2 Profesor frente a este código
 
-| Punto | Profesor | Código | Resultado |
-|---|---|---|---|
-| `cs'`, `oe'` activos en bajo | Sí | Sí | Coincide |
-| Pines de S00, S01, S02, S03 a S07, S12, S13, S14 | Tablas | Idénticos | Coincide |
-| Tabla de ALU (`SelRegW`, `RA`, `RB`, `ope`, `wr`, `SalAlu`, `LF`) | Tabla 2 | Idéntica, incluido MOV sin `LF` | Coincide |
-| S14 sin `SelDir` | `[Lpc, H]` | Solo `Lpc` | Coincide |
-| `we` en S08 | `[we, L]` | `we <= '1'` | **Discrepancia (ver 7.3)** |
-| Condición del salto | AND de `Lpc` con la bandera | Resuelta en S06 | Equivalente, mecanismo distinto |
+
+| Punto                                                             | Profesor                    | Código                          | Resultado                                  |
+| ------------------------------------------------------------------- | ----------------------------- | ---------------------------------- | -------------------------------------------- |
+| `cs'`, `oe'` activos en bajo                                      | Sí                         | Sí                              | Coincide                                   |
+| Pines de S00, S01, S02, S03 a S07, S12, S13, S14                  | Tablas                      | Idénticos                       | Coincide                                   |
+| Tabla de ALU (`SelRegW`, `RA`, `RB`, `ope`, `wr`, `SalAlu`, `LF`) | Tabla 2                     | Idéntica, incluido MOV sin `LF` | Coincide                                   |
+| S14 sin `SelDir`                                                  | `[Lpc, H]`                  | Solo `Lpc`                       | Coincide                                   |
+| `we` en S08                                                       | `[we, L]`                   | `we <= '1'`                      | **Discrepancia (ver 7.3)**                 |
+| Condición del salto                                              | AND de `Lpc` con la bandera | Resuelta en S06                  | Equivalente, mecanismo distinto            |
+| S20 y S21 (MOV R2, OR)                                            | No aparecen en las tablas   | Agregados                        | Extensiones propias, sin contraste posible |
 
 ### 7.3 Puntos por verificar en Logisim
 
@@ -600,19 +688,20 @@ Al arrancar, `rst` lleva la FSM a S00, que limpia la ruta de datos. Después la 
 
 Consecuencias del diseño; no son errores de sintaxis.
 
-| # | Limitación | Rodeo |
-|---|---|---|
-| 1 | R0 solo se escribe con MOV (`R0 ← R1`). No existe `R1 ← R0` | `MOVI 00h` y luego `ADD` deja `R1 = R0` (destruye R1) |
-| 2 | LOAD, MOVI y STORE solo usan R1 | Pasar el dato por R1 |
-| 3 | NOT, DEC, INC solo operan sobre R1; las de dos operandos son siempre `R0 op R1 → R1` | `SUB` es `R0 − R1`; el orden no se invierte |
-| 4 | LOAD, MOVI y MOV no actualizan banderas | Pasar por una operación de ALU (por ejemplo INC y luego DEC) antes de un salto |
-| 5 | No hay comparación no destructiva (CMP) | Copiar con MOV antes de restar |
-| 6 | Sin OR, XOR, desplazamientos ni rotaciones | Agregarlos (sección 9.4); `ope="001"` está libre |
-| 7 | Saltos solo absolutos con 2 bytes de dirección; sin CALL/RET ni pila | Convención de software |
-| 8 | HL solo se carga con bytes de la instrucción; no hay punteros ni indexado | Código automodificable (STORE sobre el byte `L`/`H` de una instrucción posterior), o agregar LDH/LDL/MOV L (sección 9.7) |
-| 9 | Sin acarreo de entrada (ADC/SBB) | Manejar el acarreo a mano con JC |
-| 10 | Opcode desconocido = NOP de 1 byte | — |
-| 11 | FIN es permanente | Solo `rst` lo saca de S11 |
+
+| #  | Limitación                                                                                                         | Rodeo                                                                                                                       |
+| ---- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| 1  | R0 solo se escribe con MOV (`R0 ← R1`) y R2 solo con MOV (`R2 ← R1`). No existe `R1 ← R0`, y R2 no se puede leer | `MOVI 00h` y luego `ADD` deja `R1 = R0` (destruye R1). R2 sirve para guardar un resultado final (se observa con sondas)     |
+| 2  | LOAD, MOVI y STORE solo usan R1                                                                                     | Pasar el dato por R1                                                                                                        |
+| 3  | NOT, DEC, INC solo operan sobre R1; las de dos operandos son siempre `R0 op R1 → R1`                               | `SUB` es `R0 − R1`; el orden no se invierte                                                                                |
+| 4  | LOAD, MOVI y MOV no actualizan banderas                                                                             | Pasar por una operación de ALU (por ejemplo INC y luego DEC) antes de un salto                                             |
+| 5  | No hay comparación no destructiva (CMP)                                                                            | Copiar con MOV antes de restar                                                                                              |
+| 6  | Sin XOR, desplazamientos ni rotaciones (OR ya existe: S21, `ope="001"`)                                             | Agregarlos ensanchando `ope` a 4 bits (sección 9.5): los 8 códigos de 3 bits están ocupados                              |
+| 7  | Saltos solo absolutos con 2 bytes de dirección; sin CALL/RET ni pila                                               | Convención de software                                                                                                     |
+| 8  | HL solo se carga con bytes de la instrucción; no hay punteros ni indexado                                          | Código automodificable (STORE sobre el byte `L`/`H` de una instrucción posterior), o agregar LDH/LDL/MOV L (sección 9.7) |
+| 9  | Sin acarreo de entrada (ADC/SBB)                                                                                    | Manejar el acarreo a mano con JC                                                                                            |
+| 10 | Opcode desconocido = NOP de 1 byte                                                                                  | —                                                                                                                          |
+| 11 | FIN es permanente                                                                                                   | Solo `rst` lo saca de S11                                                                                                   |
 
 ---
 
@@ -620,31 +709,33 @@ Consecuencias del diseño; no son errores de sintaxis.
 
 ### 9.1 Quién decide qué
 
-| Pregunta | Quién la decide | Dónde se cambia |
-|---|---|---|
-| ¿Qué hace la ALU con cada código `ope`? | El módulo `ALU` | Esquema de Logisim |
-| ¿Qué `ope` pide cada instrucción? | La FSM | `ope <= "xxx"` en el estado (proceso 3) |
-| ¿Qué opcode lanza cada instrucción? | El decodificador | `elsif CO = x"xx"` en S02 (y en S06 si lleva dirección) |
-| ¿Qué pasos sigue cada instrucción? | Los estados | `when Sxx` en el proceso 2 (transición) y en el proceso 3 (salidas) |
+
+| Pregunta                                   | Quién la decide | Dónde se cambia                                                     |
+| -------------------------------------------- | ------------------ | ---------------------------------------------------------------------- |
+| ¿Qué hace la ALU con cada código `ope`? | El módulo `ALU` | Esquema de Logisim                                                   |
+| ¿Qué `ope` pide cada instrucción?       | La FSM           | `ope <= "xxx"` en el estado (proceso 3)                              |
+| ¿Qué opcode lanza cada instrucción?     | El decodificador | `elsif CO = x"xx"` en S02 (y en S06 si lleva dirección)             |
+| ¿Qué pasos sigue cada instrucción?      | Los estados      | `when Sxx` en el proceso 2 (transición) y en el proceso 3 (salidas) |
 
 Cambiar el comportamiento de una operación puede requerir tocar la ALU, la FSM o ambas.
 
 ### 9.2 Lista de verificación para agregar un estado u opcode
 
-Para un estado nuevo `S20` hay que tocar, **en este orden**:
+Para un estado nuevo (el siguiente libre es `S22`) hay que tocar, **en este orden**:
 
-| Paso | Dónde | Qué comprobar |
-|---|---|---|
-| 1 | `type ESTADOS` | Declarar `S20` |
-| 2 | Proceso 2 | Agregar `when S20 => edo_sig <= …;`. Si se olvida, `when others` envía a `S00` y la CPU se **reinicia** (no se queda trabada) |
-| 3 | S02 (proceso 2) | Agregar `elsif CO = x"xx" then edo_sig <= S20;` antes del `else`. Si lleva dirección, enviarlo a S03 y agregar su rama en S06 |
-| 4 | Proceso 3 | Agregar `when S20 =>` con `idEstado` único (`"10100"`) y las señales necesarias |
-| 5 | Memoria | Leer = `cs <= '0'; oe <= '0';` (nunca `oe <= '1'` para leer) |
-| 6 | Bus | Nunca `SalAlu='1'` junto con `oe='0'` |
-| 7 | PC | Un `Ipc` por cada byte de la instrucción |
-| 8 | ALU | Si usa un `ope` nuevo, la ALU lo implementa en Logisim |
-| 9 | `idEstado` | Máximo 31 estados (5 bits; `"11111"` reservado) |
-| 10 | Simulación | Probar con un programa corto y observar `idEstado` |
+
+| Paso | Dónde          | Qué comprobar                                                                                                                  |
+| ------ | ----------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | `type ESTADOS`  | Declarar `S22`                                                                                                                  |
+| 2    | Proceso 2       | Agregar `when S22 => edo_sig <= …;`. Si se olvida, `when others` envía a `S00` y la CPU se **reinicia** (no se queda trabada) |
+| 3    | S02 (proceso 2) | Agregar `elsif CO = x"xx" then edo_sig <= S22;` antes del `else`. Si lleva dirección, enviarlo a S03 y agregar su rama en S06  |
+| 4    | Proceso 3       | Agregar `when S22 =>` con `idEstado` único (`"10110"`) y las señales necesarias                                               |
+| 5    | Memoria         | Leer = `cs <= '0'; oe <= '0';` (nunca `oe <= '1'` para leer)                                                                    |
+| 6    | Bus             | Nunca `SalAlu='1'` junto con `oe='0'`                                                                                           |
+| 7    | PC              | Un `Ipc` por cada byte de la instrucción                                                                                       |
+| 8    | ALU             | Si usa un `ope` nuevo, la ALU lo implementa en Logisim (con 3 bits ya no quedan códigos libres: ver 9.5)                       |
+| 9    | `idEstado`      | Máximo 31 estados (5 bits; `"11111"` reservado)                                                                                |
+| 10   | Simulación     | Probar con un programa corto y observar `idEstado`                                                                              |
 
 ### 9.3 Modificar una instrucción existente
 
@@ -668,41 +759,41 @@ when S18 =>            -- INC convertido en SUB (R0 - R1)
 
 **Caso C: cambiar si una instrucción actualiza banderas.** Se agrega o quita `lF <= '1';` en su estado (por ejemplo, para que MOV actualice banderas, se agrega en S10).
 
-### 9.4 Agregar una operación nueva de la ALU (ejemplo: OR)
+### 9.4 Agregar una operación nueva de la ALU (ejemplo ya aplicado: OR)
 
-Con `ope` de 3 bits hay $2^3 = 8$ códigos; el código `001` está libre.
+Este es el procedimiento seguido para añadir **OR** (`49h`, estado `S21`). Con `ope` de 3 bits hay $2^3 = 8$ códigos; `001` estaba disponible (antes solo pasaba `SalB` como buffer, algo que ninguna instrucción usaba).
 
 **Paso 1. Implementar la operación en Logisim.** Haz que `ope = 001` produzca `SalA OR SalB` y que la ALU siga calculando las banderas. Es obligatorio: la FSM solo *pide* la operación.
 
 **Paso 2. Declarar el estado:**
 
 ```vhdl
--- Tipo de estados: agregar S20 al final de la lista
+-- Tipo de estados: S20 (MOV R2) y S21 (OR) van al final de la lista
 type ESTADOS is (S00, S01, S02, S03, S04, S05, S06, S07,
             S08, S09, S10, S11, S12, S13, S14, S15,
-            S16, S17, S18, S19, S20);
+            S16, S17, S18, S19, S20, S21);
 ```
 
 **Paso 3. Asignar un opcode** en S02 (proceso 2), antes del `else` final:
 
 ```vhdl
--- OR (48h): se agrega al if/elsif de S02
-elsif CO = x"48" then
-  edo_sig <= S20;
+-- OR (49h): se agrega al if/elsif de S02
+elsif CO = x"49" then
+  edo_sig <= S21;
 ```
 
 **Paso 4. Definir la transición** del estado nuevo (proceso 2):
 
 ```vhdl
-when S20 =>            -- Fin de OR
+when S21 =>            -- Fin de OR
   edo_sig <= S01;
 ```
 
-**Paso 5. Escribir las salidas** (proceso 3), copiando la receta de la familia ALU:
+**Paso 5. Escribir las salidas** (proceso 3), copiando la receta de la familia ALU (es S16 con otro `ope`):
 
 ```vhdl
-when S20 =>            -- SalA <- R0; SalB <- R1; R1 <- ALU(A or B)
-  idEstado <= "10100"; -- 20 en binario
+when S21 =>            -- SalA <- R0; SalB <- R1; R1 <- ALU(A or B)
+  idEstado <= "10101"; -- 21 en binario
   SelRegW <= "001";    -- destino = R1
   wr <= '1';
   SelRegRA <= "000";   -- operando A = R0
@@ -712,11 +803,11 @@ when S20 =>            -- SalA <- R0; SalB <- R1; R1 <- ALU(A or B)
   lF <= '1';
 ```
 
-La instrucción ocupa un byte, así que no necesita más cambios: S02 ya incrementó el PC.
+La instrucción ocupa un byte, así que no necesita más cambios: S02 ya incrementó el PC. Con esto **ya no quedan códigos `ope` libres**: la siguiente operación (XOR, desplazamientos…) exige ensanchar `ope`, como se explica en 9.5.
 
 ### 9.5 Más de 8 operaciones: ensanchar `ope`
 
-Con $2^4 = 16$ códigos, `ope` pasa a 4 bits. Cambios necesarios:
+Los 8 códigos de 3 bits ya están ocupados (`001` lo usa OR). Con $2^4 = 16$ códigos, `ope` pasa a 4 bits, lo que da espacio para XOR, desplazamientos y rotaciones. Cambios necesarios:
 
 ```vhdl
 -- 1) Entidad: ensanchar el puerto
@@ -739,29 +830,29 @@ El valor hexadecimal de cada opcode aparece **solo** en el proceso 2:
 - Instrucciones de 1 o 2 bytes: se edita `CO = x"40"` (u otro) en la rama correspondiente de S02.
 - Instrucciones de 3 bytes (70h, 71h, 80h a 83h): se edita **tanto** la lista de S02 (la condición que lleva a S03) **como** la rama de S06.
 
-Antes de reasignar, comprueba que el nuevo valor no esté ya usado. Los opcodes libres no ocupados incluyen, por ejemplo, `48h`, `49h`, `4Ah`, `72h`, `73h`, `74h`, `84h` y `85h`.
+Antes de reasignar, comprueba que el nuevo valor no esté ya usado. Los opcodes libres no ocupados incluyen, por ejemplo, `4Ah`, `4Bh`, `72h`, `73h`, `74h`, `84h` y `85h` (`48h` y `49h` ya están ocupados por MOV R2 y OR).
 
 ### 9.7 Modificaciones relacionadas con H y L
 
-Mapa de estados nuevos propuestos (continuación de `S20`):
+Mapa de estados nuevos propuestos (continuación de `S21`):
 
-| Estado | `idEstado` | Instrucción | Opcode |
-|---|---|---|---|
-| S20 | `10100` | OR | 48h |
-| S21 | `10101` | MOVI R0 | 49h |
-| S22 | `10110` | MOV L,R1 | 4Ah |
-| S23 | `10111` | LDH (H ← inmediato) | 74h |
 
-**a) MOVI a R0 (opcode 49h).** Reutiliza S13 para saltar el byte inmediato:
+| Estado | `idEstado` | Instrucción         | Opcode |
+| -------- | ------------ | ---------------------- | -------- |
+| S22    | `10110`    | MOVI R0              | 4Ah    |
+| S23    | `10111`    | MOV L,R1             | 4Bh    |
+| S24    | `11000`    | LDH (H ← inmediato) | 74h    |
+
+**a) MOVI a R0 (opcode 4Ah).** Reutiliza S13 para saltar el byte inmediato:
 
 ```vhdl
--- Proceso 2, en S02:   elsif CO = x"49" then edo_sig <= S21;
+-- Proceso 2, en S02:   elsif CO = x"4A" then edo_sig <= S22;
 -- Proceso 2, estado:
-when S21 =>
+when S22 =>
   edo_sig <= S13;      -- reutiliza S13: Ipc salta el inmediato
 -- Proceso 3:
-when S21 =>            -- R0 <- M(PC)
-  idEstado <= "10101";
+when S22 =>            -- R0 <- M(PC)
+  idEstado <= "10110";
   cs <= '0';
   oe <= '0';           -- lee el byte inmediato
   SelRegW <= "000";    -- destino = R0
@@ -771,13 +862,13 @@ when S21 =>            -- R0 <- M(PC)
 **b) Cargar H con un inmediato (LDH, opcode 74h).** Permite construir direcciones por software:
 
 ```vhdl
--- Proceso 2, en S02:   elsif CO = x"74" then edo_sig <= S23;
+-- Proceso 2, en S02:   elsif CO = x"74" then edo_sig <= S24;
 -- Proceso 2, estado:
-when S23 =>
+when S24 =>
   edo_sig <= S13;      -- reutiliza S13
 -- Proceso 3:
-when S23 =>            -- H <- M(PC)
-  idEstado <= "10111";
+when S24 =>            -- H <- M(PC)
+  idEstado <= "11000";
   cs <= '0';
   oe <= '0';
   LH <= '1';
@@ -785,16 +876,16 @@ when S23 =>            -- H <- M(PC)
 
 Para `LDL` basta repetir el estado con `LL <= '1'`.
 
-**c) Copiar R1 a L (MOV L,R1, opcode 4Ah).** `HL` lee de `BusDatos` y el buffer de la ALU puede escribir en él; no hace falta memoria:
+**c) Copiar R1 a L (MOV L,R1, opcode 4Bh).** `HL` lee de `BusDatos` y el buffer de la ALU puede escribir en él; no hace falta memoria:
 
 ```vhdl
--- Proceso 2, en S02:   elsif CO = x"4A" then edo_sig <= S22;
+-- Proceso 2, en S02:   elsif CO = x"4B" then edo_sig <= S23;
 -- Proceso 2, estado:
-when S22 =>
+when S23 =>
   edo_sig <= S01;
 -- Proceso 3:
-when S22 =>            -- L <- R1 (via ALU, paso directo)
-  idEstado <= "10110";
+when S23 =>            -- L <- R1 (via ALU, paso directo)
+  idEstado <= "10111";
   SelRegRA <= "001";   -- lee R1
   ope <= "000";        -- paso directo
   SalAlu <= '1';       -- R1 llega al BusDatos
@@ -884,43 +975,45 @@ when S2x =>
 
 ### 9.10 Errores frecuentes
 
-| Síntoma | Causa probable |
-|---|---|
-| El PC queda desalineado y se ejecuta un operando como si fuera opcode | Falta o sobra un `Ipc`; revisar la contabilidad del PC |
-| La instrucción nueva no hace nada | Falta la rama en S02: el opcode cae en el `else` y se ignora como NOP |
-| La CPU se reinicia al llegar al estado nuevo | Falta su `when` en el proceso 2: `when others` envía a S00 |
-| La FSM se queda en el estado nuevo | Su `when` existe pero no asigna `edo_sig` (se retiene por el valor por defecto) |
-| La memoria no entrega el dato | Se escribió `oe <= '1'` (inactivo) en lugar de `cs <= '0'; oe <= '0'` |
-| Resultado incorrecto sin error de VHDL | El `ope` pedido no existe o hace otra cosa en la ALU |
-| Error de compilación al ensanchar `ope` | Alguna asignación conserva 3 bits |
-| `idEstado` no puede representar el estado | Más de 31 estados con 5 bits |
-| STORE no escribe | Polaridad de `we` de la RAM distinta (ver 7.3, punto 1) |
+
+| Síntoma                                                              | Causa probable                                                                  |
+| ----------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| El PC queda desalineado y se ejecuta un operando como si fuera opcode | Falta o sobra un `Ipc`; revisar la contabilidad del PC                          |
+| La instrucción nueva no hace nada                                    | Falta la rama en S02: el opcode cae en el `else` y se ignora como NOP           |
+| La CPU se reinicia al llegar al estado nuevo                          | Falta su `when` en el proceso 2: `when others` envía a S00                     |
+| La FSM se queda en el estado nuevo                                    | Su `when` existe pero no asigna `edo_sig` (se retiene por el valor por defecto) |
+| La memoria no entrega el dato                                         | Se escribió `oe <= '1'` (inactivo) en lugar de `cs <= '0'; oe <= '0'`          |
+| Resultado incorrecto sin error de VHDL                                | El `ope` pedido no existe o hace otra cosa en la ALU                            |
+| Error de compilación al ensanchar `ope`                              | Alguna asignación conserva 3 bits                                              |
+| `idEstado` no puede representar el estado                             | Más de 31 estados con 5 bits                                                   |
+| STORE no escribe                                                      | Polaridad de `we` de la RAM distinta (ver 7.3, punto 1)                         |
 
 ---
 
 ## Apéndice A. Glosario de señales
 
-| Señal | Dirección | Activa en | Descripción |
-|---|---|---|---|
-| `clk` | entrada | flanco de subida | Reloj de la FSM |
-| `rst` | entrada | alto | Reset asíncrono; fuerza `S00` |
-| `CO` (8 bits) | entrada | — | Opcode guardado en RI |
-| `Flags` (8 bits) | entrada | — | Banderas; solo bits 0 (Z), 1 (C), 2 (S) |
-| `clear` | salida | alto | Limpia la ruta de datos (en S00) |
-| `inicia` | salida | alto | Señal de arranque (en S00) |
-| `Lpc` | salida | alto | Carga el PC con HL |
-| `Ipc` | salida | alto | Incrementa el PC |
-| `SelDir` | salida | — | 0 = dirección del PC; 1 = dirección de HL |
-| `cs` | salida | **bajo** | Selección de la memoria |
-| `oe` | salida | **bajo** | Salida de la memoria hacia el bus |
-| `we` | salida | alto (a verificar) | Escritura en la memoria |
-| `Lri` | salida | alto | Carga el registro de instrucción |
-| `LL`, `LH` | salida | alto | Cargan L y H desde el bus |
-| `SelRegW` (3 bits) | salida | — | Registro destino del BR |
-| `SelRegRA`, `SelRegRB` (3 bits) | salida | — | Registros que salen por los puertos A y B |
-| `wr` | salida | alto | Habilita la escritura en el BR |
-| `ope` (3 bits) | salida | — | Operación de la ALU |
-| `SalAlu` | salida | alto | Habilita el buffer de la ALU hacia el bus |
-| `LF` | salida | alto | Carga el registro de banderas |
-| `fin` | salida | alto | Procesador detenido (S11) |
-| `idEstado` (5 bits) | salida | — | Número del estado actual |
+
+| Señal                          | Dirección | Activa en          | Descripción                                |
+| --------------------------------- | ------------ | -------------------- | --------------------------------------------- |
+| `clk`                           | entrada    | flanco de subida   | Reloj de la FSM                             |
+| `rst`                           | entrada    | alto               | Reset asíncrono; fuerza `S00`              |
+| `CO` (8 bits)                   | entrada    | —                 | Opcode guardado en RI                       |
+| `Flags` (8 bits)                | entrada    | —                 | Banderas; solo bits 0 (Z), 1 (C), 2 (S)     |
+| `clear`                         | salida     | alto               | Limpia la ruta de datos (en S00)            |
+| `inicia`                        | salida     | alto               | Señal de arranque (en S00)                 |
+| `Lpc`                           | salida     | alto               | Carga el PC con HL                          |
+| `Ipc`                           | salida     | alto               | Incrementa el PC                            |
+| `SelDir`                        | salida     | —                 | 0 = dirección del PC; 1 = dirección de HL |
+| `cs`                            | salida     | **bajo**           | Selección de la memoria                    |
+| `oe`                            | salida     | **bajo**           | Salida de la memoria hacia el bus           |
+| `we`                            | salida     | alto (a verificar) | Escritura en la memoria                     |
+| `Lri`                           | salida     | alto               | Carga el registro de instrucción           |
+| `LL`, `LH`                      | salida     | alto               | Cargan L y H desde el bus                   |
+| `SelRegW` (3 bits)              | salida     | —                 | Registro destino del BR                     |
+| `SelRegRA`, `SelRegRB` (3 bits) | salida     | —                 | Registros que salen por los puertos A y B   |
+| `wr`                            | salida     | alto               | Habilita la escritura en el BR              |
+| `ope` (3 bits)                  | salida     | —                 | Operación de la ALU                        |
+| `SalAlu`                        | salida     | alto               | Habilita el buffer de la ALU hacia el bus   |
+| `LF`                            | salida     | alto               | Carga el registro de banderas               |
+| `fin`                           | salida     | alto               | Procesador detenido (S11)                   |
+| `idEstado` (5 bits)             | salida     | —                 | Número del estado actual                   |

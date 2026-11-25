@@ -1,6 +1,7 @@
 -- ############################################################################
 -- #  UNIDAD DE CONTROL (FSM TIPO MOORE) - MICROPROCESADOR BASICO DE 8 BITS   #
--- #  Solo comentarios: la logica original no fue modificada ni optimizada.   #
+-- #  Comentarios actualizados; logica base sin cambios.                      #
+-- #  Extensiones: MOV R2<-R1 (opcode 48, S20) y OR (opcode 49, S21).         #
 -- #  Teoria, tablas y guias de modificacion: guia_microprocesador.md        #
 -- ############################################################################
 --
@@ -15,35 +16,44 @@
 --   el flanco que cierra N y se ve en N+1 (Lri en S01 -> CO valido en S02).
 --   Regla del bus: nunca SalAlu='1' junto con oe='0' (dos emisores en BusDatos).
 --   Regla del PC: un Ipc por cada byte de la instruccion (S02, S04, S06, S13).
---   Registros: R0 = "000", R1 = "001". Casi todo escribe su resultado en R1.
+--   Registros: R0 = "000", R1 = "001", R2 = "010". Casi todo escribe su
+--   resultado en R1; las excepciones son MOV R0<-R1 (S10) y MOV R2<-R1 (S20).
+--   R2 solo se escribe con MOV (S20): ninguna instruccion lo lee como
+--   operando (SelRegRA/RB nunca valen "010").
 --
 -- ============================================================================
 --  MAPA RAPIDO DE OPCODES (CO -> estados)
 -- ============================================================================
 --   40 NOT S15 | 41 AND S16 | 42 DEC S17 | 43 INC S18 | 44 SUB S19 | 45 ADD S09
---   46 MOV S10 | 47 MOVI S12,S13 | FF FIN S11
+--   46 MOV R0<-R1 S10 | 47 MOVI S12,S13 | 48 MOV R2<-R1 S20 | 49 OR S21 | FF FIN S11
 --   70 LOAD  : S03..S07          71 STORE : S03..S06,S08
 --   80 JMP, 81 JZ (Flags(0)=Z), 82 JC (Flags(1)=C), 83 JS (Flags(2)=S):
 --      S03..S06 y luego S14 (si la condicion se cumple) o S01 (si no)
 --   Los opcodes aparecen SOLO en S02 y (los de 3 bytes) en S06.
+--   OR (49) calcula R1 <- R0 or R1 con ope = "001". XOR y corrimientos no existen.
 --
 -- ============================================================================
 --  CODIGOS ope DE LA ALU (la ALU de Logisim decide que hace cada uno)
 -- ============================================================================
 --   000 A (paso directo) | 010 A and B | 011 not A | 100 A-1
---   101 A+B | 110 A-B | 111 A+1 | 001 LIBRE (no usado)
+--   101 A+B | 110 A-B | 111 A+1 | 001 A or B (OR, usado por S21)
+--   Los 8 codigos de 3 bits estan ocupados. (Antes 001 solo pasaba B, sin uso.)
 --
 -- ============================================================================
 --  PARA AGREGAR UNA INSTRUCCION / ESTADO (detalle en guia_microprocesador.md)
+--  Ejemplos ya aplicados: MOV R2 <- R1 (opcode 48, S20) y OR (opcode 49, S21).
 -- ============================================================================
---   1) type ESTADOS [2.1]: declarar el estado nuevo.
+--   1) type ESTADOS [2.1]: declarar el estado nuevo (S20 y S21 en los ejemplos).
 --   2) PROCESO 2 [4]: "when Sxx => edo_sig <= ...". Si se olvida, "others"
 --      manda a S00 y la CPU se reinicia.
 --   3) S02 [4.2]: nueva rama "elsif CO = x"xx" then edo_sig <= Sxx;"
 --      (si lleva direccion: enviarlo a S03 y agregar su rama en S06).
 --   4) PROCESO 3 [5]: "when Sxx" con idEstado unico (5 bits, maximo 31) y las
---      senales necesarias.
---   5) Si usa un ope nuevo, implementarlo en la ALU de Logisim.
+--      senales necesarias (S20 usa "10100"; S21 usa "10101").
+--   5) Si usa un ope nuevo, implementarlo en la ALU de Logisim. Con 3 bits ya
+--      no quedan codigos libres (OR uso el 001): ensanchar ope a 4 bits.
+--   6) Si escribe en un registro nuevo, verificar que el banco de registros
+--      de Logisim lo decodifique (SelRegW = "010" para R2).
 --
 -- ============================================================================
 --  INDICE
@@ -103,6 +113,7 @@ entity control is
     -- ------------------------------------------------------------------
     SelRegW, SelRegRA, SelRegRB: out std_logic_vector (2 downto 0);
                                        -- SelRegW: destino | SelRegRA: puerto A | SelRegRB: puerto B
+                                       -- Codigos: R0="000", R1="001", R2="010"
     wr: out std_logic;                 -- Habilita la escritura en el registro SelRegW
 
     -- ------------------------------------------------------------------
@@ -125,11 +136,13 @@ end entity control;
 -- ############################################################################
 architecture una of control is
   -- 2.1 Estados. S00 reset | S01-S02 busqueda | S03-S06 lectura de HL |
-  --     S07-S08 memoria | S09,S15-S19 ALU | S10,S12,S13 transferencia |
+  --     S07-S08 memoria | S09,S15-S19,S21 ALU | S10,S12,S13,S20 transferencia |
   --     S11 FIN | S14 salto.
+  --     S20 = MOV R2 <- R1 (opcode 48), agregado despues de S19.
+  --     S21 = OR (opcode 49), agregado despues de S20.
   type ESTADOS is (S00, S01, S02, S03, S04, S05, S06, S07, 
               S08, S09, S10, S11, S12, S13, S14, S15, 
-              S16, S17, S18, S19);
+              S16, S17, S18, S19, S20, S21); -- S20: MOV R2<-R1 | S21: OR
 
   -- 2.2 edo_pre = estado presente (flip-flops) | edo_sig = estado siguiente
   signal edo_pre, edo_sig: ESTADOS; 
@@ -200,6 +213,10 @@ begin
         edo_sig <= S10;
       elsif CO = x"47" then            -- MOVI (2 bytes: codigo + dato inmediato)
         edo_sig <= S12;
+      elsif CO = x"48" then            -- MOV (R2 <- R1), 1 byte
+        edo_sig <= S20;
+      elsif CO = x"49" then            -- OR (R1 <- R0 or R1)
+        edo_sig <= S21;
       elsif CO = x"FF" then            -- FIN
         edo_sig <= S11;
       else                             -- Opcode desconocido: NOP (el PC ya avanzo en S02)
@@ -251,7 +268,7 @@ begin
       edo_sig <= S01;
     when S09 =>                        -- Fin de ADD
       edo_sig <= S01;
-    when S10 =>                        -- Fin de MOV
+    when S10 =>                        -- Fin de MOV R0 <- R1
       edo_sig <= S01;
     when S11 =>                        -- FIN: se queda aqui; solo un reset sale
       edo_sig <= S11;
@@ -271,6 +288,10 @@ begin
       edo_sig <= S01;
     when S19 =>                        -- Fin de SUB
       edo_sig <= S01;
+    when S20 =>                        -- Fin de MOV R2 <- R1
+      edo_sig <= S01;
+    when S21 =>                        -- Fin de OR
+      edo_sig <= S01;
 
     -- Proteccion: estado ilegal -> S00 (reinicia la CPU y reactiva clear).
     -- Tambien es lo que ocurre si se agrega un estado y se olvida su "when".
@@ -281,7 +302,7 @@ begin
 
   -- ##########################################################################
   -- [5] PROCESO 3: SALIDAS (combinacional, FSM tipo Moore: solo edo_pre)
-  --     Receta de un estado de ALU: orígenes (SelRegRA/RB), operacion (ope),
+  --     Receta de un estado de ALU: origenes (SelRegRA/RB), operacion (ope),
   --     buffer (SalAlu), destino (SelRegW + wr) y banderas (LF).
   -- ##########################################################################
   -- Controladora Salidas
@@ -455,6 +476,26 @@ begin
       ope <= "110";                    -- Resta (R0 - R1)
       SalAlu <= '1';
       lF <= '1';
+
+    -- ---------------- TRANSFERENCIA A R2 (S20) ----------------
+    when S20 =>            -- SalA <- R1; R2 <- ALUA(A)
+      idEstado <= "10100";             -- MOV R2 <- R1 (opcode 48), id = 20
+      SelRegW <= "010";                -- Destino: R2 (unico estado que escribe R2)
+      wr <= '1';
+      SelRegRA <= "001";               -- A = R1
+      ope <= "000";                    -- Paso directo
+      SalAlu <= '1';                   -- Sin LF: MOV no cambia las banderas
+
+    -- ---------------- OR (S21) ----------------
+    when S21 =>           -- SalA <- R0; SalB <- R1; R1 <- ALU(A or B)
+      idEstado <= "10101";             -- OR (opcode 49), id = 21
+      SelRegW <= "001";                -- Destino: R1
+      wr <= '1';
+      SelRegRA <= "000";               -- A = R0
+      SelRegRB <= "001";               -- B = R1
+      ope <= "001";                    -- OR (la ALU de Logisim debe implementarlo)
+      SalAlu <= '1';
+      lF <= '1';                       -- Actualiza banderas
 
     -- ---------------- ESTADO ILEGAL ----------------
     when others =>
